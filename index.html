@@ -194,6 +194,11 @@
   .place{ font-family:'Orbitron'; font-weight:800; font-size:15px; }
   .place.podium{ color:var(--lime); } .place.top5{ color:var(--cyan); }
   .pbadge{ font-size:9px; background:var(--lime); color:var(--ink); padding:1px 6px; border-radius:3px; font-family:'Orbitron'; font-weight:700; margin-left:6px;}
+  .place.dnf{ color:#6b7480; text-decoration:line-through; }
+  .fld{ color:#5d6873; font-size:11px; }
+  .dnfbadge{ font-size:9px; background:#5a3d18; color:#f0c98a; padding:1px 6px; border-radius:3px; font-family:'Orbitron'; font-weight:700; margin-left:6px; }
+  .dnfcheck{ display:flex; align-items:center; gap:9px; margin-top:12px; font-size:13px; color:var(--dim2); cursor:pointer; }
+  .dnfcheck input{ width:17px; height:17px; accent-color:var(--pink); cursor:pointer; flex:none; }
 
   .skill{ display:flex; align-items:center; gap:10px; padding:7px 0; border-top:1px solid #1a2128; }
   .skill:first-child{ border-top:0; }
@@ -400,6 +405,7 @@
           <div><label class="fl">Field size</label><input class="in" type="number" id="rField" placeholder="22"></div>
           <div><label class="fl">Run time</label><input class="in" id="rTime" placeholder="3:42.1"></div>
         </div>
+        <label class="dnfcheck"><input type="checkbox" id="rDnf"><span>Crash / DNF — keep in the log but don’t count toward the pace trend or podium goal</span></label>
         <label class="fl" style="margin-top:10px;">Notes</label>
         <textarea class="in" id="rNotes" placeholder="Lost time up top, strong in the bottom woods…"></textarea>
         <button class="btn lime sm" id="addResultBtn" style="margin-top:10px;">Save result</button>
@@ -803,7 +809,7 @@ function renderWeek(){
 /* ---------- PROGRESS ---------- */
 function renderProgress(){
   // medals (top-3 finishes)
-  const podiums=DB.results.filter(r=>+r.place>0 && +r.place<=3).sort((a,b)=>a.date.localeCompare(b.date));
+  const podiums=DB.results.filter(r=>!r.dnf && +r.place>0 && +r.place<=3).sort((a,b)=>a.date.localeCompare(b.date));
   const gm=document.getElementById('goalMedals'); gm.innerHTML='';
   for(let i=0;i<3;i++){ const won=podiums[i];
     gm.innerHTML+=`<div class="medal ${won?'won':''}"><div class="mi">🏆</div>
@@ -858,8 +864,9 @@ function placeSpark(){
   const el=document.getElementById('placeSpark');
   const W=Math.max(280, Math.round(el.getBoundingClientRect().width)||600), H=80, padX=18, padTop=24, padBot=16;
   el.setAttribute('viewBox','0 0 '+W+' '+H); el.removeAttribute('preserveAspectRatio');
-  const r=[...DB.results].filter(x=>+x.place>0).sort((a,b)=>a.date.localeCompare(b.date));
-  if(r.length<1){ el.innerHTML=`<text x="${(W/2).toFixed(0)}" y="${(H/2).toFixed(0)}" fill="#5d6873" font-size="12" text-anchor="middle" font-family="Oswald">Add race results to see your placement trend</text>`; return; }
+  const r=[...DB.results].filter(x=>!x.dnf && +x.place>0).sort((a,b)=>a.date.localeCompare(b.date));
+  if(r.length<1){ const msg=DB.results.length?'Clean finishes plot here — crash / DNF results are excluded':'Add race results to see your placement trend';
+    el.innerHTML=`<text x="${(W/2).toFixed(0)}" y="${(H/2).toFixed(0)}" fill="#5d6873" font-size="12" text-anchor="middle" font-family="Oswald">${msg}</text>`; return; }
   // auto-scale the axis to the actual results (with padding) so the trend is visible
   const places=r.map(x=>+x.place); let lo=Math.min(...places), hi=Math.max(...places);
   if(lo===hi){ lo-=1; hi+=1; } else { const m=Math.max(1,Math.round((hi-lo)*0.25)); lo-=m; hi+=m; }
@@ -877,10 +884,11 @@ function renderResults(){ const t=document.getElementById('resultsTable');
   const r=[...DB.results].sort((a,b)=>b.date.localeCompare(a.date));
   if(!r.length){ t.innerHTML=`<tr><td class="empty">No races logged yet. Add your first result below.</td></tr>`; return; }
   t.innerHTML=`<tr><th>Date</th><th>Venue</th><th>Place</th><th>Time</th><th>Notes</th><th></th></tr>`+
-    r.map(x=>{ const pl=+x.place, cls=pl<=3?'podium':pl<=5?'top5':'';
+    r.map(x=>{ const pl=+x.place, cls=x.dnf?'dnf':(pl<=3?'podium':pl<=5?'top5':'');
+      const badge=x.dnf?'<span class="dnfbadge">CRASH / DNF</span>':(pl>0&&pl<=3?'<span class="pbadge">PODIUM</span>':'');
       return `<tr><td style="white-space:nowrap;font-family:Orbitron;font-size:11px;color:#9aa6b2">${x.date||''}</td>
         <td>${esc(venueShort(x.venue))}</td>
-        <td><span class="place ${cls}">${x.place||'–'}</span>${x.field?`<span style="color:#5d6873;font-size:11px"> / ${x.field}</span>`:''}${pl>0&&pl<=3?'<span class="pbadge">PODIUM</span>':''}</td>
+        <td><span class="place ${cls}">${x.place||'–'}</span>${x.field?`<span class="fld"> / ${x.field}</span>`:''}${badge}</td>
         <td style="font-family:Orbitron;font-size:11px">${esc(x.time||'')}</td>
         <td style="color:#9aa6b2;font-size:12px">${esc(x.notes||'')}</td>
         <td><button class="delx" data-delr="${x.id}">×</button></td></tr>`; }).join('');
@@ -985,13 +993,15 @@ document.getElementById('weekGrid').addEventListener('click',e=>{
 
 // results
 document.getElementById('addResultBtn').onclick=()=>{
+  const dnf=document.getElementById('rDnf').checked;
   const r={ id:uid(), date:document.getElementById('rDate').value||todayStr(),
     venue:document.getElementById('rVenue').value, cls:document.getElementById('rClass').value,
     place:document.getElementById('rPlace').value, field:document.getElementById('rField').value,
-    time:document.getElementById('rTime').value, notes:document.getElementById('rNotes').value };
-  if(!r.place){ alert('Add your finishing place.'); return; }
+    time:document.getElementById('rTime').value, notes:document.getElementById('rNotes').value, dnf };
+  if(!dnf && !r.place){ alert('Add your finishing place, or tick Crash / DNF.'); return; }
   DB.results.push(r); save();
   ['rPlace','rField','rTime','rNotes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('rDnf').checked=false;
   renderProgress();
 };
 document.getElementById('resultsTable').addEventListener('click',e=>{ const d=e.target.closest('[data-delr]');
