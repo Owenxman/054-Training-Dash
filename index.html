@@ -203,7 +203,7 @@
   .sdot.on{ background:var(--cyan); border-color:var(--cyan); }
 
   /* sparkline */
-  svg.spark{ width:100%; height:46px; display:block; margin-top:6px; }
+  svg.spark{ width:100%; height:56px; display:block; margin-top:6px; }
 
   /* ---------- BIKE ---------- */
   .bike-card{ position:relative; }
@@ -389,7 +389,7 @@
     <div class="card cyan">
       <h3>Result Log</h3>
       <div class="sub">Every race — watch the placement trend bend toward the front</div>
-      <svg class="spark" id="placeSpark" viewBox="0 0 300 60" preserveAspectRatio="none" style="height:64px;"></svg>
+      <svg class="spark" id="placeSpark" style="height:84px;"></svg>
       <table class="results" id="resultsTable"></table>
       <details class="addbox"><summary>+ Add a race result</summary><div class="pad">
         <div class="grid-form">
@@ -842,27 +842,36 @@ function metricSeries(key,days){ const out=[]; for(let i=days-1;i>=0;i--){ const
 function avgMetric(key,days){ const s=metricSeries(key,days).filter(v=>v!=null); return s.length?s.reduce((a,b)=>a+b,0)/s.length:null; }
 function sumMetric(key,days){ return metricSeries(key,days).filter(v=>v!=null).reduce((a,b)=>a+b,0); }
 function sleepSpark(){ const data=metricSeries('sleep',14); drawSpark('sleepSpark',data,0,12,'#20d4e0',9); }
-function drawSpark(id,data,min,max,color,goal){ const el=document.getElementById(id); const W=300,H=46,pad=4;
-  const pts=data.map((v,i)=>({x:pad+i*(W-2*pad)/(data.length-1), v}));
-  const y=v=>H-pad-((v-min)/(max-min))*(H-2*pad);
-  let path='',dots=''; let started=false;
-  pts.forEach(p=>{ if(p.v==null){return;} const yy=y(Math.max(min,Math.min(max,p.v)));
-    path+=(started?'L':'M')+p.x.toFixed(1)+' '+yy.toFixed(1)+' '; started=true;
-    dots+=`<circle cx="${p.x.toFixed(1)}" cy="${yy.toFixed(1)}" r="2" fill="${color}"/>`; });
+function drawSpark(id,data,min,max,color,goal){
+  const el=document.getElementById(id);
+  const W=Math.max(280, Math.round(el.getBoundingClientRect().width)||600), H=56, pad=6;
+  el.setAttribute('viewBox','0 0 '+W+' '+H); el.removeAttribute('preserveAspectRatio');
+  const n=data.length, xf=i=> pad + i*(W-2*pad)/(Math.max(1,n-1)), y=v=> H-pad-((v-min)/(max-min))*(H-2*pad);
+  let path='',dots='',started=false;
+  data.forEach((v,i)=>{ if(v==null) return; const yy=y(Math.max(min,Math.min(max,v)));
+    path+=(started?'L':'M')+xf(i).toFixed(1)+' '+yy.toFixed(1)+' '; started=true;
+    dots+=`<circle cx="${xf(i).toFixed(1)}" cy="${yy.toFixed(1)}" r="2.5" fill="${color}"/>`; });
   let gl=''; if(goal!=null){ const gy=y(goal); gl=`<line x1="0" y1="${gy}" x2="${W}" y2="${gy}" stroke="#3a4651" stroke-dasharray="3 3" stroke-width="1"/>`; }
   el.innerHTML=`${gl}<path d="${path}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round"/>${dots}`;
 }
-function placeSpark(){ const el=document.getElementById('placeSpark'); const W=300,H=60,pad=8;
+function placeSpark(){
+  const el=document.getElementById('placeSpark');
+  const W=Math.max(280, Math.round(el.getBoundingClientRect().width)||600), H=80, padX=18, padTop=24, padBot=16;
+  el.setAttribute('viewBox','0 0 '+W+' '+H); el.removeAttribute('preserveAspectRatio');
   const r=[...DB.results].filter(x=>+x.place>0).sort((a,b)=>a.date.localeCompare(b.date));
-  if(r.length<1){ el.innerHTML=`<text x="150" y="34" fill="#5d6873" font-size="11" text-anchor="middle" font-family="Oswald">Add race results to see your placement trend</text>`; return; }
-  const maxP=Math.max(...r.map(x=>+x.place),5); const minP=1;
-  const xs=i=>r.length===1?W/2:pad+i*(W-2*pad)/(r.length-1);
-  const ys=p=>pad+((p-minP)/(maxP-minP))*(H-2*pad); // lower place = higher on chart
+  if(r.length<1){ el.innerHTML=`<text x="${(W/2).toFixed(0)}" y="${(H/2).toFixed(0)}" fill="#5d6873" font-size="12" text-anchor="middle" font-family="Oswald">Add race results to see your placement trend</text>`; return; }
+  // auto-scale the axis to the actual results (with padding) so the trend is visible
+  const places=r.map(x=>+x.place); let lo=Math.min(...places), hi=Math.max(...places);
+  if(lo===hi){ lo-=1; hi+=1; } else { const m=Math.max(1,Math.round((hi-lo)*0.25)); lo-=m; hi+=m; }
+  lo=Math.max(1,lo);
+  const xs=i=> r.length===1 ? W/2 : padX + i*(W-2*padX)/(r.length-1);
+  const ys=p=> padTop + ((p-lo)/(hi-lo))*(H-padTop-padBot);   // best place sits at the top
   let path='',dots='';
-  r.forEach((x,i)=>{ const X=xs(i),Y=ys(+x.place); path+=(i?'L':'M')+X.toFixed(1)+' '+Y.toFixed(1)+' ';
-    const pod=+x.place<=3; dots+=`<circle cx="${X.toFixed(1)}" cy="${Y.toFixed(1)}" r="3.5" fill="${pod?'#90c63e':'#20d4e0'}"/>
-      <text x="${X.toFixed(1)}" y="${(Y-7).toFixed(1)}" fill="#9aa6b2" font-size="9" text-anchor="middle" font-family="Orbitron">${x.place}</text>`; });
-  el.innerHTML=`<path d="${path}" fill="none" stroke="#20d4e0" stroke-width="2"/>${dots}`;
+  r.forEach((x,i)=>{ const X=xs(i),Y=ys(+x.place), pod=+x.place<=3;
+    path+=(i?'L':'M')+X.toFixed(1)+' '+Y.toFixed(1)+' ';
+    dots+=`<circle cx="${X.toFixed(1)}" cy="${Y.toFixed(1)}" r="4" fill="${pod?'#90c63e':'#20d4e0'}"/>`;
+    dots+=`<text x="${X.toFixed(1)}" y="${Math.max(13,Y-9).toFixed(1)}" fill="#cfd6dc" font-size="11" font-weight="700" text-anchor="middle" font-family="Orbitron">${x.place}</text>`; });
+  el.innerHTML=`<path d="${path}" fill="none" stroke="#20d4e0" stroke-width="2.5" stroke-linejoin="round"/>${dots}`;
 }
 function renderResults(){ const t=document.getElementById('resultsTable');
   const r=[...DB.results].sort((a,b)=>b.date.localeCompare(a.date));
@@ -1037,6 +1046,7 @@ document.getElementById('importFile').addEventListener('change',e=>{ const f=e.t
 
 // live clock for now-line
 setInterval(()=>{ if(document.getElementById('view-today').classList.contains('active') && viewDate===todayStr()) renderTimeline(); },60000);
+let _rzT; window.addEventListener('resize',()=>{ clearTimeout(_rzT); _rzT=setTimeout(()=>{ if(document.getElementById('view-progress').classList.contains('active')) renderProgress(); },200); });
 
 document.getElementById('signBtn').onclick=signToggle;
 
