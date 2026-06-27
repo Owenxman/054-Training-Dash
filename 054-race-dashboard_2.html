@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>054 Gravity — Race Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@300;400;500;600;700&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0b0e12; --panel:#13181e; --panel2:#171d24; --panel3:#1c242c;
+    --line:#262f39; --line2:#313c47; --text:#eef2f4; --dim:#7e8a96; --dim2:#9aa6b2;
+    --pink:#e81876; --lime:#90c63e; --cyan:#20d4e0;
+    --hourH:54px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  body{ background:var(--ink); color:var(--text); font-family:'Oswald',sans-serif; font-weight:300; line-height:1.4; min-height:100vh; }
+  button{ font-family:inherit; cursor:pointer; }
+  input,select,textarea{ font-family:'Oswald',sans-serif; }
+  ::-webkit-scrollbar{ width:10px; height:10px; }
+  ::-webkit-scrollbar-track{ background:#0e1318; }
+  ::-webkit-scrollbar-thumb{ background:#2c3742; border-radius:6px; }
+
+  /* ---------- HEADER / NAV ---------- */
+  .topbar{ position:sticky; top:0; z-index:50; background:var(--panel);
+    border-bottom:1px solid var(--line); }
+  .topbar::before{ content:""; display:block; height:4px;
+    background:linear-gradient(90deg,var(--pink) 0 33.3%,var(--lime) 33.3% 66.6%,var(--cyan) 66.6% 100%); }
+  .topinner{ max-width:1180px; margin:0 auto; display:flex; align-items:center; gap:18px;
+    padding:11px 20px; flex-wrap:wrap; }
+  .brand{ display:flex; flex-direction:column; line-height:1; }
+  .brand .eb{ font-family:'Orbitron'; font-weight:700; letter-spacing:.28em; font-size:9px; color:var(--cyan); text-transform:uppercase; }
+  .brand .nm{ font-family:'Anton'; font-size:23px; text-transform:uppercase; letter-spacing:.5px; margin-top:3px; }
+  .brand .nm em{ font-style:normal; color:var(--pink); }
+  nav.tabs{ display:flex; gap:4px; margin-left:auto; flex-wrap:wrap; }
+  .tab{ background:transparent; border:1px solid transparent; color:var(--dim2);
+    font-family:'Oswald'; font-weight:600; font-size:12px; letter-spacing:.12em; text-transform:uppercase;
+    padding:9px 14px; border-radius:3px; }
+  .tab:hover{ color:var(--text); background:#0e1318; }
+  .tab.active{ color:var(--ink); background:var(--cyan); }
+  .datamenu{ display:flex; gap:6px; }
+  .iconbtn{ background:#0e1318; border:1px solid var(--line2); color:var(--dim2);
+    font-family:'Orbitron'; font-weight:600; font-size:9px; letter-spacing:.08em; text-transform:uppercase;
+    padding:8px 10px; border-radius:3px; }
+  .iconbtn:hover{ color:var(--text); border-color:var(--cyan); }
+  .syncpill{ font-family:'Orbitron'; font-weight:600; font-size:9px; letter-spacing:.06em; text-transform:uppercase;
+    padding:7px 9px; border-radius:3px; border:1px solid var(--line2); color:var(--dim2); display:flex; align-items:center; gap:6px;
+    white-space:nowrap; max-width:210px; overflow:hidden; text-overflow:ellipsis; }
+  .syncpill::before{ content:""; width:7px; height:7px; border-radius:50%; background:#5a6570; flex:none; }
+  .syncpill.ok{ color:var(--lime); border-color:#34421f; } .syncpill.ok::before{ background:var(--lime); }
+  .syncpill.sync{ color:var(--cyan); } .syncpill.sync::before{ background:var(--cyan); animation:pulse 1s infinite; }
+  .syncpill.warn{ color:#f0c98a; border-color:#5a3d18; } .syncpill.warn::before{ background:#f0c98a; }
+  .syncpill.local{ color:var(--dim); } .syncpill.local::before{ background:#5a6570; }
+  @keyframes pulse{ 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  .wrap{ max-width:1180px; margin:0 auto; padding:22px 20px 70px; }
+  .banner{ background:#2a1d10; border:1px solid #5a3d18; color:#f0c98a; font-size:13px;
+    padding:10px 14px; border-radius:4px; margin-bottom:18px; display:none; }
+
+  /* ---------- SHARED ---------- */
+  .seclabel{ display:flex; align-items:center; gap:12px; margin:6px 0 14px;
+    font-family:'Orbitron'; font-weight:700; letter-spacing:.2em; text-transform:uppercase; font-size:12px; color:var(--dim); }
+  .seclabel::after{ content:""; flex:1; height:1px; background:var(--line); }
+  .seclabel .spacer{ flex:1; }
+  .card{ background:var(--panel); border:1px solid var(--line); border-top:4px solid var(--accent,var(--cyan));
+    padding:16px 17px; border-radius:4px; }
+  .card.lime{ --accent:var(--lime);} .card.pink{ --accent:var(--pink);} .card.cyan{ --accent:var(--cyan);} .card.dimc{ --accent:#3a4651;}
+  .card h3{ font-family:'Anton'; font-weight:400; font-size:19px; text-transform:uppercase; letter-spacing:.5px; }
+  .card .sub{ font-family:'Oswald'; font-weight:500; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--dim); margin-top:2px; }
+  .view{ display:none; } .view.active{ display:block; }
+  .row{ display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap; }
+  .col{ flex:1; min-width:280px; }
+
+  /* form controls */
+  label.fl{ display:block; font-family:'Oswald'; font-weight:500; font-size:10px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--dim); margin:0 0 4px; }
+  input.in, select.in, textarea.in{ width:100%; background:#0e1318; border:1px solid var(--line2);
+    color:var(--text); border-radius:3px; padding:8px 10px; font-size:13px; font-weight:300; }
+  input.in:focus, select.in:focus, textarea.in:focus{ outline:none; border-color:var(--cyan); box-shadow:0 0 0 2px rgba(32,212,224,.18); }
+  textarea.in{ resize:vertical; min-height:54px; }
+  .btn{ background:var(--cyan); color:var(--ink); border:none; border-radius:3px; padding:9px 14px;
+    font-family:'Oswald'; font-weight:600; font-size:12px; letter-spacing:.08em; text-transform:uppercase; }
+  .btn.pink{ background:var(--pink); color:#fff; } .btn.lime{ background:var(--lime); color:var(--ink); }
+  .btn.ghost{ background:transparent; border:1px solid var(--line2); color:var(--dim2); }
+  .btn.ghost:hover{ color:var(--text); border-color:var(--cyan); }
+  .btn.sm{ padding:6px 10px; font-size:10px; }
+  .grid-form{ display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; }
+
+  /* ---------- TODAY ---------- */
+  .daynav{ display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap; }
+  .daynav .arrow{ background:#0e1318; border:1px solid var(--line2); color:var(--text);
+    width:36px; height:36px; border-radius:3px; font-size:16px; }
+  .daynav .arrow:hover{ border-color:var(--cyan); }
+  .daynav .dlabel{ font-family:'Anton'; font-size:30px; text-transform:uppercase; letter-spacing:.5px; }
+  .daynav .dmeta{ font-family:'Orbitron'; font-weight:600; font-size:12px; color:var(--cyan); letter-spacing:.06em; }
+  .daynav .theme-pill{ font-family:'Oswald'; font-weight:600; font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--dim2); border:1px solid var(--line2); padding:4px 10px; border-radius:20px; }
+  .today-btn{ margin-left:auto; }
+
+  .today-grid{ display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1fr); gap:16px; }
+  @media (max-width:880px){ .today-grid{ grid-template-columns:1fr; } }
+
+  /* completion ring */
+  .ringwrap{ display:flex; align-items:center; gap:16px; margin-bottom:14px; }
+  .ring{ position:relative; width:84px; height:84px; flex:none; }
+  .ring svg{ transform:rotate(-90deg); }
+  .ring .pct{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-family:'Orbitron'; font-weight:800; font-size:19px; }
+  .ringstats .big{ font-family:'Anton'; font-size:21px; }
+  .ringstats .small{ font-size:12px; color:var(--dim); }
+
+  /* task list */
+  ul.tasks{ list-style:none; }
+  ul.tasks li{ display:flex; align-items:flex-start; gap:11px; padding:9px 0; border-top:1px solid #1d242b; }
+  ul.tasks li:first-child{ border-top:0; }
+  .chk{ flex:none; width:22px; height:22px; border:2px solid var(--line2); border-radius:5px; background:#0e1318;
+    margin-top:1px; display:flex; align-items:center; justify-content:center; transition:.12s; }
+  .chk.on{ background:var(--lime); border-color:var(--lime); }
+  .chk.on::after{ content:"\2713"; color:var(--ink); font-weight:800; font-size:14px; }
+  .task-body{ flex:1; }
+  .task-title{ font-size:14px; font-weight:400; }
+  li.done .task-title{ text-decoration:line-through; color:var(--dim); }
+  .task-time{ font-family:'Orbitron'; font-weight:600; font-size:10px; color:var(--accent,var(--cyan)); letter-spacing:.04em; }
+  .ttag{ display:inline-block; font-family:'Orbitron'; font-weight:700; font-size:8px; letter-spacing:.1em;
+    text-transform:uppercase; padding:2px 6px; border-radius:3px; margin-left:7px; color:var(--ink); vertical-align:middle; }
+  .ttag.bike{ background:var(--cyan);} .ttag.gym{ background:var(--lime);} .ttag.meal{ background:#caa45a; }
+  .ttag.skills{ background:#9b6dd6; color:#fff;} .ttag.rest{ background:#3a4651; color:var(--text);} .ttag.race{ background:var(--pink); color:#fff;}
+  .ttag.other{ background:#4a5560; color:var(--text);}
+  .delx{ background:none; border:none; color:#5a6570; font-size:15px; padding:0 4px; }
+  .delx:hover{ color:var(--pink); }
+
+  .addrow{ display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
+  .addrow input.in{ flex:1; min-width:120px; } .addrow input.tin{ width:78px; flex:none; } .addrow select.in{ width:110px; flex:none; }
+
+  /* metrics log */
+  .metrics{ display:grid; grid-template-columns:repeat(auto-fit,minmax(90px,1fr)); gap:10px; margin-top:6px; }
+  .feelrow{ display:flex; gap:6px; }
+  .feel{ flex:1; background:#0e1318; border:1px solid var(--line2); color:var(--dim2); border-radius:3px; padding:7px 0;
+    font-family:'Orbitron'; font-weight:700; font-size:13px; }
+  .feel.on{ background:var(--pink); color:#fff; border-color:var(--pink); }
+
+  /* ---------- CALENDAR (apple day view) ---------- */
+  .cal-card{ padding:0; overflow:hidden; }
+  .cal-head{ padding:12px 16px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:10px; }
+  .cal-head h3{ font-family:'Anton'; font-size:17px; text-transform:uppercase; }
+  .legend{ display:flex; gap:10px; margin-left:auto; flex-wrap:wrap; }
+  .legend span{ font-size:10px; color:var(--dim); display:flex; align-items:center; gap:4px; text-transform:uppercase; letter-spacing:.06em; }
+  .legend i{ width:9px; height:9px; border-radius:2px; display:inline-block; }
+  .timeline{ position:relative; height:520px; overflow-y:auto; }
+  .tl-inner{ position:relative; }
+  .hour{ position:relative; height:var(--hourH); border-top:1px solid #1a2128; }
+  .hour .hr-lbl{ position:absolute; top:-7px; left:8px; font-family:'Orbitron'; font-weight:600;
+    font-size:9px; color:#5d6873; width:46px; }
+  .tl-events{ position:absolute; top:0; left:60px; right:10px; bottom:0; }
+  .ev{ position:absolute; left:0; right:0; border-radius:4px; padding:4px 8px; overflow:hidden;
+    border-left:3px solid var(--evc,var(--cyan)); background:var(--evbg,rgba(32,212,224,.13)); }
+  .ev .et{ font-size:11px; font-weight:500; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .ev .ett{ font-family:'Orbitron'; font-weight:600; font-size:8px; color:var(--evc,var(--cyan)); letter-spacing:.04em; }
+  .nowline{ position:absolute; left:54px; right:6px; height:0; border-top:2px solid var(--pink); z-index:5; }
+  .nowline::before{ content:""; position:absolute; left:-6px; top:-5px; width:9px; height:9px; border-radius:50%; background:var(--pink); }
+  .nowline .nlt{ position:absolute; right:0; top:-16px; font-family:'Orbitron'; font-weight:700; font-size:9px; color:var(--pink); }
+
+  /* ---------- PROGRESS ---------- */
+  .pgrid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; align-items:start; }
+  .goalmedals{ display:flex; gap:12px; margin:14px 0; }
+  .medal{ flex:1; text-align:center; background:#0e1318; border:1px solid var(--line2); border-radius:6px; padding:14px 6px; }
+  .medal .mi{ font-size:30px; filter:grayscale(1) opacity(.35); }
+  .medal.won .mi{ filter:none; }
+  .medal .ml{ font-family:'Orbitron'; font-weight:600; font-size:9px; color:var(--dim); letter-spacing:.08em; text-transform:uppercase; margin-top:4px; }
+  .medal.won .ml{ color:var(--lime); }
+  .milestone{ display:flex; align-items:center; gap:10px; background:#0e1318; border:1px dashed var(--line2);
+    border-radius:6px; padding:11px 13px; margin-top:6px; }
+  .milestone .star{ font-size:18px; }
+
+  .statline{ display:flex; gap:14px; flex-wrap:wrap; margin:12px 0; }
+  .stat{ background:#0e1318; border:1px solid var(--line2); border-radius:5px; padding:10px 14px; flex:1; min-width:90px; }
+  .stat .v{ font-family:'Orbitron'; font-weight:800; font-size:24px; }
+  .stat .v.pink{ color:var(--pink);} .stat .v.lime{ color:var(--lime);} .stat .v.cyan{ color:var(--cyan);}
+  .stat .k{ font-size:10px; color:var(--dim); text-transform:uppercase; letter-spacing:.08em; margin-top:2px; }
+
+  .bars{ display:flex; align-items:flex-end; gap:3px; height:80px; margin-top:8px; }
+  .bars .b{ flex:1; background:#1f2832; border-radius:2px 2px 0 0; position:relative; min-height:3px; }
+  .bars .b > i{ position:absolute; bottom:0; left:0; right:0; background:var(--lime); border-radius:2px 2px 0 0; }
+  .bars .b.today > i{ background:var(--cyan); }
+  .barlabels{ display:flex; gap:3px; margin-top:4px; }
+  .barlabels span{ flex:1; text-align:center; font-family:'Orbitron'; font-size:7px; color:#5d6873; }
+
+  table.results{ width:100%; border-collapse:collapse; margin-top:10px; font-size:13px; }
+  table.results th{ text-align:left; font-family:'Orbitron'; font-weight:600; font-size:9px; color:var(--dim);
+    text-transform:uppercase; letter-spacing:.08em; padding:6px 8px; border-bottom:1px solid var(--line); }
+  table.results td{ padding:8px; border-bottom:1px solid #1a2128; }
+  .place{ font-family:'Orbitron'; font-weight:800; font-size:15px; }
+  .place.podium{ color:var(--lime); } .place.top5{ color:var(--cyan); }
+  .pbadge{ font-size:9px; background:var(--lime); color:var(--ink); padding:1px 6px; border-radius:3px; font-family:'Orbitron'; font-weight:700; margin-left:6px;}
+
+  .skill{ display:flex; align-items:center; gap:10px; padding:7px 0; border-top:1px solid #1a2128; }
+  .skill:first-child{ border-top:0; }
+  .skill .sn{ flex:1; font-size:13px; }
+  .sdots{ display:flex; gap:4px; }
+  .sdot{ width:15px; height:15px; border-radius:50%; border:1px solid var(--line2); background:#0e1318; }
+  .sdot.on{ background:var(--cyan); border-color:var(--cyan); }
+
+  /* sparkline */
+  svg.spark{ width:100%; height:46px; display:block; margin-top:6px; }
+
+  /* ---------- BIKE ---------- */
+  .bike-card{ position:relative; }
+  .speclist{ display:grid; grid-template-columns:1fr 1fr; gap:6px 16px; margin-top:10px; }
+  .spec{ display:flex; justify-content:space-between; gap:8px; border-bottom:1px solid #1a2128; padding:5px 0; font-size:13px; }
+  .spec .sk{ color:var(--dim); } .spec .sv{ color:#fff; font-weight:400; text-align:right; }
+  .setup-entry{ background:#0e1318; border:1px solid var(--line2); border-radius:5px; padding:12px 14px; margin-top:10px; border-left:4px solid var(--cyan); }
+  .setup-entry.wet{ border-left-color:var(--cyan);} .setup-entry .se-head{ display:flex; justify-content:space-between; gap:10px; align-items:baseline; }
+  .setup-entry .se-course{ font-family:'Anton'; font-size:16px; text-transform:uppercase; }
+  .setup-entry .se-date{ font-family:'Orbitron'; font-size:10px; color:var(--dim); }
+  .se-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(100px,1fr)); gap:6px 14px; margin-top:8px; }
+  .se-grid .sg{ font-size:12px; } .se-grid .sg b{ font-family:'Orbitron'; font-weight:600; color:var(--cyan); font-size:11px; display:block; letter-spacing:.04em;}
+  .cond{ display:inline-block; font-family:'Orbitron'; font-weight:700; font-size:8px; text-transform:uppercase; padding:2px 7px; border-radius:3px; background:#3a4651; margin-left:8px;}
+  .cheat{ width:100%; border-collapse:collapse; font-size:13px; margin-top:8px; }
+  .cheat th{ text-align:left; font-family:'Orbitron'; font-size:9px; color:var(--dim); text-transform:uppercase; letter-spacing:.06em; padding:7px 8px; border-bottom:1px solid var(--line); }
+  .cheat td{ padding:8px; border-bottom:1px solid #1a2128; vertical-align:top; }
+  .cheat td.sym{ color:#fff; } .cheat td.fix{ color:var(--dim2); }
+
+  .empty{ color:var(--dim); font-size:13px; font-style:italic; padding:10px 0; }
+  details.addbox{ margin-top:12px; border:1px solid var(--line2); border-radius:5px; background:#0e1318; }
+  details.addbox > summary{ list-style:none; padding:10px 14px; font-family:'Oswald'; font-weight:600;
+    font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--cyan); cursor:pointer; }
+  details.addbox > summary::-webkit-details-marker{ display:none; }
+  details.addbox[open] > summary{ border-bottom:1px solid var(--line2); }
+  details.addbox .pad{ padding:14px; }
+
+  .footnote{ text-align:center; margin-top:34px; font-family:'Orbitron'; font-weight:600; font-size:9px;
+    letter-spacing:.24em; text-transform:uppercase; color:#3f4954; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topinner">
+    <div class="brand">
+      <span class="eb">054 Gravity Race Team</span>
+      <span class="nm">Race <em>Dashboard</em></span>
+    </div>
+    <nav class="tabs" id="tabs">
+      <button class="tab active" data-view="today">Today</button>
+      <button class="tab" data-view="week">Week</button>
+      <button class="tab" data-view="progress">Progress</button>
+      <button class="tab" data-view="bike">Bike Setup</button>
+    </nav>
+    <div class="datamenu">
+      <span class="syncpill local" id="syncStatus">Local only</span>
+      <button class="iconbtn" id="signBtn">Sign in to sync</button>
+      <button class="iconbtn" id="exportBtn" title="Download a backup of all your data">Export</button>
+      <button class="iconbtn" id="importBtn" title="Restore from a backup file">Import</button>
+      <input type="file" id="importFile" accept="application/json" hidden>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="banner" id="banner"></div>
+
+  <!-- ================= TODAY ================= -->
+  <section class="view active" id="view-today">
+    <div class="daynav">
+      <button class="arrow" id="prevDay">&#8249;</button>
+      <div>
+        <div class="dlabel" id="dayLabel">Today</div>
+        <div class="dmeta"><span id="dayDate"></span> · <span class="theme-pill" id="dayTheme"></span></div>
+      </div>
+      <button class="arrow" id="nextDay">&#8250;</button>
+      <button class="btn ghost sm today-btn" id="jumpToday">Jump to Today</button>
+    </div>
+
+    <div class="today-grid">
+      <!-- left: tasks + metrics -->
+      <div>
+        <div class="card lime" style="margin-bottom:16px;">
+          <div class="ringwrap">
+            <div class="ring" id="ring"></div>
+            <div class="ringstats">
+              <div class="big" id="ringDone">0 / 0</div>
+              <div class="small">tasks complete</div>
+            </div>
+          </div>
+          <ul class="tasks" id="taskList"></ul>
+          <div class="addrow">
+            <input class="in" id="addTaskTitle" placeholder="Add a task for this day…">
+            <input class="in tin" id="addTaskTime" placeholder="HH:MM">
+            <select class="in" id="addTaskType">
+              <option value="bike">Bike</option><option value="gym">Gym</option>
+              <option value="skills">Skills</option><option value="meal">Meal</option>
+              <option value="rest">Rest</option><option value="other" selected>Other</option>
+            </select>
+            <button class="btn sm" id="addTaskBtn">Add</button>
+          </div>
+        </div>
+
+        <div class="card cyan">
+          <h3>Daily Log</h3>
+          <div class="sub">Feeds your progress trends — log it every day</div>
+          <div class="metrics" style="margin-top:12px;">
+            <div><label class="fl">Sleep (hrs)</label><input class="in" type="number" step="0.5" id="mSleep" placeholder="9"></div>
+            <div><label class="fl">Race-pace runs</label><input class="in" type="number" id="mRuns" placeholder="0"></div>
+            <div><label class="fl">Body weight (lb)</label><input class="in" type="number" step="0.1" id="mWeight" placeholder=""></div>
+          </div>
+          <div style="margin-top:12px;">
+            <label class="fl">How the legs / body feel</label>
+            <div class="feelrow" id="feelRow">
+              <button class="feel" data-v="1">1</button><button class="feel" data-v="2">2</button>
+              <button class="feel" data-v="3">3</button><button class="feel" data-v="4">4</button>
+              <button class="feel" data-v="5">5</button>
+            </div>
+          </div>
+          <div style="margin-top:12px;">
+            <label class="fl">Notes (what worked, what to fix)</label>
+            <textarea class="in" id="mNotes" placeholder="Felt fast through the rock garden, need to brake later into the bottom corner…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- right: calendar -->
+      <div class="card cyan cal-card">
+        <div class="cal-head">
+          <h3>Day Schedule</h3>
+          <div class="legend">
+            <span><i style="background:var(--cyan)"></i>Bike</span>
+            <span><i style="background:var(--lime)"></i>Gym</span>
+            <span><i style="background:#9b6dd6"></i>Skills</span>
+            <span><i style="background:#caa45a"></i>Meal</span>
+          </div>
+        </div>
+        <div class="timeline" id="timeline"><div class="tl-inner" id="tlInner"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= WEEK ================= -->
+  <section class="view" id="view-week">
+    <div class="seclabel">The Week · Editable Template <span class="spacer"></span></div>
+    <p style="color:var(--dim); font-size:13px; margin-bottom:14px;">
+      This is your recurring weekly plan. Edit it here and every matching weekday in the Today view updates.
+      Daily check-offs are tracked per date over on Today.</p>
+    <div class="pgrid" id="weekGrid"></div>
+  </section>
+
+  <!-- ================= PROGRESS ================= -->
+  <section class="view" id="view-progress">
+    <div class="seclabel">Season Goal</div>
+    <div class="card pink" style="margin-bottom:16px;">
+      <h3>Podium x3 → Expert 2027</h3>
+      <div class="sub">Top-3 finishes light up. Currently <span id="curStanding">mid-pack</span> — close the gap.</div>
+      <div class="goalmedals" id="goalMedals"></div>
+      <div class="milestone"><span class="star">⭐</span><div>
+        <div style="font-weight:600;">Move up to Expert for 2027</div>
+        <div style="font-size:12px; color:var(--dim);">Unlocked by stringing together podium-pace runs this season.</div>
+      </div></div>
+    </div>
+
+    <div class="pgrid">
+      <div class="card lime">
+        <h3>Training Consistency</h3>
+        <div class="sub">Showing up is the whole game</div>
+        <div class="statline">
+          <div class="stat"><div class="v lime" id="stStreak">0</div><div class="k">Day streak</div></div>
+          <div class="stat"><div class="v cyan" id="stWeek">0%</div><div class="k">This week</div></div>
+          <div class="stat"><div class="v" id="stTotal">0</div><div class="k">Tasks done</div></div>
+        </div>
+        <div style="font-family:'Orbitron'; font-size:9px; color:var(--dim); letter-spacing:.1em; text-transform:uppercase; margin-top:8px;">Last 14 days completion</div>
+        <div class="bars" id="bars14"></div>
+        <div class="barlabels" id="barLabels"></div>
+      </div>
+
+      <div class="card cyan">
+        <h3>Recovery &amp; Load</h3>
+        <div class="sub">Sleep is your #1 performance lever</div>
+        <div class="statline">
+          <div class="stat"><div class="v cyan" id="stSleep">–</div><div class="k">Avg sleep (7d)</div></div>
+          <div class="stat"><div class="v lime" id="stRuns">0</div><div class="k">Race runs (7d)</div></div>
+          <div class="stat"><div class="v pink" id="stFeel">–</div><div class="k">Avg feel (7d)</div></div>
+        </div>
+        <div style="font-family:'Orbitron'; font-size:9px; color:var(--dim); letter-spacing:.1em; text-transform:uppercase; margin-top:10px;">Sleep — last 14 days</div>
+        <svg class="spark" id="sleepSpark" viewBox="0 0 300 46" preserveAspectRatio="none"></svg>
+      </div>
+    </div>
+
+    <div class="seclabel" style="margin-top:20px;">Race Results</div>
+    <div class="card cyan">
+      <h3>Result Log</h3>
+      <div class="sub">Every race — watch the placement trend bend toward the front</div>
+      <svg class="spark" id="placeSpark" viewBox="0 0 300 60" preserveAspectRatio="none" style="height:64px;"></svg>
+      <table class="results" id="resultsTable"></table>
+      <details class="addbox"><summary>+ Add a race result</summary><div class="pad">
+        <div class="grid-form">
+          <div><label class="fl">Date</label><input class="in" type="date" id="rDate"></div>
+          <div><label class="fl">Venue</label><select class="in" id="rVenue"></select></div>
+          <div><label class="fl">Class</label><input class="in" id="rClass" value="18U Amateur"></div>
+          <div><label class="fl">Place</label><input class="in" type="number" id="rPlace" placeholder="5"></div>
+          <div><label class="fl">Field size</label><input class="in" type="number" id="rField" placeholder="22"></div>
+          <div><label class="fl">Run time</label><input class="in" id="rTime" placeholder="3:42.1"></div>
+        </div>
+        <label class="fl" style="margin-top:10px;">Notes</label>
+        <textarea class="in" id="rNotes" placeholder="Lost time up top, strong in the bottom woods…"></textarea>
+        <button class="btn lime sm" id="addResultBtn" style="margin-top:10px;">Save result</button>
+      </div></details>
+    </div>
+
+    <div class="seclabel" style="margin-top:20px;">Skills Development</div>
+    <div class="card lime">
+      <h3>Skill Mastery</h3>
+      <div class="sub">Tap the dots: 1 = learning · 4 = race-ready</div>
+      <div id="skillList" style="margin-top:10px;"></div>
+      <details class="addbox"><summary>+ Add a skill to track</summary><div class="pad">
+        <div class="addrow"><input class="in" id="addSkill" placeholder="e.g. Steep wet roots"><button class="btn lime sm" id="addSkillBtn">Add</button></div>
+      </div></details>
+    </div>
+  </section>
+
+  <!-- ================= BIKE ================= -->
+  <section class="view" id="view-bike">
+    <div class="seclabel">The Garage</div>
+    <div id="bikeList"></div>
+    <details class="addbox"><summary>+ Add a bike</summary><div class="pad">
+      <div class="grid-form">
+        <div><label class="fl">Name / nickname</label><input class="in" id="bName" placeholder="Race DH"></div>
+        <div><label class="fl">Frame</label><input class="in" id="bFrame" placeholder="Make / model / size"></div>
+        <div><label class="fl">Wheel size</label><input class="in" id="bWheel" placeholder="29 / MX / 27.5"></div>
+        <div><label class="fl">Fork</label><input class="in" id="bFork" placeholder="Model · travel"></div>
+        <div><label class="fl">Shock</label><input class="in" id="bShock" placeholder="Model · stroke"></div>
+        <div><label class="fl">Drivetrain</label><input class="in" id="bDrive" placeholder="Groupset · gearing"></div>
+        <div><label class="fl">Brakes / rotors</label><input class="in" id="bBrakes" placeholder="Calipers · rotor mm"></div>
+        <div><label class="fl">Bar width / rise</label><input class="in" id="bBar" placeholder="800mm · 25mm"></div>
+        <div><label class="fl">Stem length</label><input class="in" id="bStem" placeholder="50mm"></div>
+        <div><label class="fl">Bar ends</label><input class="in" id="bBarEnds" placeholder="Wolf Tooth · dims"></div>
+        <div><label class="fl">Tires F / R</label><input class="in" id="bTires" placeholder="DHF 2.5 / DHR 2.4"></div>
+        <div><label class="fl">Inserts</label><input class="in" id="bInserts" placeholder="CushCore / none"></div>
+      </div>
+      <button class="btn sm" id="addBikeBtn" style="margin-top:12px;">Add bike</button>
+    </div></details>
+
+    <div class="seclabel" style="margin-top:22px;">Course Setup Log</div>
+    <p style="color:var(--dim); font-size:13px; margin-bottom:12px;">
+      Save what worked at each track. Next time you race a venue, pull up your known-good baseline and adjust from there.</p>
+    <div class="card cyan">
+      <h3>Saved Setups</h3>
+      <div class="sub">Tuned by course &amp; conditions</div>
+      <div id="setupList" style="margin-top:6px;"></div>
+      <details class="addbox"><summary>+ Log a setup</summary><div class="pad">
+        <div class="grid-form">
+          <div><label class="fl">Bike</label><select class="in" id="sBike"></select></div>
+          <div><label class="fl">Course / venue</label><select class="in" id="sCourse"></select></div>
+          <div><label class="fl">Date</label><input class="in" type="date" id="sDate"></div>
+          <div><label class="fl">Conditions</label><select class="in" id="sCond">
+            <option>Dry / hardpack</option><option>Loose / dusty</option><option>Wet / muddy</option>
+            <option>Wet roots</option><option>Rocky / rough</option><option>Mixed</option></select></div>
+          <div><label class="fl">Rider weight (kit on)</label><input class="in" id="sWeight" placeholder="lb"></div>
+          <div><label class="fl">Fork PSI / spring</label><input class="in" id="sForkP" placeholder="78 psi"></div>
+          <div><label class="fl">Fork rebound (clicks)</label><input class="in" id="sForkR" placeholder="8 from closed"></div>
+          <div><label class="fl">Fork LSC / HSC</label><input class="in" id="sForkC" placeholder="6 / 2"></div>
+          <div><label class="fl">Fork tokens</label><input class="in" id="sForkT" placeholder="2"></div>
+          <div><label class="fl">Shock PSI / spring</label><input class="in" id="sShockP" placeholder="225 / 400lb"></div>
+          <div><label class="fl">Shock rebound</label><input class="in" id="sShockR" placeholder="10"></div>
+          <div><label class="fl">Shock LSC / HSC</label><input class="in" id="sShockC" placeholder="5 / 3"></div>
+          <div><label class="fl">Sag F / R</label><input class="in" id="sSag" placeholder="18% / 30%"></div>
+          <div><label class="fl">Tire PSI F / R</label><input class="in" id="sTire" placeholder="24 / 26"></div>
+        </div>
+        <label class="fl" style="margin-top:10px;">Notes — what worked / what to change</label>
+        <textarea class="in" id="sNotes" placeholder="Dropped 1 psi front for the wet roots, helped grip. Add a token next time, bottomed on the big drop."></textarea>
+        <button class="btn cyan sm" id="addSetupBtn" style="margin-top:10px;">Save setup</button>
+      </div></details>
+    </div>
+
+    <div class="seclabel" style="margin-top:22px;">Tuning Cheat-Sheet</div>
+    <div class="card dimc">
+      <h3>Quick Reference</h3>
+      <div class="sub">Change ONE thing at a time · re-test · write it down. Starting points, not gospel.</div>
+      <table class="cheat" id="cheatTable"></table>
+    </div>
+  </section>
+
+  <div class="footnote">054 Gravity · Auto-saves to this browser · Sign in to sync to the cloud</div>
+</div>
+
+<!-- Firebase (cloud sync). Safe to leave in even if you don't use cloud. -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script>
+/* ============================================================
+   054 GRAVITY RACE DASHBOARD — single-file, localStorage-backed
+   ============================================================ */
+const KEY = 'gravity054_v1';
+const TYPES = ['bike','gym','skills','meal','rest','race','other'];
+const EV_COLORS = { bike:'#20d4e0', gym:'#90c63e', skills:'#9b6dd6', meal:'#caa45a', rest:'#3a4651', race:'#e81876', other:'#5a6570' };
+const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const DOW_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const THEMES = ['Recovery','Reset + Upper / Core','Team Skills Ride','Bolton DH · Key Day','Team Skills Ride','Power + Plyo','Race Sim / Race'];
+const VENUES = ['Killington, VT (Jul 12 · Showdown)','Mount Snow, VT (Aug 2)','Thunder Mtn, MA (Aug 9 · Showdown)','Blue Mountain, PA (Aug 30)','Jiminy Peak, MA (Sep 27 · Showdown)','Thunder Mtn, MA (Oct 25 · Finals)','Practice / Other'];
+
+/* default weekly template: weekday -> [{time,end,title,type}] */
+const DEFAULT_TEMPLATES = {
+  0:[ {time:'07:30',end:'08:00',title:'Wake · breakfast',type:'meal'},
+      {time:'10:30',end:'11:15',title:'Easy spin only (conversational pace)',type:'bike'},
+      {time:'14:00',end:'14:45',title:'Full mobility · plan & pack the week',type:'rest'},
+      {time:'18:00',end:'18:45',title:'Dinner',type:'meal'},
+      {time:'22:00',end:'',title:'Sleep',type:'rest'} ],
+  1:[ {time:'07:00',end:'07:20',title:'Wake · water · 5 min mobility',type:'other'},
+      {time:'07:30',end:'08:00',title:'Breakfast (carbs + protein)',type:'meal'},
+      {time:'09:30',end:'10:45',title:'PF: Upper Body + Core (Template A)',type:'gym'},
+      {time:'11:00',end:'11:15',title:'Post-gym snack',type:'meal'},
+      {time:'12:30',end:'13:00',title:'Lunch',type:'meal'},
+      {time:'14:00',end:'15:00',title:'Bike maintenance · watch race POV lines',type:'skills'},
+      {time:'18:00',end:'18:45',title:'Dinner',type:'meal'},
+      {time:'20:30',end:'21:00',title:'Foam roll + mobility',type:'rest'},
+      {time:'22:00',end:'',title:'Sleep',type:'rest'} ],
+  2:[ {time:'07:00',end:'07:20',title:'Wake · mobility',type:'other'},
+      {time:'07:30',end:'08:00',title:'Breakfast (carbs-forward)',type:'meal'},
+      {time:'09:15',end:'09:45',title:'Snack · pack · dynamic warm-up',type:'other'},
+      {time:'10:00',end:'11:30',title:'Team ride — Richmond enduro (session 2 features)',type:'bike'},
+      {time:'11:45',end:'12:00',title:'Refuel within 30 min · rehydrate',type:'meal'},
+      {time:'12:30',end:'13:00',title:'Lunch',type:'meal'},
+      {time:'14:00',end:'14:45',title:'Parking-lot skills drills (light)',type:'skills'},
+      {time:'18:00',end:'18:45',title:'Dinner',type:'meal'},
+      {time:'22:00',end:'',title:'Sleep',type:'rest'} ],
+  3:[ {time:'06:30',end:'06:50',title:'Wake · full breakfast',type:'meal'},
+      {time:'08:30',end:'09:00',title:'Pack · bike safety check',type:'other'},
+      {time:'09:30',end:'10:00',title:'Dynamic warm-up · easy first spin',type:'other'},
+      {time:'10:00',end:'17:00',title:'BOLTON lift laps → 2–3 race-pace top-to-bottoms midday',type:'bike'},
+      {time:'17:15',end:'17:30',title:'Refuel big · rehydrate',type:'meal'},
+      {time:'18:30',end:'19:15',title:'Dinner',type:'meal'},
+      {time:'20:00',end:'20:30',title:'Recovery · legs up · mobility',type:'rest'},
+      {time:'22:00',end:'',title:'Sleep (earlier if cooked)',type:'rest'} ],
+  4:[ {time:'07:00',end:'07:20',title:'Wake · check legs after Bolton',type:'other'},
+      {time:'07:30',end:'08:00',title:'Breakfast',type:'meal'},
+      {time:'09:15',end:'09:45',title:'Snack · dynamic warm-up',type:'other'},
+      {time:'10:00',end:'11:30',title:'Team ride — cornering + pump for speed',type:'bike'},
+      {time:'11:45',end:'12:00',title:'Refuel · rehydrate',type:'meal'},
+      {time:'12:30',end:'13:00',title:'Lunch',type:'meal'},
+      {time:'14:00',end:'14:30',title:'Optional: grip work + mobility only',type:'gym'},
+      {time:'18:00',end:'18:45',title:'Dinner',type:'meal'},
+      {time:'22:00',end:'',title:'Sleep',type:'rest'} ],
+  5:[ {time:'07:00',end:'07:20',title:'Wake · mobility',type:'other'},
+      {time:'07:30',end:'08:00',title:'Breakfast (carbs + protein)',type:'meal'},
+      {time:'09:30',end:'10:45',title:'PF: Lower Power + Plyo (Template B)',type:'gym'},
+      {time:'11:00',end:'11:15',title:'Post-gym snack',type:'meal'},
+      {time:'12:30',end:'13:00',title:'Lunch',type:'meal'},
+      {time:'14:00',end:'15:00',title:'Skills drills OR visualize race run',type:'skills'},
+      {time:'18:00',end:'18:45',title:'Dinner',type:'meal'},
+      {time:'20:30',end:'21:00',title:'Foam roll + mobility',type:'rest'},
+      {time:'22:00',end:'',title:'Sleep',type:'rest'} ],
+  6:[ {time:'08:00',end:'08:40',title:'Wake · full breakfast (2–3 hrs before riding)',type:'meal'},
+      {time:'10:00',end:'10:30',title:'Full warm-up · plan lines',type:'other'},
+      {time:'10:30',end:'12:30',title:'2–4 race-pace timed runs + rest between',type:'bike'},
+      {time:'13:00',end:'13:30',title:'Lunch / refuel',type:'meal'},
+      {time:'15:00',end:'16:00',title:'Recover · team content',type:'rest'},
+      {time:'18:00',end:'18:45',title:'Dinner',type:'meal'},
+      {time:'22:00',end:'',title:'Sleep',type:'rest'} ]
+};
+
+const DEFAULT_SKILLS = [
+  'Flat / off-camber corners','Steep chutes','Drops to flat','Tabletop jumps','Gap jumps',
+  'Wet root sections','Rock gardens at speed','Pumping for speed (no pedal)','Late braking control',
+  'Start-gate sprint','Line choice under pressure','Riding fast while tired'
+];
+
+const CHEAT = [
+  ['Suspension feels harsh on small bumps','Reduce low-speed compression a couple clicks; if still harsh, drop a few psi. Check rebound isn’t too slow (packing down).'],
+  ['Bottoming out hard on big hits / landings','Add air pressure, or add a volume token/spacer, or add a touch of high-speed compression.'],
+  ['Never using full travel','Remove a token, lower pressure slightly, or back off compression. Aim to use ~90% on your hardest run.'],
+  ['Bike feels bouncy / bucks you off lips','Rebound too fast — slow it down (add rebound damping, more clicks toward closed).'],
+  ['Rear packs down / sits low in repeated hits','Rebound too slow — speed it up so it recovers between hits.'],
+  ['Front dives under braking / into berms','Add low-speed compression up front, or a click more support.'],
+  ['Losing grip in wet / roots','Lower tire pressure a couple psi, soften slightly, and slow rebound a hair for more traction.'],
+  ['Burping tires / rim strikes in the rough','Raise tire pressure or run inserts; protects rims and adds support.'],
+  ['Vague / wandering in steep terrain','Check sag — fork ~15-20%, rear ~28-32%. Too much sag makes it wallow.']
+];
+
+/* =================================================================
+   CLOUD SYNC (Firebase) — fill in FIREBASE_CONFIG to enable.
+   Leave it blank and the app runs fully in local-only mode.
+   Setup steps are in the README / chat message.
+   ================================================================= */
+const FIREBASE_CONFIG = {
+  apiKey:     "AIzaSyDqzG3B5K33t2231T9ldx1hH9vGT3qn-Lo",   // paste from Firebase console → Project settings → Web app
+  authDomain: "dashboard-5a39b.firebaseapp.com",
+  projectId:  "dashboard-5a39b",
+  appId:      "1:852168890126:web:60be23c22826de3881a95f"
+};
+let CLOUD = { on:false, auth:null, db:null, user:null, timer:null };
+function cloudConfigured(){ return !!(FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.projectId); }
+function setSync(text, cls){ const el=document.getElementById('syncStatus'); if(el){ el.textContent=text; el.className='syncpill '+(cls||''); } }
+function refreshAll(){ renderToday(); const a=document.querySelector('.tab.active'); if(a && a.dataset.view!=='today') setView(a.dataset.view); }
+
+function initCloud(){
+  const btn=document.getElementById('signBtn');
+  if(!cloudConfigured()){ setSync('Local only','local'); if(btn) btn.style.display='none'; return; }
+  if(typeof firebase==='undefined'){ setSync('Cloud unavailable','warn'); if(btn) btn.style.display='none'; return; }
+  try{
+    firebase.initializeApp(FIREBASE_CONFIG);
+    CLOUD.auth=firebase.auth();
+    CLOUD.db=firebase.firestore();
+    CLOUD.db.settings({ ignoreUndefinedProperties:true });
+    CLOUD.db.enablePersistence({ synchronizeTabs:true }).catch(()=>{});
+    CLOUD.on=true;
+    CLOUD.auth.onAuthStateChanged(u=>{
+      CLOUD.user=u;
+      if(u){ if(btn) btn.textContent='Sign out'; setSync('Syncing…','sync'); cloudLoad(); }
+      else { if(btn) btn.textContent='Sign in to sync'; setSync('Signed out','local'); }
+    });
+  }catch(e){ setSync('Cloud error','warn'); }
+}
+function signToggle(){
+  if(!CLOUD.on) return;
+  if(CLOUD.user){ CLOUD.auth.signOut(); return; }
+  const p=new firebase.auth.GoogleAuthProvider();
+  CLOUD.auth.signInWithPopup(p).catch(err=>{ alert('Sign-in failed: '+err.message); setSync('Sign-in failed','warn'); });
+}
+async function cloudLoad(){
+  try{
+    const ref=CLOUD.db.collection('dashboards').doc(CLOUD.user.uid);
+    const snap=await ref.get();
+    if(snap.exists){
+      const cloud=snap.data();
+      const cu=cloud._updatedAt||0, lu=DB._updatedAt||0;
+      if(cu>=lu){ DB=cloud; const def=defaults(); for(const k in def){ if(DB[k]===undefined) DB[k]=def[k]; } saveLocal(); refreshAll(); }
+      else { cloudSaveNow(); }            // local copy is newer → push it up
+    } else {
+      cloudSaveNow();                       // first sync from this account
+    }
+    setSync('Synced · '+shortUser(),'ok');
+  }catch(e){ setSync('Offline · will sync','warn'); }
+}
+function shortUser(){ return CLOUD.user ? (CLOUD.user.email||'signed in').split('@')[0] : ''; }
+function cloudSave(){
+  if(!CLOUD.on || !CLOUD.user) return;
+  clearTimeout(CLOUD.timer); setSync('Saving…','sync');
+  CLOUD.timer=setTimeout(cloudSaveNow, 1200);
+}
+function cloudSaveNow(){
+  if(!CLOUD.on || !CLOUD.user) return;
+  CLOUD.db.collection('dashboards').doc(CLOUD.user.uid).set(DB)
+    .then(()=>setSync('Synced · '+shortUser(),'ok'))
+    .catch(()=>setSync('Offline · will sync','warn'));
+}
+
+/* ---------- store ---------- */
+let DB, MEM=false, viewDate=todayStr();
+function defaults(){ return { templates:JSON.parse(JSON.stringify(DEFAULT_TEMPLATES)), log:{}, results:[],
+  skills:DEFAULT_SKILLS.map(n=>({name:n,level:0})), bikes:[], setups:[] }; }
+function load(){
+  try{ const r=localStorage.getItem(KEY); DB = r?JSON.parse(r):defaults();
+       // migrate missing keys
+       const d=defaults(); for(const k in d){ if(DB[k]===undefined) DB[k]=d[k]; }
+  }catch(e){ DB=defaults(); MEM=true; }
+  if(MEM) showBanner('Saving is disabled in this preview window. Download the file (Export) and open or host it to save your data permanently.');
+}
+function save(){ DB._updatedAt=Date.now(); saveLocal(); cloudSave(); }
+function saveLocal(){ if(MEM) return; try{ localStorage.setItem(KEY, JSON.stringify(DB)); }catch(e){ MEM=true; showBanner('Local storage is full or blocked — sign in to sync so your data is safe in the cloud instead.'); } }
+function showBanner(msg){ const b=document.getElementById('banner'); b.textContent=msg; b.style.display='block'; }
+
+/* ---------- date helpers ---------- */
+function todayStr(){ const d=new Date(); return ymd(d); }
+function ymd(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function parseYmd(s){ const [y,m,dd]=s.split('-').map(Number); return new Date(y,m-1,dd); }
+function addDays(s,n){ const d=parseYmd(s); d.setDate(d.getDate()+n); return ymd(d); }
+function toMin(t){ if(!t||!t.includes(':')) return null; const [h,m]=t.split(':').map(Number); return h*60+m; }
+function fmt12(t){ const mm=toMin(t); if(mm==null) return t||''; let h=Math.floor(mm/60), m=mm%60, ap=h>=12?'PM':'AM'; h=h%12||12; return h+(m?':'+String(m).padStart(2,'0'):'')+ap; }
+function getLog(date){ if(!DB.log[date]) DB.log[date]={checks:{},custom:[],metrics:{}}; return DB.log[date]; }
+
+/* combined day items (template + custom) sorted */
+function dayItems(date){
+  const wd=parseYmd(date).getDay();
+  const base=(DB.templates[wd]||[]).map((t,i)=>({...t, id:'t'+wd+'_'+i, src:'tpl'}));
+  const lg=getLog(date);
+  const cust=(lg.custom||[]).map(c=>({...c, src:'cst'}));
+  const all=[...base,...cust];
+  all.sort((a,b)=>{ const am=toMin(a.time), bm=toMin(b.time); if(am==null)return 1; if(bm==null)return -1; return am-bm; });
+  return all;
+}
+function isChecked(date,item){ const lg=getLog(date); return item.src==='cst' ? !!item.done : !!lg.checks[item.id]; }
+function completion(date){ const items=dayItems(date); if(!items.length) return {d:0,t:0,p:0};
+  let d=0; items.forEach(it=>{ if(isChecked(date,it)) d++; }); return {d,t:items.length,p:Math.round(d/items.length*100)}; }
+
+/* =================================================================
+   RENDERING
+   ================================================================= */
+function setView(v){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
+  document.querySelectorAll('.view').forEach(s=>s.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  if(v==='week') renderWeek();
+  if(v==='progress') renderProgress();
+  if(v==='bike') renderBike();
+}
+
+/* ---------- TODAY ---------- */
+function renderToday(){
+  const wd=parseYmd(viewDate).getDay();
+  const isToday=viewDate===todayStr();
+  document.getElementById('dayLabel').textContent = isToday?'Today':DOW_FULL[wd];
+  const d=parseYmd(viewDate);
+  document.getElementById('dayDate').textContent = d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
+  document.getElementById('dayTheme').textContent = THEMES[wd];
+
+  // tasks
+  const items=dayItems(viewDate);
+  const ul=document.getElementById('taskList'); ul.innerHTML='';
+  items.forEach(it=>{
+    const on=isChecked(viewDate,it);
+    const li=document.createElement('li'); if(on) li.classList.add('done');
+    li.style.setProperty('--accent',EV_COLORS[it.type]||'#5a6570');
+    li.innerHTML=`<div class="chk ${on?'on':''}" data-id="${it.id}" data-src="${it.src}"></div>
+      <div class="task-body">
+        <div class="task-title">${esc(it.title)}<span class="ttag ${it.type}">${it.type}</span></div>
+        ${it.time?`<span class="task-time">${fmt12(it.time)}${it.end?' – '+fmt12(it.end):''}</span>`:''}
+      </div>
+      ${it.src==='cst'?`<button class="delx" data-del="${it.id}">×</button>`:''}`;
+    ul.appendChild(li);
+  });
+  // ring
+  const c=completion(viewDate);
+  document.getElementById('ringDone').textContent=c.d+' / '+c.t;
+  drawRing(c.p);
+  // metrics
+  const m=getLog(viewDate).metrics||{};
+  document.getElementById('mSleep').value=m.sleep??'';
+  document.getElementById('mRuns').value=m.runs??'';
+  document.getElementById('mWeight').value=m.weight??'';
+  document.getElementById('mNotes').value=m.notes??'';
+  document.querySelectorAll('#feelRow .feel').forEach(b=>b.classList.toggle('on',+b.dataset.v===m.feel));
+  // timeline
+  renderTimeline();
+}
+function drawRing(p){
+  const r=36,c=2*Math.PI*r,off=c*(1-p/100);
+  const col=p>=80?'var(--lime)':p>=40?'var(--cyan)':'var(--pink)';
+  document.getElementById('ring').innerHTML=
+    `<svg width="84" height="84"><circle cx="42" cy="42" r="36" fill="none" stroke="#1f2832" stroke-width="8"/>
+     <circle cx="42" cy="42" r="36" fill="none" stroke="${col}" stroke-width="8" stroke-linecap="round"
+      stroke-dasharray="${c}" stroke-dashoffset="${off}"/></svg><div class="pct">${p}%</div>`;
+}
+function renderTimeline(){
+  const START=6,END=23, inner=document.getElementById('tlInner');
+  let h=''; for(let hr=START;hr<=END;hr++){ const ap=hr>=12?'PM':'AM',hh=hr%12||12;
+    h+=`<div class="hour"><span class="hr-lbl">${hh} ${ap}</span></div>`; }
+  h+='<div class="tl-events" id="tlEvents"></div>';
+  inner.innerHTML=h;
+  const ev=document.getElementById('tlEvents');
+  const HH=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hourH'));
+  dayItems(viewDate).forEach(it=>{
+    const sm=toMin(it.time); if(sm==null) return;
+    let em=toMin(it.end); if(em==null||em<=sm) em=sm+30;
+    const top=(sm-START*60)/60*HH; const hgt=Math.max(18,(em-sm)/60*HH-2);
+    if(top<-30) return;
+    const col=EV_COLORS[it.type]||'#5a6570';
+    const div=document.createElement('div'); div.className='ev';
+    div.style.top=top+'px'; div.style.height=hgt+'px';
+    div.style.setProperty('--evc',col); div.style.setProperty('--evbg',hex2rgba(col,.14));
+    div.innerHTML=`<div class="ett">${fmt12(it.time)}</div><div class="et">${esc(it.title)}</div>`;
+    ev.appendChild(div);
+  });
+  // now line
+  if(viewDate===todayStr()){
+    const now=new Date(), nm=now.getHours()*60+now.getMinutes();
+    if(nm>=START*60 && nm<=END*60){
+      const top=(nm-START*60)/60*HH;
+      const nl=document.createElement('div'); nl.className='nowline'; nl.style.top=top+'px';
+      nl.innerHTML=`<span class="nlt">${fmt12(String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0'))}</span>`;
+      inner.appendChild(nl);
+      setTimeout(()=>{ const tl=document.getElementById('timeline'); if(tl) tl.scrollTop=Math.max(0,top-150); },30);
+    }
+  }
+}
+
+/* ---------- WEEK ---------- */
+function renderWeek(){
+  const g=document.getElementById('weekGrid'); g.innerHTML='';
+  const order=[1,2,3,4,5,6,0];
+  order.forEach(wd=>{
+    const cls = (wd===3||wd===6)?'pink':(wd===1||wd===5)?'lime':(wd===0)?'dimc':'cyan';
+    const card=document.createElement('div'); card.className='card '+cls;
+    let rows=(DB.templates[wd]||[]).map((t,i)=>`
+      <li style="--accent:${EV_COLORS[t.type]||'#5a6570'}">
+        <div class="task-body">
+          <div class="task-title">${esc(t.title)}<span class="ttag ${t.type}">${t.type}</span></div>
+          ${t.time?`<span class="task-time">${fmt12(t.time)}${t.end?' – '+fmt12(t.end):''}</span>`:''}
+        </div>
+        <button class="delx" data-wd="${wd}" data-i="${i}">×</button></li>`).join('');
+    card.innerHTML=`<h3>${DOW_FULL[wd]}</h3><div class="sub">${THEMES[wd]}</div>
+      <ul class="tasks" style="margin-top:8px;">${rows}</ul>
+      <div class="addrow">
+        <input class="in wk-t" placeholder="Add task…" data-wd="${wd}">
+        <input class="in tin wk-time" placeholder="HH:MM" data-wd="${wd}">
+        <select class="in wk-ty" data-wd="${wd}">${TYPES.map(t=>`<option value="${t}">${t}</option>`).join('')}</select>
+        <button class="btn sm wk-add" data-wd="${wd}">Add</button>
+      </div>`;
+    g.appendChild(card);
+  });
+}
+
+/* ---------- PROGRESS ---------- */
+function renderProgress(){
+  // medals (top-3 finishes)
+  const podiums=DB.results.filter(r=>+r.place>0 && +r.place<=3).sort((a,b)=>a.date.localeCompare(b.date));
+  const gm=document.getElementById('goalMedals'); gm.innerHTML='';
+  for(let i=0;i<3;i++){ const won=podiums[i];
+    gm.innerHTML+=`<div class="medal ${won?'won':''}"><div class="mi">🏆</div>
+      <div class="ml">${won?('P'+won.place+' · '+venueShort(won.venue)):'Podium '+(i+1)}</div></div>`; }
+  // consistency
+  document.getElementById('stStreak').textContent=streak();
+  document.getElementById('stWeek').textContent=weekPct()+'%';
+  document.getElementById('stTotal').textContent=totalTasksDone();
+  render14Bars();
+  // recovery
+  const sl=avgMetric('sleep',7); document.getElementById('stSleep').textContent= sl!=null?sl.toFixed(1):'–';
+  document.getElementById('stRuns').textContent=sumMetric('runs',7);
+  const fl=avgMetric('feel',7); document.getElementById('stFeel').textContent= fl!=null?fl.toFixed(1):'–';
+  sleepSpark();
+  // results
+  renderResults();
+  placeSpark();
+  // skills
+  renderSkills();
+}
+function venueShort(v){ return (v||'').split(',')[0].split('(')[0].trim(); }
+function streak(){ let s=0,d=todayStr(); for(let i=0;i<400;i++){ const c=completion(d); if(c.t>0 && c.d>0){ s++; d=addDays(d,-1);} else { if(i===0 && (completion(d).d===0)){ d=addDays(d,-1); continue;} break; } } return s; }
+function weekPct(){ const now=parseYmd(todayStr()); const monOff=(now.getDay()+6)%7; let tot=0,don=0;
+  for(let i=0;i<=monOff;i++){ const ds=addDays(todayStr(),-i); const c=completion(ds); tot+=c.t; don+=c.d; }
+  return tot?Math.round(don/tot*100):0; }
+function totalTasksDone(){ let n=0; for(const d in DB.log){ const c=completion(d); n+=c.d; } return n; }
+function render14Bars(){ const bars=document.getElementById('bars14'),labs=document.getElementById('barLabels');
+  bars.innerHTML='';labs.innerHTML='';
+  for(let i=13;i>=0;i--){ const ds=addDays(todayStr(),-i); const c=completion(ds); const p=c.t?c.p:0;
+    const today=ds===todayStr();
+    bars.innerHTML+=`<div class="b ${today?'today':''}" title="${ds}: ${p}%"><i style="height:${Math.max(3,p)}%"></i></div>`;
+    labs.innerHTML+=`<span>${i%2===0?parseYmd(ds).getDate():''}</span>`; }
+}
+function metricSeries(key,days){ const out=[]; for(let i=days-1;i>=0;i--){ const ds=addDays(todayStr(),-i);
+  const m=(DB.log[ds]&&DB.log[ds].metrics)||{}; out.push(m[key]!=null?+m[key]:null);} return out; }
+function avgMetric(key,days){ const s=metricSeries(key,days).filter(v=>v!=null); return s.length?s.reduce((a,b)=>a+b,0)/s.length:null; }
+function sumMetric(key,days){ return metricSeries(key,days).filter(v=>v!=null).reduce((a,b)=>a+b,0); }
+function sleepSpark(){ const data=metricSeries('sleep',14); drawSpark('sleepSpark',data,0,12,'#20d4e0',9); }
+function drawSpark(id,data,min,max,color,goal){ const el=document.getElementById(id); const W=300,H=46,pad=4;
+  const pts=data.map((v,i)=>({x:pad+i*(W-2*pad)/(data.length-1), v}));
+  const y=v=>H-pad-((v-min)/(max-min))*(H-2*pad);
+  let path='',dots=''; let started=false;
+  pts.forEach(p=>{ if(p.v==null){return;} const yy=y(Math.max(min,Math.min(max,p.v)));
+    path+=(started?'L':'M')+p.x.toFixed(1)+' '+yy.toFixed(1)+' '; started=true;
+    dots+=`<circle cx="${p.x.toFixed(1)}" cy="${yy.toFixed(1)}" r="2" fill="${color}"/>`; });
+  let gl=''; if(goal!=null){ const gy=y(goal); gl=`<line x1="0" y1="${gy}" x2="${W}" y2="${gy}" stroke="#3a4651" stroke-dasharray="3 3" stroke-width="1"/>`; }
+  el.innerHTML=`${gl}<path d="${path}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round"/>${dots}`;
+}
+function placeSpark(){ const el=document.getElementById('placeSpark'); const W=300,H=60,pad=8;
+  const r=[...DB.results].filter(x=>+x.place>0).sort((a,b)=>a.date.localeCompare(b.date));
+  if(r.length<1){ el.innerHTML=`<text x="150" y="34" fill="#5d6873" font-size="11" text-anchor="middle" font-family="Oswald">Add race results to see your placement trend</text>`; return; }
+  const maxP=Math.max(...r.map(x=>+x.place),5); const minP=1;
+  const xs=i=>r.length===1?W/2:pad+i*(W-2*pad)/(r.length-1);
+  const ys=p=>pad+((p-minP)/(maxP-minP))*(H-2*pad); // lower place = higher on chart
+  let path='',dots='';
+  r.forEach((x,i)=>{ const X=xs(i),Y=ys(+x.place); path+=(i?'L':'M')+X.toFixed(1)+' '+Y.toFixed(1)+' ';
+    const pod=+x.place<=3; dots+=`<circle cx="${X.toFixed(1)}" cy="${Y.toFixed(1)}" r="3.5" fill="${pod?'#90c63e':'#20d4e0'}"/>
+      <text x="${X.toFixed(1)}" y="${(Y-7).toFixed(1)}" fill="#9aa6b2" font-size="9" text-anchor="middle" font-family="Orbitron">${x.place}</text>`; });
+  el.innerHTML=`<path d="${path}" fill="none" stroke="#20d4e0" stroke-width="2"/>${dots}`;
+}
+function renderResults(){ const t=document.getElementById('resultsTable');
+  const r=[...DB.results].sort((a,b)=>b.date.localeCompare(a.date));
+  if(!r.length){ t.innerHTML=`<tr><td class="empty">No races logged yet. Add your first result below.</td></tr>`; return; }
+  t.innerHTML=`<tr><th>Date</th><th>Venue</th><th>Place</th><th>Time</th><th>Notes</th><th></th></tr>`+
+    r.map(x=>{ const pl=+x.place, cls=pl<=3?'podium':pl<=5?'top5':'';
+      return `<tr><td style="white-space:nowrap;font-family:Orbitron;font-size:11px;color:#9aa6b2">${x.date||''}</td>
+        <td>${esc(venueShort(x.venue))}</td>
+        <td><span class="place ${cls}">${x.place||'–'}</span>${x.field?`<span style="color:#5d6873;font-size:11px"> / ${x.field}</span>`:''}${pl>0&&pl<=3?'<span class="pbadge">PODIUM</span>':''}</td>
+        <td style="font-family:Orbitron;font-size:11px">${esc(x.time||'')}</td>
+        <td style="color:#9aa6b2;font-size:12px">${esc(x.notes||'')}</td>
+        <td><button class="delx" data-delr="${x.id}">×</button></td></tr>`; }).join('');
+}
+function renderSkills(){ const el=document.getElementById('skillList'); el.innerHTML='';
+  DB.skills.forEach((s,i)=>{ let dots=''; for(let l=1;l<=4;l++) dots+=`<div class="sdot ${l<=s.level?'on':''}" data-si="${i}" data-lv="${l}"></div>`;
+    el.innerHTML+=`<div class="skill"><span class="sn">${esc(s.name)}</span><div class="sdots">${dots}</div><button class="delx" data-dels="${i}">×</button></div>`; });
+}
+
+/* ---------- BIKE ---------- */
+function renderBike(){
+  // garage
+  const bl=document.getElementById('bikeList'); bl.innerHTML='';
+  if(!DB.bikes.length) bl.innerHTML=`<div class="empty">No bikes yet. Add your race rig below so you can attach setups to it.</div>`;
+  DB.bikes.forEach(b=>{
+    const specs=[['Frame',b.frame],['Wheels',b.wheel],['Fork',b.fork],['Shock',b.shock],['Drivetrain',b.drive],
+      ['Brakes',b.brakes],['Bar',b.bar],['Stem',b.stem],['Bar ends',b.barEnds],['Tires',b.tires],['Inserts',b.inserts]]
+      .filter(s=>s[1]).map(s=>`<div class="spec"><span class="sk">${s[0]}</span><span class="sv">${esc(s[1])}</span></div>`).join('');
+    bl.innerHTML+=`<div class="card cyan bike-card" style="margin-bottom:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
+        <h3>${esc(b.name||'Bike')}</h3><button class="delx" data-delb="${b.id}">× remove</button></div>
+      <div class="speclist">${specs||'<span class="empty">No specs entered.</span>'}</div></div>`;
+  });
+  // setup dropdowns
+  fillSelect('sBike', DB.bikes.map(b=>({v:b.id,t:b.name||'Bike'})), true);
+  fillSelect('sCourse', VENUES.map(v=>({v:v,t:v})));
+  fillSelect('rVenue', VENUES.map(v=>({v:v,t:v})));
+  // setups
+  const sl=document.getElementById('setupList'); sl.innerHTML='';
+  const setups=[...DB.setups].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  if(!setups.length) sl.innerHTML=`<div class="empty">No setups logged yet.</div>`;
+  setups.forEach(s=>{ const bike=DB.bikes.find(b=>b.id===s.bikeId);
+    const fields=[['Fork',s.forkP],['Fk reb',s.forkR],['Fk L/H',s.forkC],['Tokens',s.forkT],
+      ['Shock',s.shockP],['Sh reb',s.shockR],['Sh L/H',s.shockC],['Sag',s.sag],['Tire F/R',s.tire],['Rider',s.weight]]
+      .filter(f=>f[1]).map(f=>`<div class="sg"><b>${f[0]}</b>${esc(f[1])}</div>`).join('');
+    sl.innerHTML+=`<div class="setup-entry">
+      <div class="se-head"><div class="se-course">${esc(venueShort(s.course))}<span class="cond">${esc(s.cond||'')}</span></div>
+        <div class="se-date">${esc(s.date||'')} ${bike?'· '+esc(bike.name):''} <button class="delx" data-delset="${s.id}">×</button></div></div>
+      <div class="se-grid">${fields}</div>
+      ${s.notes?`<div style="margin-top:8px;font-size:12px;color:#9aa6b2;border-left:3px solid var(--cyan);padding-left:9px;">${esc(s.notes)}</div>`:''}
+    </div>`; });
+  // cheat sheet
+  const ct=document.getElementById('cheatTable');
+  ct.innerHTML=`<tr><th style="width:42%">Symptom</th><th>Starting fix</th></tr>`+
+    CHEAT.map(c=>`<tr><td class="sym">${c[0]}</td><td class="fix">${c[1]}</td></tr>`).join('');
+}
+function fillSelect(id,opts,blankFirst){ const s=document.getElementById(id); if(!s) return; const cur=s.value;
+  s.innerHTML=(blankFirst?'<option value="">—</option>':'')+opts.map(o=>`<option value="${esc(o.v)}">${esc(o.t)}</option>`).join('');
+  if(cur) s.value=cur; }
+
+/* ---------- utils ---------- */
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function hex2rgba(h,a){ const n=parseInt(h.slice(1),16); return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`; }
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+
+/* =================================================================
+   EVENTS
+   ================================================================= */
+document.getElementById('tabs').addEventListener('click',e=>{ if(e.target.dataset.view) setView(e.target.dataset.view); });
+document.getElementById('prevDay').onclick=()=>{ viewDate=addDays(viewDate,-1); renderToday(); };
+document.getElementById('nextDay').onclick=()=>{ viewDate=addDays(viewDate,1); renderToday(); };
+document.getElementById('jumpToday').onclick=()=>{ viewDate=todayStr(); renderToday(); };
+
+// task check / delete (delegated)
+document.getElementById('taskList').addEventListener('click',e=>{
+  const chk=e.target.closest('.chk');
+  if(chk){ const id=chk.dataset.id, src=chk.dataset.src; const lg=getLog(viewDate);
+    if(src==='cst'){ const it=lg.custom.find(c=>c.id===id); if(it) it.done=!it.done; }
+    else { lg.checks[id]=!lg.checks[id]; }
+    save(); renderToday(); return; }
+  const del=e.target.closest('[data-del]');
+  if(del){ const lg=getLog(viewDate); lg.custom=lg.custom.filter(c=>c.id!==del.dataset.del); save(); renderToday(); }
+});
+document.getElementById('addTaskBtn').onclick=()=>{
+  const title=document.getElementById('addTaskTitle').value.trim(); if(!title) return;
+  const time=document.getElementById('addTaskTime').value.trim();
+  const type=document.getElementById('addTaskType').value;
+  getLog(viewDate).custom.push({id:uid(),title,time,end:'',type,done:false});
+  document.getElementById('addTaskTitle').value=''; document.getElementById('addTaskTime').value='';
+  save(); renderToday();
+};
+// metrics
+function bindMetric(id,key,num){ document.getElementById(id).addEventListener('change',e=>{
+  const m=getLog(viewDate).metrics; const v=e.target.value; m[key]= v===''?undefined:(num?parseFloat(v):v); save();
+  if(document.getElementById('view-progress').classList.contains('active')) renderProgress(); }); }
+bindMetric('mSleep','sleep',true); bindMetric('mRuns','runs',true); bindMetric('mWeight','weight',true); bindMetric('mNotes','notes',false);
+document.getElementById('feelRow').addEventListener('click',e=>{ const b=e.target.closest('.feel'); if(!b) return;
+  const m=getLog(viewDate).metrics; m.feel = m.feel===+b.dataset.v ? undefined : +b.dataset.v; save(); renderToday(); });
+
+// week edits (delegated)
+document.getElementById('weekGrid').addEventListener('click',e=>{
+  const add=e.target.closest('.wk-add');
+  if(add){ const wd=+add.dataset.wd; const card=add.closest('.card');
+    const ti=card.querySelector('.wk-t'), tm=card.querySelector('.wk-time'), ty=card.querySelector('.wk-ty');
+    const title=ti.value.trim(); if(!title) return;
+    DB.templates[wd].push({time:tm.value.trim(),end:'',title,type:ty.value});
+    DB.templates[wd].sort((a,b)=>{const am=toMin(a.time),bm=toMin(b.time); if(am==null)return 1; if(bm==null)return -1; return am-bm;});
+    save(); renderWeek(); return; }
+  const del=e.target.closest('[data-wd][data-i]');
+  if(del){ const wd=+del.dataset.wd,i=+del.dataset.i; DB.templates[wd].splice(i,1); save(); renderWeek(); }
+});
+
+// results
+document.getElementById('addResultBtn').onclick=()=>{
+  const r={ id:uid(), date:document.getElementById('rDate').value||todayStr(),
+    venue:document.getElementById('rVenue').value, cls:document.getElementById('rClass').value,
+    place:document.getElementById('rPlace').value, field:document.getElementById('rField').value,
+    time:document.getElementById('rTime').value, notes:document.getElementById('rNotes').value };
+  if(!r.place){ alert('Add your finishing place.'); return; }
+  DB.results.push(r); save();
+  ['rPlace','rField','rTime','rNotes'].forEach(id=>document.getElementById(id).value='');
+  renderProgress();
+};
+document.getElementById('resultsTable').addEventListener('click',e=>{ const d=e.target.closest('[data-delr]');
+  if(d){ DB.results=DB.results.filter(x=>x.id!==d.dataset.delr); save(); renderProgress(); } });
+
+// skills
+document.getElementById('skillList').addEventListener('click',e=>{
+  const dot=e.target.closest('.sdot');
+  if(dot){ const i=+dot.dataset.si,lv=+dot.dataset.lv; DB.skills[i].level = DB.skills[i].level===lv?lv-1:lv; save(); renderSkills(); return; }
+  const del=e.target.closest('[data-dels]'); if(del){ DB.skills.splice(+del.dataset.dels,1); save(); renderSkills(); }
+});
+document.getElementById('addSkillBtn').onclick=()=>{ const v=document.getElementById('addSkill').value.trim(); if(!v) return;
+  DB.skills.push({name:v,level:0}); document.getElementById('addSkill').value=''; save(); renderSkills(); };
+
+// bikes
+document.getElementById('addBikeBtn').onclick=()=>{
+  const g=id=>document.getElementById(id).value.trim();
+  const b={ id:uid(), name:g('bName')||'Bike', frame:g('bFrame'), wheel:g('bWheel'), fork:g('bFork'),
+    shock:g('bShock'), drive:g('bDrive'), brakes:g('bBrakes'), bar:g('bBar'), stem:g('bStem'),
+    barEnds:g('bBarEnds'), tires:g('bTires'), inserts:g('bInserts') };
+  DB.bikes.push(b);
+  ['bName','bFrame','bWheel','bFork','bShock','bDrive','bBrakes','bBar','bStem','bBarEnds','bTires','bInserts'].forEach(id=>document.getElementById(id).value='');
+  save(); renderBike();
+};
+document.getElementById('bikeList').addEventListener('click',e=>{ const d=e.target.closest('[data-delb]');
+  if(d){ if(confirm('Remove this bike?')){ DB.bikes=DB.bikes.filter(b=>b.id!==d.dataset.delb); save(); renderBike(); } } });
+
+// setups
+document.getElementById('addSetupBtn').onclick=()=>{
+  const g=id=>document.getElementById(id).value.trim();
+  const s={ id:uid(), bikeId:document.getElementById('sBike').value, course:g('sCourse'), date:g('sDate')||todayStr(),
+    cond:g('sCond'), weight:g('sWeight'), forkP:g('sForkP'), forkR:g('sForkR'), forkC:g('sForkC'), forkT:g('sForkT'),
+    shockP:g('sShockP'), shockR:g('sShockR'), shockC:g('sShockC'), sag:g('sSag'), tire:g('sTire'), notes:g('sNotes') };
+  DB.setups.push(s);
+  ['sWeight','sForkP','sForkR','sForkC','sForkT','sShockP','sShockR','sShockC','sSag','sTire','sNotes'].forEach(id=>document.getElementById(id).value='');
+  save(); renderBike();
+};
+document.getElementById('setupList').addEventListener('click',e=>{ const d=e.target.closest('[data-delset]');
+  if(d){ DB.setups=DB.setups.filter(x=>x.id!==d.dataset.delset); save(); renderBike(); } });
+
+// export / import
+document.getElementById('exportBtn').onclick=()=>{
+  const blob=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='054-dashboard-backup-'+todayStr()+'.json'; a.click(); URL.revokeObjectURL(a.href);
+};
+document.getElementById('importBtn').onclick=()=>document.getElementById('importFile').click();
+document.getElementById('importFile').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader(); r.onload=()=>{ try{ const d=JSON.parse(r.result);
+    if(confirm('Replace all current data with this backup?')){ DB=d; const def=defaults(); for(const k in def){ if(DB[k]===undefined) DB[k]=def[k]; } save(); renderToday(); setView('today'); }
+  }catch(err){ alert('That file could not be read as a valid backup.'); } }; r.readAsText(f); });
+
+// live clock for now-line
+setInterval(()=>{ if(document.getElementById('view-today').classList.contains('active') && viewDate===todayStr()) renderTimeline(); },60000);
+
+document.getElementById('signBtn').onclick=signToggle;
+
+/* boot */
+load(); renderToday(); initCloud();
+</script>
+</body>
+</html>
