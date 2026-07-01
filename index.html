@@ -265,6 +265,127 @@
   .ideachips{ display:flex; flex-wrap:wrap; gap:7px; }
   .ideachip{ display:inline-flex; align-items:center; gap:6px; font-size:12.5px; background:#0e1318; border:1px solid var(--line2); color:#d6dde2; padding:5px 10px; border-radius:5px; }
   .ideachip .delx{ font-size:13px; padding:0 2px; }
+  .exrows{ margin-top:10px; }
+  .exrow{ padding:12px 0; border-top:1px solid #1a2128; }
+  .exrow:first-child{ border-top:0; }
+  .exhead{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+  .exname{ font-size:14px; font-weight:500; color:#fff; }
+  .extarget{ font-family:'Orbitron'; font-size:10px; color:var(--dim); letter-spacing:.04em; margin-top:2px; }
+  .excur{ text-align:right; white-space:nowrap; }
+  .curw{ font-family:'Orbitron'; font-weight:800; font-size:22px; color:var(--lime); }
+  .curw small{ font-size:11px; color:var(--dim); font-weight:600; margin-left:2px; }
+  .curw.none{ color:#3a4651; }
+  .gd{ display:block; font-family:'Orbitron'; font-weight:700; font-size:10px; margin-top:2px; }
+  .gd.up{ color:var(--lime); } .gd.dn{ color:#f0c98a; } .gd.sm{ color:var(--dim); }
+  .exlog{ display:flex; align-items:center; gap:8px; margin-top:9px; flex-wrap:wrap; }
+  .exlog .gymin{ width:120px; flex:none; }
+  .inccount{ font-family:'Orbitron'; font-weight:700; font-size:10px; color:var(--lime); letter-spacing:.04em; }
+  .ghist{ margin-top:8px; }
+  .ghist > summary{ list-style:none; font-family:'Orbitron'; font-weight:600; font-size:9px; letter-spacing:.08em; text-transform:uppercase; color:var(--cyan); cursor:pointer; }
+  .ghist > summary::-webkit-details-marker{ display:none; }
+  .ghlist{ margin-top:6px; }
+  .ghrow{ display:flex; align-items:center; gap:10px; padding:4px 0; border-top:1px solid #151b21; font-size:12px; }
+  .ghrow:first-child{ border-top:0; }
+  .ghd{ font-family:'Orbitron'; font-size:10px; color:var(--dim); min-width:82px; }
+  .ghw{ flex:1; color:#d6dde2; font-weight:500; }
+  .ghw.up{ color:var(--lime); } .ghw.dn{ color:#f0c98a; }
+  .videobox{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#000; }
+  .videobox iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .runlist{ display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:14px; align-items:start; }
+  .run-head{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; }
+  .run-course{ font-family:'Anton'; font-size:17px; text-transform:uppercase; letter-spacing:.5px; }
+  .run-date{ font-family:'Orbitron'; font-size:10px; color:var(--dim); white-space:nowrap; }
+  .runtype{ font-family:'Orbitron'; font-weight:700; font-size:8px; letter-spacing:.1em; text-transform:uppercase; padding:2px 7px; border-radius:3px; margin-left:8px; }
+  .runtype.race{ background:var(--pink); color:#fff; } .runtype.other{ background:var(--cyan); color:var(--ink); }
+  .run-player{ margin-top:11px; }
+  .run-notes{ margin-top:10px; font-size:12.5px; color:#9aa6b2; border-left:3px solid var(--cyan); padding-left:10px; }
+  .filterbar{ display:flex; gap:10px; align-items:center; margin-bottom:14px; flex-wrap:wrap; }
+  .acctchips{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; align-items:center; }
+  .acctchip{ font-family:'Oswald'; font-weight:600; font-size:12px; letter-spacing:.03em; padding:8px 12px; border-radius:5px; border:1px solid var(--line2); background:#0e1318; color:var(--dim2); display:flex; align-items:center; gap:8px; cursor:pointer; }
+  .acctchip.on{ background:var(--pink); color:#fff; border-color:var(--pink); }
+  .acctchip .rm{ background:none; border:none; color:inherit; opacity:.55; font-size:14px; padding:0; }
+  .acctchip .rm:hover{ opacity:1; }
+  td.up,.mono.up{ color:var(--lime); } td.dn,.mono.dn{ color:#f0c98a; }
+  .mono{ font-family:'Orbitron'; font-size:11px; }
+  /* sidebar nav */
+  .datamenu{ margin-left:auto; }
+  .hamburger{ background:#0e1318; border:1px solid var(--line2); color:var(--text); width:40px; height:38px; border-radius:4px; font-size:18px; line-height:1; }
+  .hamburger:hover{ border-color:var(--cyan); }
+  .scrim{ position:fixed; inset:0; background:rgba(0,0,0,.55); opacity:0; pointer-events:none; transition:opacity .2s; z-index:90; }
+  .scrim.show{ opacity:1; pointer-events:auto; }
+  .sidebar{ position:fixed; top:0; left:0; bottom:0; width:274px; background:var(--panel); border-right:1px solid var(--line);
+    transform:translateX(-102%); transition:transform .22s ease; z-index:100; overflow-y:auto; }
+  .sidebar.open{ transform:none; box-shadow:2px 0 30px rgba(0,0,0,.5); }
+  .side-head{ display:flex; align-items:center; justify-content:space-between; padding:16px 18px; border-bottom:1px solid var(--line);
+    position:sticky; top:0; background:var(--panel); }
+  .side-head .nm{ font-family:'Anton'; font-size:20px; text-transform:uppercase; letter-spacing:.5px; }
+  .side-head .nm em{ font-style:normal; color:var(--pink); }
+  .side-close{ background:none; border:none; color:var(--dim2); font-size:24px; line-height:1; }
+  .side-close:hover{ color:var(--pink); }
+  #nav{ padding:12px 10px 30px; }
+  .navlink{ display:block; width:100%; text-align:left; background:transparent; border:none; color:var(--dim2);
+    font-family:'Oswald'; font-weight:500; font-size:14px; padding:10px 12px; border-radius:4px; letter-spacing:.02em; }
+  .navlink:hover{ background:#0e1318; color:var(--text); }
+  .navlink.active{ background:var(--cyan); color:var(--ink); font-weight:600; }
+  .navlink.home{ font-family:'Anton'; font-weight:400; font-size:18px; text-transform:uppercase; letter-spacing:.6px; margin-bottom:8px; }
+  .navlink.home .ni{ color:var(--pink); margin-right:4px; }
+  .navlink.home.active{ background:var(--pink); color:#fff; }
+  .navlink.home.active .ni{ color:#fff; }
+  .navfolder{ margin-top:6px; border-top:1px solid var(--line); padding-top:6px; }
+  .folder-h{ width:100%; text-align:left; background:transparent; border:none; color:var(--cyan); position:relative;
+    font-family:'Orbitron'; font-weight:700; font-size:10px; letter-spacing:.16em; text-transform:uppercase; padding:9px 12px; }
+  .folder-h::after{ content:'▾'; position:absolute; right:14px; top:9px; transition:transform .2s; font-size:9px; }
+  .navfolder.collapsed .folder-h::after{ transform:rotate(-90deg); }
+  .navfolder.collapsed .folder-items{ display:none; }
+  .folder-items{ padding:2px 0 4px 8px; }
+  .folder-items .navlink{ font-size:13px; padding:8px 12px; }
+
+  /* dashboard */
+  .dashgrid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin-bottom:16px; }
+  .cd-days{ font-family:'Orbitron'; font-weight:800; font-size:54px; line-height:.9; color:#fff; margin-top:6px; }
+  .cd-lbl{ font-family:'Orbitron'; font-weight:600; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--dim); }
+  .cd-race{ font-family:'Anton'; font-size:19px; text-transform:uppercase; margin-top:8px; color:var(--pink); }
+  #countdownCard .cd-race{ color:#fff; }
+  .cd-date{ font-family:'Orbitron'; font-size:11px; color:var(--dim); margin-top:2px; }
+  .wx{ display:flex; align-items:center; gap:12px; margin-top:8px; }
+  .wx-e{ font-size:38px; line-height:1; }
+  .wx-t{ font-family:'Orbitron'; font-weight:800; font-size:34px; }
+  .wx-d{ font-size:12px; color:var(--dim2); line-height:1.45; } .wx-d b{ color:#fff; font-weight:600; }
+  .wx-note{ font-size:12px; color:var(--dim); margin-top:8px; border-left:3px solid var(--cyan); padding-left:9px; }
+  .focus-txt{ font-size:15px; color:#fff; margin-top:8px; line-height:1.4; }
+  .snaprow{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-top:16px; }
+  .snapcard{ cursor:pointer; } .snapcard:hover{ border-color:var(--cyan); }
+  .snk{ font-family:'Orbitron'; font-weight:600; font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--dim); }
+  .snv{ font-family:'Orbitron'; font-weight:800; font-size:26px; margin-top:6px; }
+  .snsub{ font-size:11px; color:var(--dim); margin-top:2px; }
+  .snapmedals{ margin-top:6px; font-size:22px; } .smed{ filter:grayscale(1) opacity(.3); } .smed.on{ filter:none; }
+
+  /* drills */
+  .drill{ display:flex; align-items:flex-start; gap:10px; padding:9px 0; border-top:1px solid #1a2128; }
+  .drill:first-child{ border-top:0; }
+  .star{ background:none; border:none; color:var(--dim); font-size:18px; line-height:1; padding:0; }
+  .star.on{ color:var(--lime); }
+  .drill-b{ flex:1; } .drill-n{ font-size:14px; color:#fff; font-weight:500; } .drill-d{ font-size:12px; color:var(--dim2); margin-top:2px; }
+
+  /* checkrows (mobility / raceday) */
+  .chkrow{ display:flex; align-items:center; gap:11px; padding:8px 0; border-top:1px solid #1a2128; cursor:pointer; }
+  .chkrow:first-child{ border-top:0; }
+  .chkrow > span{ flex:1; font-size:14px; }
+  .chkrow .strike, span.strike{ text-decoration:line-through; color:var(--dim); }
+
+  /* maintenance */
+  .maint-row{ display:flex; align-items:center; gap:10px; padding:11px 0; border-top:1px solid #1a2128; flex-wrap:wrap; }
+  .maint-row:first-child{ border-top:0; }
+  .maint-b{ flex:1; min-width:180px; } .maint-n{ font-size:14px; color:#fff; font-weight:500; }
+  .maint-m{ font-family:'Orbitron'; font-size:10px; color:var(--dim); margin-top:3px; letter-spacing:.02em; }
+  .mbadge{ font-family:'Orbitron'; font-weight:700; font-size:9px; letter-spacing:.06em; text-transform:uppercase; padding:4px 9px; border-radius:3px; }
+  .mbadge.ok{ background:rgba(144,198,62,.15); color:var(--lime); } .mbadge.due{ background:#3a2c12; color:#f0c98a; }
+  .mbadge.over{ background:var(--pink); color:#fff; } .mbadge.none{ background:#1f2832; color:var(--dim); }
+
+  /* insights */
+  .insightTips p{ font-size:13px; color:#d6dde2; padding:6px 0; border-top:1px solid #1a2128; margin:0; }
+  .insightTips p:first-child{ border-top:0; }
+  .run-time{ font-family:'Orbitron'; font-weight:700; font-size:15px; color:var(--lime); margin:8px 0 2px; }
   .footnote{ text-align:center; margin-top:34px; font-family:'Orbitron'; font-weight:600; font-size:9px;
     letter-spacing:.24em; text-transform:uppercase; color:#3f4954; }
 </style>
@@ -273,17 +394,11 @@
 
 <div class="topbar">
   <div class="topinner">
+    <button class="hamburger" id="hamburger" aria-label="Open menu">&#9776;</button>
     <div class="brand">
       <span class="eb">054 Gravity Race Team</span>
       <span class="nm">Race <em>Dashboard</em></span>
     </div>
-    <nav class="tabs" id="tabs">
-      <button class="tab active" data-view="today">Today</button>
-      <button class="tab" data-view="week">Week</button>
-      <button class="tab" data-view="progress">Progress</button>
-      <button class="tab" data-view="meals">Meals</button>
-      <button class="tab" data-view="bike">Bike Setup</button>
-    </nav>
     <div class="datamenu">
       <span class="syncpill local" id="syncStatus">Local only</span>
       <button class="iconbtn" id="signBtn">Sign in to sync</button>
@@ -293,6 +408,52 @@
     </div>
   </div>
 </div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="side-head">
+    <span class="nm">Race <em>Dashboard</em></span>
+    <button class="side-close" id="sideClose" aria-label="Close menu">&times;</button>
+  </div>
+  <nav id="nav">
+    <button class="navlink home active" data-view="today"><span class="ni">◆</span> Today</button>
+    <div class="navfolder">
+      <button class="folder-h" data-folder="training">Training</button>
+      <div class="folder-items">
+        <button class="navlink" data-view="week">Weekly Schedule</button>
+        <button class="navlink" data-view="gym">Gym</button>
+        <button class="navlink" data-view="skills">Skills &amp; Drills</button>
+        <button class="navlink" data-view="mobility">Mobility &amp; Recovery</button>
+        <button class="navlink" data-view="meals">Meals</button>
+      </div>
+    </div>
+    <div class="navfolder">
+      <button class="folder-h" data-folder="bike">Bike</button>
+      <div class="folder-items">
+        <button class="navlink" data-view="bike">Setup &amp; Tuning</button>
+        <button class="navlink" data-view="maint">Maintenance</button>
+      </div>
+    </div>
+    <div class="navfolder">
+      <button class="folder-h" data-folder="race">Race</button>
+      <div class="folder-items">
+        <button class="navlink" data-view="racecal">Race Calendar</button>
+        <button class="navlink" data-view="raceday">Race Day</button>
+        <button class="navlink" data-view="course">Course Notes</button>
+        <button class="navlink" data-view="runs">Runs &amp; Timing</button>
+        <button class="navlink" data-view="progress">Results</button>
+        <button class="navlink" data-view="rankings">Rankings &amp; Points</button>
+        <button class="navlink" data-view="insights">Insights</button>
+      </div>
+    </div>
+    <div class="navfolder">
+      <button class="folder-h" data-folder="content">Content</button>
+      <div class="folder-items">
+        <button class="navlink" data-view="social">Instagram</button>
+      </div>
+    </div>
+  </nav>
+</aside>
 
 <div class="wrap">
   <div class="banner" id="banner"></div>
@@ -307,6 +468,12 @@
       </div>
       <button class="arrow" id="nextDay">&#8250;</button>
       <button class="btn ghost sm today-btn" id="jumpToday">Jump to Today</button>
+    </div>
+
+    <div class="dashgrid">
+      <div class="card pink" id="countdownCard"></div>
+      <div class="card cyan" id="weatherCard"><div class="sub">Weather</div><div class="empty" style="padding:6px 0;">Loading…</div></div>
+      <div class="card lime" id="focusCard"></div>
     </div>
 
     <div class="today-grid">
@@ -369,6 +536,13 @@
         </div>
         <div class="timeline" id="timeline"><div class="tl-inner" id="tlInner"></div></div>
       </div>
+    </div>
+
+    <div class="snaprow">
+      <div class="card dimc snapcard" data-go="progress"><div class="snk">Season goal</div><div class="snapmedals" id="snapPodium"></div></div>
+      <div class="card dimc snapcard" data-go="progress"><div class="snk">Consistency</div><div class="snv"><span id="snapStreak">0</span> 🔥</div><div class="snsub"><span id="snapWeek">0%</span> this week</div></div>
+      <div class="card dimc snapcard" data-go="social"><div class="snk">Followers</div><div class="snv" id="snapFollowers">–</div><div class="snsub">tap to log</div></div>
+      <div class="card dimc snapcard" data-go="runs"><div class="snk">Runs logged</div><div class="snv" id="snapRuns">0</div><div class="snsub">tap to review</div></div>
     </div>
   </section>
 
@@ -435,6 +609,7 @@
           <div><label class="fl">Place</label><input class="in" type="number" id="rPlace" placeholder="5"></div>
           <div><label class="fl">Field size</label><input class="in" type="number" id="rField" placeholder="22"></div>
           <div><label class="fl">Run time</label><input class="in" id="rTime" placeholder="3:42.1"></div>
+          <div><label class="fl">Series points earned</label><input class="in" type="number" id="rPoints" placeholder="optional"></div>
         </div>
         <label class="dnfcheck"><input type="checkbox" id="rDnf"><span>Crash / DNF — keep in the log but don’t count toward the pace trend or podium goal</span></label>
         <label class="fl" style="margin-top:10px;">Notes</label>
@@ -451,6 +626,41 @@
       <details class="addbox"><summary>+ Add a skill to track</summary><div class="pad">
         <div class="addrow"><input class="in" id="addSkill" placeholder="e.g. Steep wet roots"><button class="btn lime sm" id="addSkillBtn">Add</button></div>
       </div></details>
+    </div>
+  </section>
+
+  <!-- ================= RANKINGS & POINTS ================= -->
+  <section class="view" id="view-rankings">
+    <div class="seclabel">Qualification Status</div>
+    <div class="card pink" style="margin-bottom:16px;">
+      <h3>Where You Stand</h3>
+      <div class="sub">Pull these from your series' standings page (USA Cycling, regional series, etc.) — Roots &amp; Rain has results but no official rankings</div>
+      <div class="grid-form" style="margin-top:10px;">
+        <div><label class="fl">Category / class</label><input class="in" id="rkCategory" placeholder="18U Amateur"></div>
+        <div style="grid-column:span 2;min-width:220px;"><label class="fl">Current standing</label><input class="in" id="rkStanding" placeholder="14th of 52, Northeast DH Series"></div>
+      </div>
+      <label class="fl" style="margin-top:10px;">What it takes to move up / qualify</label>
+      <textarea class="in" id="rkPointsNote" placeholder="Need to finish top-5 in 3 of remaining 4 rounds to reach Expert for 2027…"></textarea>
+      <div style="margin-top:10px;font-family:'Orbitron';font-size:11px;color:var(--dim);letter-spacing:.06em;">Total points logged: <span id="rkTotal" style="color:#fff;">0</span></div>
+    </div>
+    <div class="seclabel">Points Log</div>
+    <div class="card cyan">
+      <h3>Per-Race Points</h3>
+      <div class="sub">Auto-added when you log points on a race result — or add manually below</div>
+      <div id="rankingEntries" style="margin-top:10px;"></div>
+      <details class="addbox" style="margin-top:12px;"><summary>+ Add points entry</summary><div class="pad">
+        <div class="grid-form">
+          <div><label class="fl">Date</label><input class="in" type="date" id="rkeDate"></div>
+          <div><label class="fl">Series</label><input class="in" id="rkeSeries" placeholder="Northeast DH Series"></div>
+          <div><label class="fl">Race / round</label><input class="in" id="rkeRace" placeholder="Round 3"></div>
+          <div><label class="fl">Points</label><input class="in" type="number" id="rkePoints" placeholder="45"></div>
+        </div>
+        <button class="btn cyan sm" id="addRankBtn" style="margin-top:10px;">Save entry</button>
+      </div></details>
+    </div>
+    <div class="card dimc" style="margin-top:16px;">
+      <h3>About auto-pulling from Roots &amp; Rain</h3>
+      <div class="sub">This dashboard is a static file with no server, so it can't silently sync from another site in the background. Two ways around that: paste your rider profile link here and ask me in chat to pull your latest results any time, or log points straight into the Race Results form above and they'll land here automatically.</div>
     </div>
   </section>
 
@@ -514,6 +724,13 @@
       <div class="sub">Change ONE thing at a time · re-test · write it down. Starting points, not gospel.</div>
       <table class="cheat" id="cheatTable"></table>
     </div>
+  </section>
+
+  <!-- ================= GYM ================= -->
+  <section class="view" id="view-gym">
+    <div class="seclabel">Gym Progress · Progressive Overload</div>
+    <p style="color:var(--dim); font-size:13px; margin-bottom:14px;">Log the weight you use each session — when you go up, it gets flagged so you can watch your strength climb. You're ramping back in, so only add load when your form stays clean for every rep.</p>
+    <div id="gymWrap" class="pgrid"></div>
   </section>
 
   <!-- ================= MEALS ================= -->
@@ -589,6 +806,272 @@
     </div>
   </section>
 
+  <!-- ================= RUNS ================= -->
+  <section class="view" id="view-runs">
+    <div class="seclabel">Run Library</div>
+    <div class="card cyan" style="margin-bottom:16px;">
+      <h3>How this works</h3>
+      <div class="sub">Big video files can't live in the site itself — here's the free way</div>
+      <p style="font-size:13px;color:#d6dde2;margin-top:10px;">Upload each run to <b style="color:var(--cyan)">YouTube (set it to Unlisted)</b> or <b style="color:var(--cyan)">Google Drive</b>, then paste the link below. The dashboard becomes your run catalogue — it saves the link, course, and notes to your account and plays the video right here so you can rewatch and study your lines. YouTube unlisted is free and unlimited, and only people with the link (kept private in your synced data) can see it.</p>
+    </div>
+    <div class="filterbar">
+      <label class="fl" style="margin:0;">Filter by course</label>
+      <select class="in" id="runFilter" style="width:auto;"></select>
+    </div>
+    <div id="runCompare"></div>
+    <div class="runlist" id="runList"></div>
+    <details class="addbox" style="margin-top:16px;"><summary>+ Add a run</summary><div class="pad">
+      <div class="grid-form">
+        <div><label class="fl">Date</label><input class="in" type="date" id="runDate"></div>
+        <div><label class="fl">Course</label><select class="in" id="runCourse"></select></div>
+        <div><label class="fl">Type</label><select class="in" id="runType"></select></div>
+      </div>
+      <label class="fl" style="margin-top:10px;">Video link (YouTube / Google Drive / Vimeo)</label>
+      <input class="in" id="runUrl" placeholder="https://youtu.be/…">
+      <div class="grid-form" style="margin-top:10px;">
+        <div><label class="fl">Total time (optional)</label><input class="in" id="runTotal" placeholder="2:49.1"></div>
+        <div style="grid-column:span 2; min-width:200px;"><label class="fl">Section splits (optional)</label><input class="in" id="runSplits" placeholder="Top=15.2, Woods=22.1, Bottom=18.9"></div>
+      </div>
+      <label class="fl" style="margin-top:10px;">Notes</label>
+      <textarea class="in" id="runNotes" placeholder="Practice run 3 — carried more speed into the rock garden, braked too early up top"></textarea>
+      <button class="btn cyan sm" id="addRunBtn" style="margin-top:10px;">Save run</button>
+    </div></details>
+  </section>
+
+  <!-- ================= SOCIAL ================= -->
+  <section class="view" id="view-social">
+    <div class="seclabel">Instagram Growth</div>
+    <p style="color:var(--dim); font-size:13px; margin-bottom:14px;">Instagram can't feed a static site automatically, so this is a quick manual tracker — jot your numbers from the app's Insights each week and the growth trend builds itself.</p>
+    <div class="acctchips" id="acctChips"></div>
+    <div id="socialBody">
+      <div class="statline">
+        <div class="stat"><div class="v pink" id="sFollowers">–</div><div class="k">Followers</div></div>
+        <div class="stat"><div class="v lime" id="sDelta">–</div><div class="k">Since last log</div></div>
+        <div class="stat"><div class="v cyan" id="sDelta30">–</div><div class="k">Last 30 days</div></div>
+        <div class="stat"><div class="v" id="sPosts">–</div><div class="k">Posts</div></div>
+      </div>
+      <div class="card pink" style="margin-top:6px;">
+        <h3>Follower Growth</h3>
+        <div class="sub">Log your numbers regularly to see the trend climb</div>
+        <svg class="spark" id="followChart" style="height:100px;"></svg>
+      </div>
+      <div class="card cyan" style="margin-top:16px;">
+        <h3>Stat Log</h3>
+        <div class="sub">Pull these from Instagram → Insights (needs a free Creator / Business account)</div>
+        <table class="results" id="statTable"></table>
+        <details class="addbox"><summary>+ Log stats</summary><div class="pad">
+          <div class="grid-form">
+            <div><label class="fl">Date</label><input class="in" type="date" id="statDate"></div>
+            <div><label class="fl">Account</label><select class="in" id="statAcct"></select></div>
+            <div><label class="fl">Followers</label><input class="in" type="number" id="statFollowers" placeholder="1200"></div>
+            <div><label class="fl">Following</label><input class="in" type="number" id="statFollowing"></div>
+            <div><label class="fl">Posts</label><input class="in" type="number" id="statPosts"></div>
+            <div><label class="fl">Reach (28d)</label><input class="in" type="number" id="statReach"></div>
+            <div><label class="fl">Profile visits</label><input class="in" type="number" id="statVisits"></div>
+          </div>
+          <label class="fl" style="margin-top:10px;">Notes — what content performed</label>
+          <textarea class="in" id="statNotes" placeholder="Bolton POV reel hit 4k views — race-run edits get the most reach"></textarea>
+          <button class="btn cyan sm" id="addStatBtn" style="margin-top:10px;">Save stats</button>
+        </div></details>
+      </div>
+    </div>
+    <div class="empty" id="noAcct" style="display:none;">Add an account above to start tracking.</div>
+  </section>
+
+  <!-- ================= SKILLS & DRILLS ================= -->
+  <section class="view" id="view-skills">
+    <div class="seclabel">Focus of the Week</div>
+    <div class="card lime" style="margin-bottom:16px;">
+      <h3>Pick One Thing</h3>
+      <div class="sub">Deliberate practice beats aimless laps — choose a focus and rate how it's going</div>
+      <textarea class="in" id="focusText" style="margin-top:10px;" placeholder="e.g. Late braking into flat corners — carry more entry speed"></textarea>
+      <div class="addrow"><input class="in" id="focusNote" placeholder="Quick note on how it went…"><button class="btn lime sm" id="saveFocusBtn">Log it</button></div>
+      <div id="focusLog" style="margin-top:12px;"></div>
+    </div>
+    <div class="seclabel">Drill Bank</div>
+    <div class="card cyan">
+      <h3>Drills &amp; Progressions</h3>
+      <div class="sub">Star the ones you're working on now</div>
+      <div id="drillList" style="margin-top:10px;"></div>
+      <details class="addbox"><summary>+ Add a drill</summary><div class="pad">
+        <div class="grid-form">
+          <div><label class="fl">Category</label><input class="in" id="drillCat" placeholder="Cornering"></div>
+          <div style="grid-column:span 2;min-width:180px;"><label class="fl">Drill name</label><input class="in" id="drillName" placeholder="Switchback rail drill"></div>
+        </div>
+        <label class="fl" style="margin-top:10px;">How to do it</label>
+        <textarea class="in" id="drillDesc" placeholder="Short description / cue"></textarea>
+        <button class="btn cyan sm" id="addDrillBtn" style="margin-top:10px;">Add drill</button>
+      </div></details>
+    </div>
+  </section>
+
+  <!-- ================= MOBILITY & RECOVERY ================= -->
+  <section class="view" id="view-mobility">
+    <div class="seclabel">Warm-up &amp; Prehab</div>
+    <div class="card cyan" style="margin-bottom:16px;">
+      <h3>Daily Routine</h3>
+      <div class="sub">Run through before riding &amp; gym — resets fresh each day · <span id="mobCount">0 / 0 today</span></div>
+      <div id="mobList" style="margin-top:10px;"></div>
+      <div class="addrow"><input class="in" id="mobName" placeholder="Add a movement…"><button class="btn sm" id="addMobBtn">Add</button></div>
+    </div>
+    <div class="seclabel">Niggle &amp; Soreness Log</div>
+    <div class="card pink">
+      <h3>Stay Ahead of Injury</h3>
+      <div class="sub">Log tweaks early — patterns here mean it's time to back off, not push</div>
+      <div id="niggleList" style="margin-top:10px;"></div>
+      <details class="addbox"><summary>+ Log a niggle</summary><div class="pad">
+        <div class="grid-form">
+          <div><label class="fl">Date</label><input class="in" type="date" id="nigDate"></div>
+          <div><label class="fl">Area</label><input class="in" id="nigArea" placeholder="Left knee"></div>
+          <div><label class="fl">Severity 1–5</label><input class="in" type="number" min="1" max="5" id="nigSev" placeholder="2"></div>
+        </div>
+        <label class="fl" style="margin-top:10px;">Notes</label>
+        <textarea class="in" id="nigNotes" placeholder="Tight after Bolton, eased with mobility"></textarea>
+        <button class="btn pink sm" id="addNigBtn" style="margin-top:10px;">Save</button>
+      </div></details>
+    </div>
+  </section>
+
+  <!-- ================= MAINTENANCE ================= -->
+  <section class="view" id="view-maint">
+    <div class="seclabel">Service Status</div>
+    <div class="card cyan" style="margin-bottom:16px;">
+      <h3>Keep It Race-Ready</h3>
+      <div class="sub">A mechanical on race day is a wasted entry — mark each job when you do it</div>
+      <div id="maintStatus" style="margin-top:10px;"></div>
+      <details class="addbox"><summary>+ Add a service item</summary><div class="pad">
+        <div class="addrow"><input class="in" id="miName" placeholder="e.g. Grease seatpost"><input class="in" type="number" id="miDays" placeholder="days" style="width:90px;flex:none;"><button class="btn sm" id="addMiBtn">Add</button></div>
+      </div></details>
+    </div>
+    <div class="seclabel">Service Log</div>
+    <div class="card lime">
+      <h3>History</h3>
+      <div class="sub">Auto-logs when you mark a job done</div>
+      <div id="maintLog" style="margin-top:10px;"></div>
+    </div>
+  </section>
+
+  <!-- ================= RACE CALENDAR ================= -->
+  <section class="view" id="view-racecal">
+    <div class="seclabel">Season Schedule</div>
+    <p style="color:var(--dim); font-size:13px; margin-bottom:14px;">Every race feeds the countdown on Today &amp; Race Day, and the venue lists in Course Notes and Results. Add coordinates (or hit Find) to get a race-day forecast.</p>
+    <div class="card cyan">
+      <h3>Races</h3>
+      <div class="sub">Registered, tentative, or just on your radar</div>
+      <div id="raceCalList" style="margin-top:10px;"></div>
+      <details class="addbox" style="margin-top:14px;"><summary>+ Add a race</summary><div class="pad">
+        <div class="grid-form">
+          <div><label class="fl">Date</label><input class="in" type="date" id="rcDate"></div>
+          <div><label class="fl">Venue</label><input class="in" id="rcVenue" placeholder="Killington, VT"></div>
+          <div><label class="fl">Series / label</label><input class="in" id="rcLabel" placeholder="e.g. Showdown, Round 3"></div>
+          <div><label class="fl">Class</label><input class="in" id="rcCls" placeholder="18U Amateur"></div>
+          <div><label class="fl">Status</label><select class="in" id="rcStatus"><option>Registered</option><option>Tentative</option><option>Planning</option><option>Withdrawn</option></select></div>
+        </div>
+        <div class="grid-form" style="margin-top:10px;">
+          <div><label class="fl">Latitude</label><input class="in" id="rcLat" placeholder="43.6045"></div>
+          <div><label class="fl">Longitude</label><input class="in" id="rcLon" placeholder="-72.8201"></div>
+          <div style="display:flex;align-items:flex-end;"><button class="btn ghost sm" id="rcFindBtn" style="width:100%;">Find coordinates</button></div>
+        </div>
+        <label class="fl" style="margin-top:10px;">Link (Roots &amp; Rain event page, registration, etc.)</label>
+        <input class="in" id="rcLink" placeholder="https://www.rootsandrain.com/event…">
+        <label class="fl" style="margin-top:10px;">Notes</label>
+        <textarea class="in" id="rcNotes" placeholder="Points race, need top-5 to move up a category…"></textarea>
+        <button class="btn cyan sm" id="addRaceBtn" style="margin-top:10px;">Save race</button>
+      </div></details>
+    </div>
+  </section>
+
+  <!-- ================= RACE DAY ================= -->
+  <section class="view" id="view-raceday">
+    <div class="seclabel">Countdown</div>
+    <div class="dashgrid" style="margin-bottom:16px;">
+      <div class="card pink" id="rdCountdown"></div>
+      <div class="card cyan" id="rdWeather"><div class="sub">Race-day forecast</div><div class="empty" style="padding:6px 0;">Loading…</div></div>
+    </div>
+    <div class="row">
+      <div class="col card lime">
+        <h3>Packing Checklist <button class="btn ghost sm" id="resetPk" style="float:right;">Reset</button></h3>
+        <div class="sub">Everything for race day</div>
+        <div id="packList" style="margin-top:10px;"></div>
+        <div class="addrow"><input class="in" id="pkName" placeholder="Add item…"><button class="btn sm lime" id="addPkBtn">Add</button></div>
+      </div>
+      <div class="col card cyan">
+        <h3>Race-Day Flow <button class="btn ghost sm" id="resetSt" style="float:right;">Reset</button></h3>
+        <div class="sub">Work down the list on the day</div>
+        <div id="stepList" style="margin-top:10px;"></div>
+        <div class="addrow"><input class="in" id="stName" placeholder="Add step…"><button class="btn sm" id="addStBtn">Add</button></div>
+      </div>
+    </div>
+    <div class="seclabel" style="margin-top:20px;">Pre-Run Routine</div>
+    <div class="card pink">
+      <h3>In the Start Gate <button class="btn ghost sm" id="resetPr" style="float:right;">Reset</button></h3>
+      <div class="sub">Run this every time — race craft is trained, not hoped for</div>
+      <div id="prerunList" style="margin-top:10px;"></div>
+      <div class="addrow"><input class="in" id="prName" placeholder="Add cue…"><button class="btn sm pink" id="addPrBtn">Add</button></div>
+    </div>
+  </section>
+
+  <!-- ================= COURSE NOTES ================= -->
+  <section class="view" id="view-course">
+    <div class="seclabel">Course Notes</div>
+    <div class="filterbar">
+      <label class="fl" style="margin:0;">Course</label>
+      <select class="in" id="courseSel" style="width:auto;"></select>
+    </div>
+    <div class="row">
+      <div class="col card cyan">
+        <h3>Track Breakdown &amp; Lines</h3>
+        <div class="sub">Section by section — your fast lines and commit points</div>
+        <textarea class="in" id="cBreakdown" style="margin-top:10px;min-height:150px;" placeholder="Top: hard right into the steep chute, stay off the brakes…"></textarea>
+      </div>
+      <div class="col card pink">
+        <h3>Wet-Weather Lines</h3>
+        <div class="sub">Your rain plan — where the dry line stops working</div>
+        <textarea class="in" id="cWet" style="margin-top:10px;min-height:150px;" placeholder="Roots after the second berm get greasy — take the high inside line…"></textarea>
+      </div>
+    </div>
+    <div class="row" style="margin-top:16px;">
+      <div class="col card lime">
+        <h3>Brake Markers &amp; Commit Points</h3>
+        <textarea class="in" id="cBrakes" style="margin-top:10px;min-height:110px;" placeholder="Brake at the lone birch before the hip; commit fully off the top drop…"></textarea>
+      </div>
+      <div class="col card dimc">
+        <h3>Watch Out For</h3>
+        <textarea class="in" id="cHazards" style="margin-top:10px;min-height:110px;" placeholder="Blind compression after the rock garden; ruts form late in the day…"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= INSIGHTS ================= -->
+  <section class="view" id="view-insights">
+    <div class="seclabel">What Your Data Says</div>
+    <div class="card lime" style="margin-bottom:16px;">
+      <h3>Patterns</h3>
+      <div class="sub">Built from what you've logged — the more you track, the sharper this gets</div>
+      <div class="insightTips" id="insightTips" style="margin-top:10px;"></div>
+    </div>
+    <div class="pgrid">
+      <div class="card cyan">
+        <h3>Training &amp; Recovery</h3>
+        <div class="statline">
+          <div class="stat"><div class="v cyan" id="inSleep">–</div><div class="k">Avg sleep 30d</div></div>
+          <div class="stat"><div class="v lime" id="inConsist">–</div><div class="k">Completion 30d</div></div>
+          <div class="stat"><div class="v pink" id="inFeel">–</div><div class="k">Avg feel 30d</div></div>
+          <div class="stat"><div class="v" id="inGym">0</div><div class="k">Gym increases</div></div>
+        </div>
+      </div>
+      <div class="card pink">
+        <h3>Racing</h3>
+        <div class="statline">
+          <div class="stat"><div class="v lime" id="inBest">–</div><div class="k">Best finish</div></div>
+          <div class="stat"><div class="v cyan" id="inAvg">–</div><div class="k">Avg (clean)</div></div>
+          <div class="stat"><div class="v" id="inClean">0 / 0</div><div class="k">Clean / crash</div></div>
+          <div class="stat"><div class="v pink" id="inTrend">–</div><div class="k">Trend</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <div class="footnote">054 Gravity · Auto-saves to this browser · Sign in to sync to the cloud</div>
 </div>
 
@@ -607,7 +1090,13 @@ const EV_COLORS = { bike:'#20d4e0', gym:'#90c63e', skills:'#9b6dd6', meal:'#caa4
 const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const DOW_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const THEMES = ['Recovery','Reset + Upper / Core','Team Skills Ride','Bolton DH · Key Day','Team Skills Ride','Power + Plyo','Race Sim / Race'];
-const VENUES = ['Killington, VT (Jul 12 · Showdown)','Mount Snow, VT (Aug 2)','Thunder Mtn, MA (Aug 9 · Showdown)','Blue Mountain, PA (Aug 30)','Jiminy Peak, MA (Sep 27 · Showdown)','Thunder Mtn, MA (Oct 25 · Finals)','Practice / Other'];
+function raceVenueOptions(){
+  const rs=[...DB.races].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  const opts=rs.map(r=>{ const d=r.date?parseYmd(r.date):null;
+    const dl=d?(d.toLocaleString('en-US',{month:'short'})+' '+d.getDate()):'';
+    return `${venueShort(r.venue)}${dl?', '+dl:''}${r.label&&r.label!==r.venue?' · '+r.label:''}`; });
+  return [...new Set(opts)].concat(['Practice / Other']);
+}
 
 /* default weekly template: weekday -> [{time,end,title,type}] */
 const DEFAULT_TEMPLATES = {
@@ -728,6 +1217,74 @@ const DEFAULT_MEAL_IDEAS=[
   {cat:'Snacks', name:'Fruit + string cheese'}
 ];
 
+const GYM_TEMPLATES={
+  A:{ name:'Template A — Upper + Core', day:'Monday', accent:'lime', exercises:[
+    {id:'a1', name:'Lat pulldown', target:'3 × 8–10'},
+    {id:'a2', name:'Seated cable row', target:'3 × 10'},
+    {id:'a3', name:'DB / machine chest press', target:'3 × 8–10'},
+    {id:'a4', name:'DB shoulder press', target:'3 × 10'},
+    {id:'a5', name:'Dead hangs (grip)', target:'3 × max — add weight later'},
+    {id:'a6', name:'Farmer carries', target:'3 × 30–40s'},
+    {id:'a7', name:'Pallof press (cable)', target:'3 × 10/side'},
+    {id:'a8', name:'Plank + side planks', target:'3 rounds — bodyweight'},
+    {id:'a9', name:'Hanging / lying leg raises', target:'3 × 10–12'}
+  ]},
+  B:{ name:'Template B — Lower Power + Plyo', day:'Friday', accent:'pink', exercises:[
+    {id:'b1', name:'Box / broad jumps', target:'4 × 4 — bodyweight'},
+    {id:'b2', name:'Smith machine squat', target:'4 × 6–8'},
+    {id:'b3', name:'DB Romanian deadlift', target:'3 × 8'},
+    {id:'b4', name:'Walking DB lunges', target:'3 × 8/leg (per hand)'},
+    {id:'b5', name:'Leg press', target:'3 × 10'},
+    {id:'b6', name:'Standing calf raises', target:'3 × 12–15'},
+    {id:'b7', name:'Dead bug', target:'3 × 8/side — bodyweight'},
+    {id:'b8', name:'Bike intervals', target:'6 × 30s / 90s'}
+  ]}
+};
+
+const RUN_TYPES=['Race run','Qualifying','Practice','Training'];
+
+const DEFAULT_RACES=[
+  {date:'2026-07-12', venue:'Killington, VT', label:'Killington · Showdown', cls:'', lat:43.6045, lon:-72.8201},
+  {date:'2026-08-02', venue:'Mount Snow, VT', label:'Mount Snow', cls:'', lat:42.9602, lon:-72.9204},
+  {date:'2026-08-09', venue:'Thunder Mtn, MA', label:'Thunder Mtn · Showdown', cls:'', lat:42.6417, lon:-72.9123},
+  {date:'2026-08-30', venue:'Blue Mountain, PA', label:'Blue Mountain', cls:'', lat:40.7996, lon:-75.7324},
+  {date:'2026-09-27', venue:'Jiminy Peak, MA', label:'Jiminy Peak · Showdown', cls:'', lat:42.5540, lon:-73.2887},
+  {date:'2026-10-25', venue:'Thunder Mtn, MA', label:'Thunder Mtn · FINALS', cls:'', lat:42.6417, lon:-72.9123}
+];
+const WMO={0:['Clear','☀️'],1:['Mainly clear','🌤️'],2:['Partly cloudy','⛅'],3:['Overcast','☁️'],45:['Fog','🌫️'],48:['Rime fog','🌫️'],51:['Light drizzle','🌦️'],53:['Drizzle','🌦️'],55:['Heavy drizzle','🌦️'],56:['Freezing drizzle','🌧️'],57:['Freezing drizzle','🌧️'],61:['Light rain','🌧️'],63:['Rain','🌧️'],65:['Heavy rain','🌧️'],66:['Freezing rain','🌧️'],67:['Freezing rain','🌧️'],71:['Light snow','🌨️'],73:['Snow','🌨️'],75:['Heavy snow','❄️'],77:['Snow grains','🌨️'],80:['Rain showers','🌦️'],81:['Rain showers','🌦️'],82:['Heavy showers','⛈️'],85:['Snow showers','🌨️'],86:['Snow showers','🌨️'],95:['Thunderstorm','⛈️'],96:['Thunderstorm','⛈️'],99:['Thunderstorm','⛈️']};
+const EXTRA_PRACTICE_VENUES=['Bolton Valley','Richmond'];
+function courseVenueList(){
+  const race=DB.races.map(r=>venueShort(r.venue));
+  return [...new Set([...race, ...EXTRA_PRACTICE_VENUES])];
+}
+const DEFAULT_DRILLS=[
+  {cat:'Cornering', name:'Flat-corner figure-8s', desc:'Weight the outside foot, look through the exit. Tighten the loop as you improve.'},
+  {cat:'Cornering', name:'Berm high-line vs low-line', desc:'Session a berm both ways to learn which carries more speed on that trail.'},
+  {cat:'Cornering', name:'Off-camber traverse', desc:'Stay light, use body english over tyre edge on slick roots.'},
+  {cat:'Jumping', name:'Table progression', desc:'Roll → case → clear. Only move up when the previous step feels boring.'},
+  {cat:'Jumping', name:'Pump the lip, don’t pedal', desc:'Generate pop from the takeoff instead of pedalling into it.'},
+  {cat:'Braking', name:'Late-braking markers', desc:'Pick a marker into a corner and move it a bike-length later each lap.'},
+  {cat:'Braking', name:'Trail braking', desc:'Carry light rear brake into the turn, release as you commit to the exit.'},
+  {cat:'Pumping', name:'Pump-track no-pedal laps', desc:'Complete the loop generating all speed from pumping rollers and berms.'},
+  {cat:'Manual / lift', name:'Manual distance ladder', desc:'Find the balance point, extend the distance a little each session.'},
+  {cat:'Body position', name:'Heavy feet, light hands', desc:'Drive weight through the pedals so the bike moves under you in the rough.'},
+  {cat:'Body position', name:'Ready-position holds', desc:'Coast a rough section in a strong neutral stance without death-gripping.'}
+];
+const DEFAULT_MOBILITY=['Ankle rocks','90/90 hip openers','Leg swings (front + side)','Thoracic rotations','Glute bridges / activation','Band pull-aparts','Wrist prep + push-up rocks','Cat–cow','Deep squat holds','Neck rolls'];
+const DEFAULT_SERVICE=[
+  {name:'Tyre condition + pressure check', days:7},
+  {name:'Bolt torque check (stem, brakes, axles)', days:14},
+  {name:'Drivetrain wear + chain lube', days:30},
+  {name:'Pivot / linkage bearing check', days:30},
+  {name:'Tubeless sealant top-up', days:90},
+  {name:'Brake bleed', days:180},
+  {name:'Fork lowers service', days:60},
+  {name:'Full fork + shock service', days:365}
+];
+const DEFAULT_PACKING=['Full-face helmet','Goggles + spare lens','Knee pads','Elbow pads','Gloves','Race kit','Neck brace','Race bike + spare wheel','Floor pump + shock pump','Multitool + chain tool','Spare tube + tyre plugs','Spare derailleur hanger','Zip ties + tape','Water + bottles','Race food / snacks','Sunscreen','Rain gear / dry layers','GoPro charged + mounts + spare SD','Registration / license','Cash / card'];
+const DEFAULT_RACEDAY=['Real breakfast 2–3 hrs before practice','Register + collect plate','Walk / slow-ride the track, plan lines','Practice runs 1–2: smooth, wake up','Build to race pace, session key sections','Snack + hydrate between every run','One clean confidence run, then rest','30 min out: warm up + visualize the run','Timed run — commit, ride your lines','Cool down + refuel','Check results + be at the podium'];
+const DEFAULT_PRERUN=['3 slow breaths, drop the shoulders','Visualize the full run top-to-bottom, real time','Lock in 2 focus cues','Say your trigger word','Commit — no coasting'];
+
 /* =================================================================
    CLOUD SYNC (Firebase) — fill in FIREBASE_CONFIG to enable.
    Leave it blank and the app runs fully in local-only mode.
@@ -742,7 +1299,7 @@ const FIREBASE_CONFIG = {
 let CLOUD = { on:false, auth:null, db:null, user:null, timer:null };
 function cloudConfigured(){ return !!(FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.projectId); }
 function setSync(text, cls){ const el=document.getElementById('syncStatus'); if(el){ el.textContent=text; el.className='syncpill '+(cls||''); } }
-function refreshAll(){ renderToday(); const a=document.querySelector('.tab.active'); if(a && a.dataset.view!=='today') setView(a.dataset.view); }
+function refreshAll(){ const a=document.querySelector('.navlink.active'); setView(a?a.dataset.view:'today'); }
 
 function initCloud(){
   const btn=document.getElementById('signBtn');
@@ -800,7 +1357,16 @@ function cloudSaveNow(){
 let DB, MEM=false, viewDate=todayStr();
 function defaults(){ return { templates:JSON.parse(JSON.stringify(DEFAULT_TEMPLATES)), log:{}, results:[],
   skills:DEFAULT_SKILLS.map(n=>({name:n,level:0})), bikes:[], setups:[],
-  meals:JSON.parse(JSON.stringify(DEFAULT_MEALS)), mealIdeas:DEFAULT_MEAL_IDEAS.map(m=>({id:uid(),cat:m.cat,name:m.name})) }; }
+  meals:JSON.parse(JSON.stringify(DEFAULT_MEALS)), mealIdeas:DEFAULT_MEAL_IDEAS.map(m=>({id:uid(),cat:m.cat,name:m.name})), gym:{},
+  runs:[], social:{ accounts:['@054_gravityraceteam','@owen.christman'], entries:[] },
+  skillsFocus:{ current:'', log:[] },
+  drills:DEFAULT_DRILLS.map(d=>({id:uid(),cat:d.cat,name:d.name,desc:d.desc,star:false})),
+  mobility:{ routine:DEFAULT_MOBILITY.map(n=>({id:uid(),name:n})), done:{}, niggles:[] },
+  maint:{ items:DEFAULT_SERVICE.map(s=>({id:uid(),name:s.name,days:s.days})), done:{}, log:[] },
+  raceday:{ packing:DEFAULT_PACKING.map(n=>({id:uid(),name:n,done:false})), steps:DEFAULT_RACEDAY.map(n=>({id:uid(),name:n,done:false})), prerun:DEFAULT_PRERUN.map(n=>({id:uid(),name:n,done:false})) },
+  course:{}, settings:{ lat:44.4215, lon:-72.8490, place:'Bolton Valley, VT' },
+  races:DEFAULT_RACES.map(r=>({id:uid(),status:'Registered',notes:'',link:'',...r})),
+  rankings:{ category:'', standing:'', pointsNote:'', entries:[] } }; }
 function load(){
   try{ const r=localStorage.getItem(KEY); DB = r?JSON.parse(r):defaults();
        // migrate missing keys
@@ -840,13 +1406,26 @@ function completion(date){ const items=dayItems(date); if(!items.length) return 
    RENDERING
    ================================================================= */
 function setView(v){
-  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
+  document.querySelectorAll('.navlink').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
   document.querySelectorAll('.view').forEach(s=>s.classList.remove('active'));
-  document.getElementById('view-'+v).classList.add('active');
+  const el=document.getElementById('view-'+v); if(el) el.classList.add('active');
+  if(v==='today') renderToday();
   if(v==='week') renderWeek();
   if(v==='progress') renderProgress();
   if(v==='meals') renderMeals();
+  if(v==='gym') renderGym();
+  if(v==='runs') renderRuns();
+  if(v==='social') renderSocial();
   if(v==='bike') renderBike();
+  if(v==='skills') renderSkillsDrills();
+  if(v==='mobility') renderMobility();
+  if(v==='maint') renderMaint();
+  if(v==='raceday') renderRaceDay();
+  if(v==='course') renderCourse();
+  if(v==='racecal') renderRaceCal();
+  if(v==='rankings') renderRankings();
+  if(v==='insights') renderInsights();
+  closeSidebar(); window.scrollTo(0,0);
 }
 
 /* ---------- TODAY ---------- */
@@ -886,6 +1465,7 @@ function renderToday(){
   document.querySelectorAll('#feelRow .feel').forEach(b=>b.classList.toggle('on',+b.dataset.v===m.feel));
   // timeline
   renderTimeline();
+  renderTodayDash();
 }
 function drawRing(p){
   const r=36,c=2*Math.PI*r,off=c*(1-p/100);
@@ -1031,13 +1611,14 @@ function placeSpark(){
 function renderResults(){ const t=document.getElementById('resultsTable');
   const r=[...DB.results].sort((a,b)=>b.date.localeCompare(a.date));
   if(!r.length){ t.innerHTML=`<tr><td class="empty">No races logged yet. Add your first result below.</td></tr>`; return; }
-  t.innerHTML=`<tr><th>Date</th><th>Venue</th><th>Place</th><th>Time</th><th>Notes</th><th></th></tr>`+
+  t.innerHTML=`<tr><th>Date</th><th>Venue</th><th>Place</th><th>Time</th><th>Pts</th><th>Notes</th><th></th></tr>`+
     r.map(x=>{ const pl=+x.place, cls=x.dnf?'dnf':(pl<=3?'podium':pl<=5?'top5':'');
       const badge=x.dnf?'<span class="dnfbadge">CRASH / DNF</span>':(pl>0&&pl<=3?'<span class="pbadge">PODIUM</span>':'');
       return `<tr><td style="white-space:nowrap;font-family:Orbitron;font-size:11px;color:#9aa6b2">${x.date||''}</td>
         <td>${esc(venueShort(x.venue))}</td>
         <td><span class="place ${cls}">${x.place||'–'}</span>${x.field?`<span class="fld"> / ${x.field}</span>`:''}${badge}</td>
         <td style="font-family:Orbitron;font-size:11px">${esc(x.time||'')}</td>
+        <td style="font-family:Orbitron;font-size:11px">${esc(x.points||'')}</td>
         <td style="color:#9aa6b2;font-size:12px">${esc(x.notes||'')}</td>
         <td><button class="delx" data-delr="${x.id}">×</button></td></tr>`; }).join('');
 }
@@ -1081,6 +1662,311 @@ function renderMealIdeas(){
       `</div></div>`; });
 }
 
+/* ---------- GYM ---------- */
+function gymHist(id){ return (DB.gym[id]||[]).slice().sort((a,b)=>a.d.localeCompare(b.d)); }
+function logGymWeight(id,w){ if(w===''||isNaN(+w)) return; w=+w; if(!DB.gym[id]) DB.gym[id]=[];
+  const today=todayStr(), ex=DB.gym[id].find(e=>e.d===today); if(ex) ex.w=w; else DB.gym[id].push({d:today,w});
+  save(); renderGym(); }
+function delGym(id,d){ if(DB.gym[id]){ DB.gym[id]=DB.gym[id].filter(e=>e.d!==d); save(); renderGym(); } }
+function renderGym(){
+  const wrap=document.getElementById('gymWrap'); wrap.innerHTML='';
+  ['A','B'].forEach(key=>{ const t=GYM_TEMPLATES[key];
+    const card=document.createElement('div'); card.className='card '+t.accent;
+    card.innerHTML=`<h3>${esc(t.name)}</h3><div class="sub">${t.day} · log the weight you used — increases get flagged</div>
+      <div class="exrows">${t.exercises.map(gymRow).join('')}</div>`;
+    wrap.appendChild(card);
+  });
+}
+function gymRow(ex){
+  const h=gymHist(ex.id);
+  const cur=h.length?h[h.length-1].w:null, prev=h.length>1?h[h.length-2].w:null;
+  let badge='';
+  if(cur!=null&&prev!=null){ const d=+(cur-prev).toFixed(1);
+    if(d>0) badge=`<span class="gd up">▲ +${d} lb</span>`;
+    else if(d<0) badge=`<span class="gd dn">▼ ${d} lb</span>`;
+    else badge=`<span class="gd sm">no change</span>`; }
+  const inc=h.reduce((n,e,i)=> i>0 && e.w>h[i-1].w ? n+1 : n, 0);
+  const items=h.map((e,i)=>({ ...e, up:i>0&&e.w>h[i-1].w, dn:i>0&&e.w<h[i-1].w })).reverse();
+  const hist = items.length ? items.map(e=>
+    `<div class="ghrow"><span class="ghd">${e.d}</span><span class="ghw ${e.up?'up':e.dn?'dn':''}">${e.w} lb ${e.up?'▲':e.dn?'▼':''}</span><button class="delx" data-delg="${ex.id}" data-gd="${e.d}">×</button></div>`).join('')
+    : '<div class="empty" style="padding:6px 0;">No weights logged yet.</div>';
+  return `<div class="exrow">
+    <div class="exhead">
+      <div><div class="exname">${esc(ex.name)}</div><div class="extarget">${esc(ex.target)}</div></div>
+      <div class="excur">${cur!=null?`<span class="curw">${cur}<small>lb</small></span>${badge}`:'<span class="curw none">—</span>'}</div>
+    </div>
+    <div class="exlog">
+      <input class="in gymin" type="number" step="0.5" inputmode="decimal" data-ex="${ex.id}" placeholder="${cur!=null?cur+' lb':'weight (lb)'}">
+      <button class="btn sm gymlog" data-ex="${ex.id}">Log</button>
+      ${inc>0?`<span class="inccount">${inc} increase${inc>1?'s':''} ▲</span>`:''}
+    </div>
+    <details class="ghist"><summary>History (${h.length})</summary><div class="ghlist">${hist}</div></details>
+  </div>`;
+}
+
+/* ---------- RUNS ---------- */
+let runFilter='all';
+function embedHtml(url){
+  const u=(url||'').trim(); let m;
+  if(m=u.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([\w-]{11})/)) return vbox('https://www.youtube.com/embed/'+m[1]);
+  if(m=u.match(/drive\.google\.com\/file\/d\/([\w-]+)/)) return vbox('https://drive.google.com/file/d/'+m[1]+'/preview');
+  if(m=u.match(/vimeo\.com\/(?:video\/)?(\d+)/)) return vbox('https://player.vimeo.com/video/'+m[1]);
+  if(/\.(mp4|webm|ogg|m4v|mov)(\?|#|$)/i.test(u)) return `<video controls playsinline preload="metadata" style="width:100%;border-radius:6px;background:#000;" src="${esc(u)}"></video>`;
+  if(/^https?:\/\//i.test(u)) return `<a class="btn ghost sm" href="${esc(u)}" target="_blank" rel="noopener">Open video ↗</a>`;
+  return `<div class="empty">No valid video link on this run.</div>`;
+}
+function vbox(src){ return `<div class="videobox"><iframe src="${esc(src)}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>`; }
+function renderRuns(){
+  fillSelect('runCourse', raceVenueOptions().map(v=>({v:v,t:v})));
+  fillSelect('runType', RUN_TYPES.map(t=>({v:t,t:t})));
+  const sel=document.getElementById('runFilter');
+  const courses=[...new Set(DB.runs.map(r=>venueShort(r.course)).filter(Boolean))];
+  sel.innerHTML=`<option value="all">All courses</option>`+courses.map(c=>`<option>${esc(c)}</option>`).join('');
+  if([...sel.options].some(o=>o.value===runFilter)) sel.value=runFilter; else runFilter='all';
+  const list=document.getElementById('runList');
+  let runs=[...DB.runs].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  if(runFilter!=='all') runs=runs.filter(r=>venueShort(r.course)===runFilter);
+  const rc=document.getElementById('runCompare');
+  if(rc) rc.innerHTML=(runFilter!=='all' && runs.some(r=>r.total||r.splits))? buildCompare(runs.filter(r=>r.total||r.splits)) : '';
+  if(!runs.length){ list.innerHTML=`<div class="empty">No runs saved yet. Upload footage to YouTube (unlisted) or Google Drive, then paste the link below.</div>`; return; }
+  list.innerHTML=runs.map(r=>{ const race=/race|qual/i.test(r.type||'');
+    return `<div class="card ${race?'pink':'cyan'} runcard">
+      <div class="run-head"><div><span class="run-course">${esc(venueShort(r.course)||'Run')}</span><span class="runtype ${race?'race':'other'}">${esc(r.type||'')}</span></div>
+        <div class="run-date">${esc(r.date||'')} <button class="delx" data-delrun="${r.id}">×</button></div></div>
+      ${r.total?`<div class="run-time">⏱ ${esc(secFmt(timeToSec(r.total))||r.total)}</div>`:''}
+      <div class="run-player" id="rp_${r.id}"><button class="btn cyan sm playbtn" data-run="${r.id}">▶ Watch run</button></div>
+      ${r.notes?`<div class="run-notes">${esc(r.notes)}</div>`:''}
+    </div>`; }).join('');
+}
+function buildCompare(runs){
+  const parsed=runs.map(r=>({r, tot:timeToSec(r.total), sp:parseSplits(r.splits)}));
+  const labels=[...new Set(parsed.flatMap(p=>Object.keys(p.sp)))];
+  const cols=['Total',...labels];
+  const mins={}; cols.forEach(c=>{ const vals=parsed.map(p=>c==='Total'?p.tot:p.sp[c]).filter(v=>v!=null&&!isNaN(v)); mins[c]=vals.length?Math.min(...vals):null; });
+  const order=[...parsed].sort((a,b)=>(a.tot==null?1e9:a.tot)-(b.tot==null?1e9:b.tot));
+  let h=`<table class="results"><tr><th>Date</th>${cols.map(c=>`<th>${esc(c)}</th>`).join('')}</tr>`;
+  order.forEach(p=>{ h+=`<tr><td class="mono">${esc(p.r.date||'')}</td>`+cols.map(c=>{ const v=c==='Total'?p.tot:p.sp[c];
+    const best=v!=null&&mins[c]!=null&&Math.abs(v-mins[c])<1e-6;
+    return `<td class="mono ${best?'up':''}">${v!=null?secFmt(v):'–'}</td>`; }).join('')+`</tr>`; });
+  return `<div class="card cyan" style="margin-bottom:14px;"><h3>Split Comparison — ${esc(runFilter)}</h3><div class="sub">Fastest in each section highlighted · seconds</div>${h}</table></div>`;
+}
+
+/* ---------- SOCIAL ---------- */
+let socialSel=null;
+function renderSocial(){
+  const accts=(DB.social.accounts||[]);
+  if(!socialSel || !accts.includes(socialSel)) socialSel=accts[0]||null;
+  document.getElementById('acctChips').innerHTML = accts.map(a=>
+    `<span class="acctchip ${a===socialSel?'on':''}" data-acct="${esc(a)}">${esc(a)}<button class="rm" data-rmacct="${esc(a)}" title="Remove">×</button></span>`).join('')
+    + `<button class="iconbtn" id="addAcctBtn">+ Account</button>`;
+  const hasAcct=!!socialSel;
+  document.getElementById('socialBody').style.display=hasAcct?'':'none';
+  document.getElementById('noAcct').style.display=hasAcct?'none':'block';
+  if(!hasAcct) return;
+  const entries=DB.social.entries.filter(e=>e.account===socialSel).sort((a,b)=>a.date.localeCompare(b.date));
+  const latest=entries[entries.length-1], prev=entries[entries.length-2];
+  document.getElementById('sFollowers').textContent = latest?(+latest.followers).toLocaleString():'–';
+  const dLast=(latest&&prev)?(+latest.followers-+prev.followers):null;
+  document.getElementById('sDelta').textContent = dLast!=null?((dLast>=0?'+':'')+dLast):'–';
+  const cutoff=addDays(todayStr(),-30);
+  const older=entries.filter(e=>e.date<=cutoff);
+  const base=older.length?older[older.length-1]:entries[0];
+  const d30=(latest&&base&&base!==latest)?(+latest.followers-+base.followers):null;
+  document.getElementById('sDelta30').textContent = d30!=null?((d30>=0?'+':'')+d30):'–';
+  document.getElementById('sPosts').textContent = (latest&&latest.posts!=='' &&latest.posts!=null)?latest.posts:'–';
+  lineChart('followChart', entries.map(e=>({d:e.date,v:+e.followers})), '#e81876');
+  renderStatTable(entries);
+  fillSelect('statAcct', accts.map(a=>({v:a,t:a}))); document.getElementById('statAcct').value=socialSel;
+}
+function renderStatTable(entries){
+  const t=document.getElementById('statTable');
+  if(!entries.length){ t.innerHTML=`<tr><td class="empty">No stats logged for this account yet.</td></tr>`; return; }
+  const rows=[...entries].reverse();
+  t.innerHTML=`<tr><th>Date</th><th>Followers</th><th>Δ</th><th>Reach</th><th>Visits</th><th>Notes</th><th></th></tr>`+
+    rows.map(e=>{ const ci=entries.indexOf(e); const pr=ci>0?+entries[ci-1].followers:null; const d=pr!=null?(+e.followers-pr):null;
+      return `<tr><td class="mono">${esc(e.date)}</td>
+        <td class="mono" style="font-weight:700;color:#fff">${(+e.followers).toLocaleString()}</td>
+        <td class="mono ${d>0?'up':d<0?'dn':''}">${d!=null?((d>0?'+':'')+d):''}</td>
+        <td class="mono">${esc(e.reach||'')}</td><td class="mono">${esc(e.visits||'')}</td>
+        <td style="color:#9aa6b2;font-size:12px">${esc(e.notes||'')}</td>
+        <td><button class="delx" data-dels2="${e.id}">×</button></td></tr>`; }).join('');
+}
+function lineChart(elId, series, color){
+  const el=document.getElementById(elId); const rect=el.getBoundingClientRect();
+  const W=Math.max(280,Math.round(rect.width)||600), H=Math.max(70,Math.round(rect.height)||100), padX=12, padTop=16, padBot=16;
+  el.setAttribute('viewBox','0 0 '+W+' '+H); el.removeAttribute('preserveAspectRatio');
+  const pts=series.filter(p=>p.v!=null && !isNaN(p.v));
+  if(pts.length<1){ el.innerHTML=`<text x="${(W/2)|0}" y="${(H/2)|0}" fill="#5d6873" font-size="12" text-anchor="middle" font-family="Oswald">Log stats to see your growth</text>`; return; }
+  let lo=Math.min(...pts.map(p=>p.v)), hi=Math.max(...pts.map(p=>p.v)); if(lo===hi){ lo-=1; hi+=1; }
+  const xs=i=> pts.length===1?W/2: padX + i*(W-2*padX)/(pts.length-1);
+  const ys=v=> padTop + (1-(v-lo)/(hi-lo))*(H-padTop-padBot);
+  let path='',dots='';
+  pts.forEach((p,i)=>{ const X=xs(i),Y=ys(p.v); path+=(i?'L':'M')+X.toFixed(1)+' '+Y.toFixed(1)+' ';
+    dots+=`<circle cx="${X.toFixed(1)}" cy="${Y.toFixed(1)}" r="3" fill="${color}"/>`; });
+  el.innerHTML=`<path d="${path}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linejoin="round"/>${dots}`;
+}
+
+/* ---------- shared helpers ---------- */
+function sv(id,v){ const el=document.getElementById(id); if(el) el.textContent=v; }
+function daysBetween(a,b){ return Math.round((parseYmd(b)-parseYmd(a))/86400000); }
+function nextRace(){ const t=todayStr(); return [...DB.races].sort((a,b)=>(a.date||'').localeCompare(b.date||'')).find(r=>r.date>=t)||null; }
+function wmo(c){ return WMO[c]||['—','·']; }
+function timeToSec(s){ if(s==null) return null; s=(''+s).trim(); if(!s) return null;
+  if(s.includes(':')){ const p=s.split(':').map(Number); if(p.some(isNaN)) return null; return p.length===2? p[0]*60+p[1] : p[0]*3600+p[1]*60+p[2]; }
+  return isNaN(+s)?null:+s; }
+function secFmt(x){ if(x==null||isNaN(x)) return ''; const m=Math.floor(x/60), s=x-m*60; return m? m+':'+s.toFixed(1).padStart(4,'0') : s.toFixed(1); }
+function parseSplits(str){ const out={}; if(!str) return out;
+  str.split(/[|,]/).forEach(tok=>{ const m=tok.trim().match(/^(.+?)[\s:=]+([\d:.]+)$/); if(m){ const v=timeToSec(m[2]); if(v!=null) out[m[1].trim()]=v; } });
+  return out; }
+
+/* ---------- weather (Open-Meteo, no key) ---------- */
+async function fetchWx(lat,lon){
+  const url=`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,precipitation,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=16`;
+  const r=await fetch(url); if(!r.ok) throw 0; return r.json();
+}
+async function renderWeatherToday(){
+  const el=document.getElementById('weatherCard'); if(!el) return;
+  const s=DB.settings||{lat:44.4215,lon:-72.8490,place:'Bolton Valley, VT'};
+  try{ const d=await fetchWx(s.lat,s.lon); const [t,e]=wmo(d.current.weather_code);
+    el.innerHTML=`<div class="sub">${esc(s.place)} · now</div>
+      <div class="wx"><span class="wx-e">${e}</span><span class="wx-t">${Math.round(d.current.temperature_2m)}°</span>
+        <span class="wx-d"><b>${t}</b><br>H ${Math.round(d.daily.temperature_2m_max[0])}° · L ${Math.round(d.daily.temperature_2m_min[0])}° · 💧${d.daily.precipitation_probability_max[0]}% · 💨${Math.round(d.current.wind_speed_10m)}mph</span></div>`;
+  }catch(err){ el.innerHTML=`<div class="sub">Weather</div><div class="empty" style="padding:6px 0;">Couldn't load forecast right now.</div>`; }
+}
+
+/* ---------- TODAY dashboard ---------- */
+function renderTodayDash(){
+  const nr=nextRace();
+  const cc=document.getElementById('countdownCard');
+  if(cc) cc.innerHTML = nr
+    ? `<div class="sub">Next race</div><div class="cd-days">${daysBetween(todayStr(),nr.date)}</div><div class="cd-lbl">days out</div><div class="cd-race">${esc(nr.label)}</div><div class="cd-date">${nr.date}</div>`
+    : `<div class="sub">Next race</div><div class="cd-race" style="margin-top:10px;">Season complete 🎉</div>`;
+  const fc=document.getElementById('focusCard');
+  if(fc){ const f=DB.skillsFocus.current; fc.innerHTML=`<div class="sub">This week's focus</div><div class="focus-txt">${f?esc(f):'<span class="empty">Set one in Skills &amp; Drills →</span>'}</div>`; }
+  const pods=DB.results.filter(r=>!r.dnf&&+r.place>0&&+r.place<=3);
+  const sp=document.getElementById('snapPodium'); if(sp) sp.innerHTML=[0,1,2].map(i=>`<span class="smed ${pods[i]?'on':''}">🏆</span>`).join('');
+  sv('snapStreak',streak()); sv('snapWeek',weekPct()+'%');
+  const fe=[...DB.social.entries].sort((a,b)=>a.date.localeCompare(b.date)); const lf=fe[fe.length-1];
+  sv('snapFollowers', lf?(+lf.followers).toLocaleString():'–'); sv('snapRuns', DB.runs.length);
+  renderWeatherToday();
+}
+
+/* ---------- SKILLS & DRILLS ---------- */
+function renderSkillsDrills(){
+  document.getElementById('focusText').value=DB.skillsFocus.current||'';
+  const fl=[...DB.skillsFocus.log].reverse();
+  document.getElementById('focusLog').innerHTML= fl.length ? fl.map(e=>
+    `<div class="ghrow"><span class="ghd">${e.date}</span><span class="ghw">${esc(e.focus)}${e.note?' — '+esc(e.note):''}</span><button class="delx" data-delf="${e.id}">×</button></div>`).join('')
+    : '<div class="empty">No focus history yet.</div>';
+  const el=document.getElementById('drillList'); el.innerHTML='';
+  [...new Set(DB.drills.map(d=>d.cat))].forEach(c=>{
+    el.innerHTML+=`<div class="ideacat"><div class="ideacat-h">${esc(c)}</div>`+
+      DB.drills.filter(d=>d.cat===c).map(d=>`<div class="drill"><button class="star ${d.star?'on':''}" data-star="${d.id}">${d.star?'★':'☆'}</button>
+        <div class="drill-b"><div class="drill-n">${esc(d.name)}</div><div class="drill-d">${esc(d.desc||'')}</div></div>
+        <button class="delx" data-deld="${d.id}">×</button></div>`).join('')+`</div>`;
+  });
+}
+
+/* ---------- MOBILITY & RECOVERY ---------- */
+function renderMobility(){
+  const day=todayStr(); const done=DB.mobility.done[day]||{};
+  document.getElementById('mobList').innerHTML=DB.mobility.routine.map(m=>
+    `<div class="chkrow" data-mob="${m.id}"><div class="chk ${done[m.id]?'on':''}"></div><span class="${done[m.id]?'strike':''}">${esc(m.name)}</span><button class="delx" data-delmob="${m.id}">×</button></div>`).join('');
+  sv('mobCount', DB.mobility.routine.filter(m=>done[m.id]).length+' / '+DB.mobility.routine.length+' today');
+  const ng=[...DB.mobility.niggles].sort((a,b)=>b.date.localeCompare(a.date));
+  document.getElementById('niggleList').innerHTML= ng.length ?
+    `<table class="results"><tr><th>Date</th><th>Area</th><th>Severity</th><th>Notes</th><th></th></tr>`+
+    ng.map(n=>`<tr><td class="mono">${esc(n.date)}</td><td>${esc(n.area)}</td>
+      <td class="mono">${'●'.repeat(+n.severity||0)}<span style="color:#2c3742">${'●'.repeat(Math.max(0,5-(+n.severity||0)))}</span></td>
+      <td style="color:#9aa6b2;font-size:12px">${esc(n.notes||'')}</td><td><button class="delx" data-deln="${n.id}">×</button></td></tr>`).join('')+`</table>`
+    : '<div class="empty">No niggles logged — keep it that way.</div>';
+}
+
+/* ---------- MAINTENANCE ---------- */
+function renderMaint(){
+  const today=todayStr();
+  document.getElementById('maintStatus').innerHTML=DB.maint.items.map(it=>{
+    const last=DB.maint.done[it.id]; const since=last?daysBetween(last,today):null;
+    let status='none',label='Not logged';
+    if(last){ const ratio=since/it.days; if(ratio>=1){status='over';label='Overdue';} else if(ratio>=0.8){status='due';label='Due soon';} else {status='ok';label='OK';} }
+    const every = it.days<30? it.days+' days' : Math.round(it.days/30)+' mo';
+    return `<div class="maint-row"><div class="maint-b"><div class="maint-n">${esc(it.name)}</div>
+      <div class="maint-m">every ~${every} · ${last?('last '+last+' — '+since+'d ago'):'never logged'}</div></div>
+      <span class="mbadge ${status}">${label}</span>
+      <button class="btn ghost sm markdone" data-mk="${it.id}">Done today</button>
+      <button class="delx" data-delmi="${it.id}">×</button></div>`;
+  }).join('');
+  const lg=[...DB.maint.log].sort((a,b)=>b.date.localeCompare(a.date));
+  document.getElementById('maintLog').innerHTML= lg.length ? lg.map(l=>
+    `<div class="ghrow"><span class="ghd">${l.date}</span><span class="ghw">${esc(l.item)}${l.notes?' — '+esc(l.notes):''}</span><button class="delx" data-dellog="${l.id}">×</button></div>`).join('')
+    : '<div class="empty">No service history yet.</div>';
+}
+
+/* ---------- RACE DAY ---------- */
+function renderChecklist(elId, arr, kind){
+  document.getElementById(elId).innerHTML=arr.map(i=>
+    `<div class="chkrow" data-ck="${kind}:${i.id}"><div class="chk ${i.done?'on':''}"></div><span class="${i.done?'strike':''}">${esc(i.name)}</span><button class="delx" data-delck="${kind}:${i.id}">×</button></div>`).join('');
+}
+function renderRaceDay(){
+  const nr=nextRace(); const cd=document.getElementById('rdCountdown');
+  if(nr){ cd.innerHTML=`<div class="sub">Next race</div><div class="cd-days">${daysBetween(todayStr(),nr.date)}</div><div class="cd-lbl">days out</div><div class="cd-race">${esc(nr.label)}</div><div class="cd-date">${esc(nr.venue)} · ${nr.date}</div>`;
+    renderRaceWx(nr);
+  } else { cd.innerHTML=`<div class="sub">Next race</div><div class="cd-race" style="margin-top:10px;">Season complete 🎉</div>`; document.getElementById('rdWeather').innerHTML=''; }
+  renderChecklist('packList', DB.raceday.packing, 'pk');
+  renderChecklist('stepList', DB.raceday.steps, 'st');
+  renderChecklist('prerunList', DB.raceday.prerun, 'pr');
+}
+async function renderRaceWx(nr){
+  const el=document.getElementById('rdWeather'); if(!el) return;
+  if(nr.lat==null || nr.lon==null || nr.lat===''){ el.innerHTML=`<div class="sub">Race-day forecast</div><div class="empty" style="padding:6px 0;">Add coordinates for this race in Race Calendar to see a forecast.</div>`; return; }
+  try{ const d=await fetchWx(nr.lat,nr.lon); const idx=d.daily.time.indexOf(nr.date);
+    if(idx<0){ el.innerHTML=`<div class="sub">Race-day forecast</div><div class="empty" style="padding:6px 0;">Forecast opens within ~16 days of the race.</div>`; return; }
+    const [t,e]=wmo(d.daily.weather_code[idx]);
+    el.innerHTML=`<div class="sub">Forecast · ${esc(venueShort(nr.venue))} · ${nr.date}</div>
+      <div class="wx"><span class="wx-e">${e}</span><span class="wx-t">${Math.round(d.daily.temperature_2m_max[idx])}°</span>
+        <span class="wx-d"><b>${t}</b><br>H ${Math.round(d.daily.temperature_2m_max[idx])}° · L ${Math.round(d.daily.temperature_2m_min[idx])}° · 💧${d.daily.precipitation_probability_max[idx]}% chance</span></div>
+      <div class="wx-note">Plan your setup, tyres, and packing for this.</div>`;
+  }catch(err){ el.innerHTML=`<div class="sub">Race-day forecast</div><div class="empty" style="padding:6px 0;">Couldn't load forecast.</div>`; }
+}
+
+/* ---------- COURSE NOTES ---------- */
+let courseSel=null;
+function renderCourse(){
+  const list=courseVenueList();
+  if(courseSel==null || !list.includes(courseSel)) courseSel=list[0];
+  const sel=document.getElementById('courseSel'); sel.innerHTML=list.map(v=>`<option>${esc(v)}</option>`).join(''); sel.value=courseSel;
+  const c=DB.course[courseSel]||{};
+  document.getElementById('cBreakdown').value=c.breakdown||'';
+  document.getElementById('cWet').value=c.wet||'';
+  document.getElementById('cBrakes').value=c.brakes||'';
+  document.getElementById('cHazards').value=c.hazards||'';
+}
+
+/* ---------- INSIGHTS ---------- */
+function weekPct30(){ let tot=0,don=0; for(let i=0;i<30;i++){ const c=completion(addDays(todayStr(),-i)); tot+=c.t; don+=c.d; } return tot?Math.round(don/tot*100):0; }
+function renderInsights(){
+  const sleep=avgMetric('sleep',30), feel=avgMetric('feel',30);
+  const clean=DB.results.filter(r=>!r.dnf&&+r.place>0);
+  const crashes=DB.results.filter(r=>r.dnf).length;
+  const best=clean.length?Math.min(...clean.map(r=>+r.place)):null;
+  const avgP=clean.length?(clean.reduce((s,r)=>s+ +r.place,0)/clean.length):null;
+  const sorted=[...clean].sort((a,b)=>a.date.localeCompare(b.date)); let trend='';
+  if(sorted.length>=2){ const mid=Math.floor(sorted.length/2); const e=sorted.slice(0,mid), l=sorted.slice(mid);
+    const ea=e.reduce((s,r)=>s+ +r.place,0)/e.length, la=l.reduce((s,r)=>s+ +r.place,0)/l.length;
+    trend= la<ea?'improving ▲':la>ea?'slipping ▼':'steady'; }
+  const gymInc=Object.values(DB.gym).reduce((n,arr)=>{ const s=[...arr].sort((a,b)=>a.d.localeCompare(b.d)); return n+s.reduce((m,e,i)=>i>0&&e.w>s[i-1].w?m+1:m,0); },0);
+  sv('inSleep', sleep!=null?sleep.toFixed(1)+'h':'–'); sv('inConsist', weekPct30()+'%'); sv('inFeel', feel!=null?feel.toFixed(1):'–'); sv('inGym', gymInc);
+  sv('inBest', best!=null?('P'+best):'–'); sv('inAvg', avgP!=null?avgP.toFixed(1):'–'); sv('inClean', clean.length+' / '+crashes); sv('inTrend', trend||'–');
+  const tips=[];
+  if(sleep!=null && sleep<8) tips.push("Your 30-day sleep average is under 8 hours — that's the biggest free speed and recovery you can add. Protect the 9.");
+  else if(sleep!=null) tips.push("Sleep is holding strong — keep protecting it, it's doing the quiet work.");
+  if(crashes>=2) tips.push("A couple of crashes on file. Build a wet-weather line plan per course, and remember crash results are noise, not your pace.");
+  if(trend==='improving ▲') tips.push("Your clean-finish trend is bending toward the front — whatever you're doing, keep stacking it.");
+  if(gymInc>0) tips.push(`You've logged ${gymInc} strength increase${gymInc>1?'s':''} — progressive overload is working. Keep form clean as you climb.`);
+  if(!tips.length) tips.push("Log a bit more — sleep, results, gym weights — and this panel will start spotting your patterns.");
+  document.getElementById('insightTips').innerHTML=tips.map(t=>`<p>${esc(t)}</p>`).join('');
+}
+
 /* ---------- BIKE ---------- */
 function renderBike(){
   // garage
@@ -1097,8 +1983,8 @@ function renderBike(){
   });
   // setup dropdowns
   fillSelect('sBike', DB.bikes.map(b=>({v:b.id,t:b.name||'Bike'})), true);
-  fillSelect('sCourse', VENUES.map(v=>({v:v,t:v})));
-  fillSelect('rVenue', VENUES.map(v=>({v:v,t:v})));
+  fillSelect('sCourse', raceVenueOptions().map(v=>({v:v,t:v})));
+  fillSelect('rVenue', raceVenueOptions().map(v=>({v:v,t:v})));
   // setups
   const sl=document.getElementById('setupList'); sl.innerHTML='';
   const setups=[...DB.setups].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
@@ -1130,7 +2016,16 @@ function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(
 /* =================================================================
    EVENTS
    ================================================================= */
-document.getElementById('tabs').addEventListener('click',e=>{ if(e.target.dataset.view) setView(e.target.dataset.view); });
+function openSidebar(){ document.getElementById('sidebar').classList.add('open'); document.getElementById('scrim').classList.add('show'); }
+function closeSidebar(){ document.getElementById('sidebar').classList.remove('open'); document.getElementById('scrim').classList.remove('show'); }
+document.getElementById('hamburger').onclick=openSidebar;
+document.getElementById('sideClose').onclick=closeSidebar;
+document.getElementById('scrim').onclick=closeSidebar;
+document.getElementById('nav').addEventListener('click',e=>{
+  const link=e.target.closest('.navlink'); if(link){ setView(link.dataset.view); return; }
+  const fh=e.target.closest('.folder-h'); if(fh){ fh.parentElement.classList.toggle('collapsed'); }
+});
+document.querySelector('.snaprow').addEventListener('click',e=>{ const c=e.target.closest('.snapcard'); if(c&&c.dataset.go) setView(c.dataset.go); });
 document.getElementById('prevDay').onclick=()=>{ viewDate=addDays(viewDate,-1); renderToday(); };
 document.getElementById('nextDay').onclick=()=>{ viewDate=addDays(viewDate,1); renderToday(); };
 document.getElementById('jumpToday').onclick=()=>{ viewDate=todayStr(); renderToday(); };
@@ -1180,10 +2075,13 @@ document.getElementById('addResultBtn').onclick=()=>{
   const r={ id:uid(), date:document.getElementById('rDate').value||todayStr(),
     venue:document.getElementById('rVenue').value, cls:document.getElementById('rClass').value,
     place:document.getElementById('rPlace').value, field:document.getElementById('rField').value,
-    time:document.getElementById('rTime').value, notes:document.getElementById('rNotes').value, dnf };
+    time:document.getElementById('rTime').value, points:document.getElementById('rPoints').value,
+    notes:document.getElementById('rNotes').value, dnf };
   if(!dnf && !r.place){ alert('Add your finishing place, or tick Crash / DNF.'); return; }
-  DB.results.push(r); save();
-  ['rPlace','rField','rTime','rNotes'].forEach(id=>document.getElementById(id).value='');
+  DB.results.push(r);
+  if(r.points){ DB.rankings.entries.push({id:uid(), date:r.date, series:venueShort(r.venue), race:r.cls||'', points:+r.points}); }
+  save();
+  ['rPlace','rField','rTime','rPoints','rNotes'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('rDnf').checked=false;
   renderProgress();
 };
@@ -1211,6 +2109,47 @@ document.getElementById('ideaList').addEventListener('click',e=>{ const d=e.targ
 document.getElementById('addIdeaBtn').onclick=()=>{ const n=document.getElementById('ideaName').value.trim(); if(!n) return;
   DB.mealIdeas.push({id:uid(),cat:document.getElementById('ideaCat').value,name:n}); document.getElementById('ideaName').value=''; save(); renderMealIdeas(); };
 
+// gym
+document.getElementById('gymWrap').addEventListener('click',e=>{
+  const log=e.target.closest('.gymlog');
+  if(log){ const id=log.dataset.ex, inp=document.querySelector('.gymin[data-ex="'+id+'"]'); logGymWeight(id, inp.value); return; }
+  const del=e.target.closest('[data-delg]');
+  if(del){ delGym(del.dataset.delg, del.dataset.gd); }
+});
+document.getElementById('gymWrap').addEventListener('keydown',e=>{
+  if(e.key==='Enter' && e.target.classList.contains('gymin')){ e.preventDefault(); logGymWeight(e.target.dataset.ex, e.target.value); }
+});
+
+// runs
+document.getElementById('addRunBtn').onclick=()=>{ const g=id=>document.getElementById(id).value.trim();
+  const url=g('runUrl'); if(!url){ alert('Paste the video link (YouTube, Google Drive, or Vimeo).'); return; }
+  DB.runs.push({ id:uid(), date:g('runDate')||todayStr(), course:document.getElementById('runCourse').value,
+    type:document.getElementById('runType').value, url, total:g('runTotal'), splits:g('runSplits'), notes:g('runNotes') });
+  ['runUrl','runTotal','runSplits','runNotes'].forEach(id=>document.getElementById(id).value=''); save(); renderRuns(); };
+document.getElementById('runFilter').addEventListener('change',e=>{ runFilter=e.target.value; renderRuns(); });
+document.getElementById('runList').addEventListener('click',e=>{
+  const p=e.target.closest('.playbtn');
+  if(p){ const r=DB.runs.find(x=>x.id===p.dataset.run); if(r) document.getElementById('rp_'+r.id).innerHTML=embedHtml(r.url); return; }
+  const d=e.target.closest('[data-delrun]');
+  if(d){ if(confirm('Remove this run from your library? (The video itself stays wherever you uploaded it.)')){ DB.runs=DB.runs.filter(x=>x.id!==d.dataset.delrun); save(); renderRuns(); } }
+});
+
+// social
+document.getElementById('acctChips').addEventListener('click',e=>{
+  const rm=e.target.closest('[data-rmacct]');
+  if(rm){ const a=rm.dataset.rmacct; if(confirm('Remove '+a+'? Its logged stats stay but will be hidden.')){ DB.social.accounts=DB.social.accounts.filter(x=>x!==a); if(socialSel===a) socialSel=null; save(); renderSocial(); } return; }
+  if(e.target.id==='addAcctBtn'){ const a=(prompt('Instagram handle (e.g. @054_gravityraceteam)')||'').trim(); if(a){ if(!DB.social.accounts.includes(a)) DB.social.accounts.push(a); socialSel=a; save(); renderSocial(); } return; }
+  const chip=e.target.closest('[data-acct]'); if(chip){ socialSel=chip.dataset.acct; renderSocial(); }
+});
+document.getElementById('addStatBtn').onclick=()=>{ const g=id=>document.getElementById(id).value.trim();
+  const followers=g('statFollowers'); if(followers===''){ alert('Enter your follower count.'); return; }
+  DB.social.entries.push({ id:uid(), date:g('statDate')||todayStr(), account:document.getElementById('statAcct').value,
+    followers, following:g('statFollowing'), posts:g('statPosts'), reach:g('statReach'), visits:g('statVisits'), notes:g('statNotes') });
+  ['statFollowers','statFollowing','statPosts','statReach','statVisits','statNotes'].forEach(id=>document.getElementById(id).value='');
+  save(); renderSocial(); };
+document.getElementById('statTable').addEventListener('click',e=>{ const d=e.target.closest('[data-dels2]');
+  if(d){ DB.social.entries=DB.social.entries.filter(x=>x.id!==d.dataset.dels2); save(); renderSocial(); } });
+
 // bikes
 document.getElementById('addBikeBtn').onclick=()=>{
   const g=id=>document.getElementById(id).value.trim();
@@ -1237,6 +2176,136 @@ document.getElementById('addSetupBtn').onclick=()=>{
 document.getElementById('setupList').addEventListener('click',e=>{ const d=e.target.closest('[data-delset]');
   if(d){ DB.setups=DB.setups.filter(x=>x.id!==d.dataset.delset); save(); renderBike(); } });
 
+// skills & drills
+document.getElementById('focusText').addEventListener('change',e=>{ DB.skillsFocus.current=e.target.value.trim(); save(); });
+document.getElementById('saveFocusBtn').onclick=()=>{ const cur=document.getElementById('focusText').value.trim(); if(!cur){ alert('Set a focus first.'); return; }
+  const note=document.getElementById('focusNote').value.trim(); DB.skillsFocus.current=cur;
+  DB.skillsFocus.log.push({id:uid(),date:todayStr(),focus:cur,note}); document.getElementById('focusNote').value=''; save(); renderSkillsDrills(); };
+document.getElementById('focusLog').addEventListener('click',e=>{ const d=e.target.closest('[data-delf]');
+  if(d){ DB.skillsFocus.log=DB.skillsFocus.log.filter(x=>x.id!==d.dataset.delf); save(); renderSkillsDrills(); } });
+document.getElementById('addDrillBtn').onclick=()=>{ const g=id=>document.getElementById(id).value.trim();
+  const name=g('drillName'); if(!name){ alert('Give the drill a name.'); return; }
+  DB.drills.push({id:uid(),cat:g('drillCat')||'General',name,desc:g('drillDesc'),star:false});
+  ['drillCat','drillName','drillDesc'].forEach(id=>document.getElementById(id).value=''); save(); renderSkillsDrills(); };
+document.getElementById('drillList').addEventListener('click',e=>{
+  const s=e.target.closest('[data-star]'); if(s){ const d=DB.drills.find(x=>x.id===s.dataset.star); if(d){ d.star=!d.star; save(); renderSkillsDrills(); } return; }
+  const d=e.target.closest('[data-deld]'); if(d){ DB.drills=DB.drills.filter(x=>x.id!==d.dataset.deld); save(); renderSkillsDrills(); } });
+
+// mobility & recovery
+document.getElementById('mobList').addEventListener('click',e=>{
+  const dl=e.target.closest('[data-delmob]'); if(dl){ DB.mobility.routine=DB.mobility.routine.filter(m=>m.id!==dl.dataset.delmob); save(); renderMobility(); return; }
+  const row=e.target.closest('[data-mob]'); if(row){ const day=todayStr(); if(!DB.mobility.done[day]) DB.mobility.done[day]={};
+    const id=row.dataset.mob; DB.mobility.done[day][id]=!DB.mobility.done[day][id]; save(); renderMobility(); } });
+document.getElementById('addMobBtn').onclick=()=>{ const i=document.getElementById('mobName'); const v=i.value.trim(); if(!v) return;
+  DB.mobility.routine.push({id:uid(),name:v}); i.value=''; save(); renderMobility(); };
+document.getElementById('addNigBtn').onclick=()=>{ const g=id=>document.getElementById(id).value.trim();
+  const area=g('nigArea'); if(!area){ alert('Which area?'); return; }
+  DB.mobility.niggles.push({id:uid(),date:g('nigDate')||todayStr(),area,severity:+g('nigSev')||1,notes:g('nigNotes')});
+  ['nigArea','nigSev','nigNotes'].forEach(id=>document.getElementById(id).value=''); save(); renderMobility(); };
+document.getElementById('niggleList').addEventListener('click',e=>{ const d=e.target.closest('[data-deln]');
+  if(d){ DB.mobility.niggles=DB.mobility.niggles.filter(x=>x.id!==d.dataset.deln); save(); renderMobility(); } });
+
+// maintenance
+document.getElementById('maintStatus').addEventListener('click',e=>{
+  const mk=e.target.closest('[data-mk]'); if(mk){ const it=DB.maint.items.find(x=>x.id===mk.dataset.mk); if(it){ DB.maint.done[it.id]=todayStr();
+    DB.maint.log.push({id:uid(),date:todayStr(),item:it.name,notes:''}); save(); renderMaint(); } return; }
+  const dm=e.target.closest('[data-delmi]'); if(dm){ DB.maint.items=DB.maint.items.filter(x=>x.id!==dm.dataset.delmi); save(); renderMaint(); } });
+document.getElementById('addMiBtn').onclick=()=>{ const n=document.getElementById('miName'), d=document.getElementById('miDays');
+  const v=n.value.trim(); if(!v) return; DB.maint.items.push({id:uid(),name:v,days:+d.value||30}); n.value=''; d.value=''; save(); renderMaint(); };
+document.getElementById('maintLog').addEventListener('click',e=>{ const d=e.target.closest('[data-dellog]');
+  if(d){ DB.maint.log=DB.maint.log.filter(x=>x.id!==d.dataset.dellog); save(); renderMaint(); } });
+
+// race day
+const RD_MAP={pk:'packing',st:'steps',pr:'prerun'};
+function rdArr(kind){ return DB.raceday[RD_MAP[kind]]; }
+document.getElementById('view-raceday').addEventListener('click',e=>{
+  const ck=e.target.closest('[data-ck]'); if(ck && !e.target.closest('[data-delck]')){ const [k,id]=ck.dataset.ck.split(':');
+    const it=rdArr(k).find(x=>x.id===id); if(it){ it.done=!it.done; save(); renderRaceDay(); } return; }
+  const dc=e.target.closest('[data-delck]'); if(dc){ const [k,id]=dc.dataset.delck.split(':');
+    DB.raceday[RD_MAP[k]]=rdArr(k).filter(x=>x.id!==id); save(); renderRaceDay(); } });
+function addRD(kind,inputId){ const i=document.getElementById(inputId); const v=i.value.trim(); if(!v) return;
+  rdArr(kind).push({id:uid(),name:v,done:false}); i.value=''; save(); renderRaceDay(); }
+document.getElementById('addPkBtn').onclick=()=>addRD('pk','pkName');
+document.getElementById('addStBtn').onclick=()=>addRD('st','stName');
+document.getElementById('addPrBtn').onclick=()=>addRD('pr','prName');
+function resetRD(kind){ rdArr(kind).forEach(i=>i.done=false); save(); renderRaceDay(); }
+document.getElementById('resetPk').onclick=()=>resetRD('pk');
+document.getElementById('resetSt').onclick=()=>resetRD('st');
+document.getElementById('resetPr').onclick=()=>resetRD('pr');
+
+/* ---------- RACE CALENDAR ---------- */
+function renderRaceCal(){
+  const rs=[...DB.races].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  const t=todayStr();
+  const el=document.getElementById('raceCalList');
+  el.innerHTML = rs.length ? rs.map(r=>{
+    const past = r.date && r.date<t;
+    return `<div class="maint-row"><div class="maint-b">
+      <div class="maint-n">${esc(venueShort(r.venue))}${r.label&&r.label!==r.venue?' · '+esc(r.label):''} ${past?'<span style="color:var(--dim);font-size:11px;">(past)</span>':''}</div>
+      <div class="maint-m">${esc(r.date||'')}${r.cls?' · '+esc(r.cls):''}${r.link?' · <a href="'+esc(r.link)+'" target="_blank" style="color:var(--cyan)">link</a>':''}</div>
+      ${r.notes?`<div style="font-size:12px;color:#9aa6b2;margin-top:4px;">${esc(r.notes)}</div>`:''}</div>
+      <span class="mbadge ${r.status==='Registered'?'ok':r.status==='Withdrawn'?'over':'due'}">${esc(r.status||'Planning')}</span>
+      <button class="delx" data-delrc="${r.id}">×</button></div>`;
+  }).join('') : '<div class="empty">No races added yet — add your first one below.</div>';
+}
+document.getElementById('raceCalList').addEventListener('click',e=>{ const d=e.target.closest('[data-delrc]');
+  if(d){ if(confirm('Remove this race?')){ DB.races=DB.races.filter(r=>r.id!==d.dataset.delrc); save(); renderRaceCal(); } } });
+document.getElementById('rcFindBtn').onclick=async()=>{
+  const v=document.getElementById('rcVenue').value.trim(); if(!v){ alert('Enter a venue first.'); return; }
+  const btn=document.getElementById('rcFindBtn'); const orig=btn.textContent; btn.textContent='Finding…'; btn.disabled=true;
+  try{ const r=await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(v)}&count=1`);
+    const d=await r.json();
+    if(d.results && d.results[0]){ document.getElementById('rcLat').value=d.results[0].latitude.toFixed(4); document.getElementById('rcLon').value=d.results[0].longitude.toFixed(4); }
+    else alert('No match found — enter coordinates manually.');
+  }catch(err){ alert("Couldn't look that up right now."); }
+  btn.textContent=orig; btn.disabled=false;
+};
+document.getElementById('addRaceBtn').onclick=()=>{
+  const g=id=>document.getElementById(id).value.trim();
+  const venue=g('rcVenue'); if(!venue){ alert('Enter a venue.'); return; }
+  const r={ id:uid(), date:g('rcDate'), venue, label:g('rcLabel')||venue, cls:g('rcCls'),
+    status:g('rcStatus')||'Registered', lat:g('rcLat')?+g('rcLat'):null, lon:g('rcLon')?+g('rcLon'):null,
+    link:g('rcLink'), notes:g('rcNotes') };
+  DB.races.push(r);
+  ['rcDate','rcVenue','rcLabel','rcCls','rcLat','rcLon','rcLink','rcNotes'].forEach(id=>document.getElementById(id).value='');
+  save(); renderRaceCal();
+};
+
+/* ---------- RANKINGS & POINTS ---------- */
+function renderRankings(){
+  const rk=DB.rankings;
+  document.getElementById('rkCategory').value=rk.category||'';
+  document.getElementById('rkStanding').value=rk.standing||'';
+  document.getElementById('rkPointsNote').value=rk.pointsNote||'';
+  const total=rk.entries.reduce((s,e)=>s+(+e.points||0),0);
+  document.getElementById('rkTotal').textContent=total;
+  const sorted=[...rk.entries].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  document.getElementById('rankingEntries').innerHTML = sorted.length ? sorted.map(e=>
+    `<div class="ghrow"><span class="ghd">${esc(e.date||'')}</span><span class="ghw">${esc(e.series||'')}${e.race?' · '+esc(e.race):''} — <b style="color:var(--lime)">${e.points} pts</b></span><button class="delx" data-delrk="${e.id}">×</button></div>`).join('')
+    : '<div class="empty">No points logged yet.</div>';
+}
+['rkCategory','rkStanding','rkPointsNote'].forEach(id=>{
+  document.getElementById(id).addEventListener('change',e=>{
+    const key = id==='rkCategory'?'category':id==='rkStanding'?'standing':'pointsNote';
+    DB.rankings[key]=e.target.value.trim(); save();
+  });
+});
+document.getElementById('addRankBtn').onclick=()=>{
+  const g=id=>document.getElementById(id).value.trim();
+  const points=g('rkePoints'); if(!points){ alert('Enter points earned.'); return; }
+  DB.rankings.entries.push({ id:uid(), date:g('rkeDate')||todayStr(), series:g('rkeSeries'), race:g('rkeRace'), points:+points });
+  ['rkeDate','rkeSeries','rkeRace','rkePoints'].forEach(id=>document.getElementById(id).value='');
+  save(); renderRankings();
+};
+document.getElementById('rankingEntries').addEventListener('click',e=>{ const d=e.target.closest('[data-delrk]');
+  if(d){ DB.rankings.entries=DB.rankings.entries.filter(x=>x.id!==d.dataset.delrk); save(); renderRankings(); } });
+
+// course notes
+document.getElementById('courseSel').addEventListener('change',e=>{ courseSel=e.target.value; renderCourse(); });
+[['cBreakdown','breakdown'],['cWet','wet'],['cBrakes','brakes'],['cHazards','hazards']].forEach(([id,key])=>{
+  document.getElementById(id).addEventListener('change',e=>{ if(!DB.course[courseSel]) DB.course[courseSel]={};
+    DB.course[courseSel][key]=e.target.value; save(); }); });
+
 // export / import
 document.getElementById('exportBtn').onclick=()=>{
   const blob=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'});
@@ -1251,7 +2320,8 @@ document.getElementById('importFile').addEventListener('change',e=>{ const f=e.t
 
 // live clock for now-line
 setInterval(()=>{ if(document.getElementById('view-today').classList.contains('active') && viewDate===todayStr()) renderTimeline(); },60000);
-let _rzT; window.addEventListener('resize',()=>{ clearTimeout(_rzT); _rzT=setTimeout(()=>{ if(document.getElementById('view-progress').classList.contains('active')) renderProgress(); },200); });
+let _rzT; window.addEventListener('resize',()=>{ clearTimeout(_rzT); _rzT=setTimeout(()=>{ const a=document.querySelector('.navlink.active'); if(!a) return;
+  if(a.dataset.view==='progress') renderProgress(); else if(a.dataset.view==='social') renderSocial(); },200); });
 
 document.getElementById('signBtn').onclick=signToggle;
 
