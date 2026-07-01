@@ -235,6 +235,36 @@
   details.addbox[open] > summary{ border-bottom:1px solid var(--line2); }
   details.addbox .pad{ padding:14px; }
 
+  .principles p{ font-size:13px; color:#d6dde2; padding:6px 0; border-top:1px solid #1a2128; margin:0; }
+  .principles p:first-child{ border-top:0; }
+  .principles b{ color:var(--lime); font-weight:600; }
+  .staples{ margin-top:14px; }
+  .staples .sh{ font-family:'Orbitron'; font-weight:600; font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--dim); margin-bottom:7px; }
+  .staples .chips{ display:flex; flex-wrap:wrap; gap:6px; }
+  .staple{ font-size:11px; background:#0e1318; border:1px solid var(--line2); color:var(--dim2); padding:3px 9px; border-radius:20px; }
+  .dietnote{ font-size:12px; color:var(--dim); margin-top:14px; border-left:3px solid var(--lime); padding-left:11px; }
+  .todayfuel{ margin-top:8px; }
+  .tfrow{ display:flex; gap:12px; padding:8px 0; border-top:1px solid #1a2128; }
+  .tfrow:first-child{ border-top:0; }
+  .tfk{ font-family:'Orbitron'; font-weight:600; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--cyan); min-width:70px; padding-top:2px; }
+  .tfv{ flex:1; font-size:13px; color:#d6dde2; }
+  .hydro{ display:flex; align-items:center; gap:18px; justify-content:center; margin-top:14px; }
+  .hbtn{ width:44px; height:44px; border-radius:50%; border:1px solid var(--line2); background:#0e1318; color:var(--text); font-size:22px; line-height:1; }
+  .hbtn:hover{ border-color:var(--pink); }
+  .wcount{ text-align:center; } .wcount span{ font-family:'Orbitron'; font-weight:800; font-size:32px; color:var(--pink); }
+  .wcount small{ display:block; font-size:10px; color:var(--dim); text-transform:uppercase; letter-spacing:.08em; }
+  .drops{ text-align:center; margin-top:10px; font-size:15px; line-height:1.7; min-height:22px; }
+  .drops .drop{ opacity:.18; } .drops .drop.on{ opacity:1; }
+  .habits{ display:flex; flex-direction:column; gap:6px; margin-top:8px; }
+  .habit{ text-align:left; background:#0e1318; border:1px solid var(--line2); color:var(--dim2); border-radius:4px; padding:9px 12px; font-family:'Oswald'; font-weight:500; font-size:13px; }
+  .habit.on{ background:rgba(144,198,62,.14); border-color:var(--lime); color:var(--text); }
+  .habit.on::before{ content:"\2713 "; color:var(--lime); font-weight:800; }
+  .meal-in{ font-size:12.5px; }
+  .ideacat{ margin-bottom:15px; }
+  .ideacat-h{ font-family:'Orbitron'; font-weight:600; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--cyan); margin-bottom:8px; }
+  .ideachips{ display:flex; flex-wrap:wrap; gap:7px; }
+  .ideachip{ display:inline-flex; align-items:center; gap:6px; font-size:12.5px; background:#0e1318; border:1px solid var(--line2); color:#d6dde2; padding:5px 10px; border-radius:5px; }
+  .ideachip .delx{ font-size:13px; padding:0 2px; }
   .footnote{ text-align:center; margin-top:34px; font-family:'Orbitron'; font-weight:600; font-size:9px;
     letter-spacing:.24em; text-transform:uppercase; color:#3f4954; }
 </style>
@@ -251,6 +281,7 @@
       <button class="tab active" data-view="today">Today</button>
       <button class="tab" data-view="week">Week</button>
       <button class="tab" data-view="progress">Progress</button>
+      <button class="tab" data-view="meals">Meals</button>
       <button class="tab" data-view="bike">Bike Setup</button>
     </nav>
     <div class="datamenu">
@@ -485,6 +516,79 @@
     </div>
   </section>
 
+  <!-- ================= MEALS ================= -->
+  <section class="view" id="view-meals">
+    <div class="seclabel">Fuel to Perform</div>
+    <div class="card lime" style="margin-bottom:16px;">
+      <h3>Eat Like a Racer</h3>
+      <div class="sub">The goal is fueling and growing — eat ENOUGH, not less</div>
+      <div class="principles" style="margin-top:10px;">
+        <p><b>Build the plate:</b> about half fruit &amp; veg, a quarter quality carbs (rice, pasta, potatoes, oats, bread), a quarter protein (chicken, eggs, fish, beans, yogurt), plus some healthy fat.</p>
+        <p><b>Carbs are your fuel</b> — don't skip them, especially before and after riding. They're what power your race runs.</p>
+        <p><b>Protein at every meal</b> helps you recover from training and grow stronger.</p>
+        <p><b>Eat before AND after training</b> — never ride hard on empty, and refuel within about 45 minutes of finishing.</p>
+        <p><b>Hydrate all day,</b> with extra on Bolton and race days when you're sweating for hours.</p>
+        <p><b>Eat enough.</b> Hard training on a growing body needs plenty of food — being under-fueled makes you slower and raises injury risk. Hunger is a signal to eat, not ignore.</p>
+      </div>
+      <div class="staples">
+        <div class="sh">Staples to keep stocked</div>
+        <div class="chips">
+          <span class="staple">Oats</span><span class="staple">Eggs</span><span class="staple">Bread / bagels</span>
+          <span class="staple">Rice &amp; pasta</span><span class="staple">Potatoes</span><span class="staple">Chicken / turkey</span>
+          <span class="staple">Canned beans</span><span class="staple">Greek yogurt</span><span class="staple">Milk</span>
+          <span class="staple">Peanut butter</span><span class="staple">Bananas &amp; fruit</span><span class="staple">Fresh + frozen veg</span>
+          <span class="staple">Cheese</span><span class="staple">Trail mix</span><span class="staple">Granola bars</span><span class="staple">Honey</span>
+        </div>
+      </div>
+      <p class="dietnote">General guidance to build healthy habits. As a growing athlete, if you want a plan tailored to you, a registered sports dietitian or your doctor is the best person to help — and whatever you do, keep eating enough to support training and growth.</p>
+    </div>
+
+    <div class="row" style="margin-bottom:16px;">
+      <div class="card cyan col">
+        <h3>Today's Fuel</h3>
+        <div class="sub">Pulled from your weekly plan</div>
+        <div id="todayFuel" class="todayfuel"></div>
+      </div>
+      <div class="card pink col" style="max-width:390px;">
+        <h3>Hydration</h3>
+        <div class="sub">Sip through the day · extra on Bolton &amp; race days</div>
+        <div class="hydro">
+          <button class="hbtn" id="waterMinus">&minus;</button>
+          <div class="wcount"><span id="waterCount">0</span><small>glasses today</small></div>
+          <button class="hbtn" id="waterPlus">+</button>
+        </div>
+        <div id="waterDrops" class="drops"></div>
+        <div class="sub" style="margin-top:14px;">Daily habits</div>
+        <div id="fuelHabits" class="habits">
+          <button class="habit" data-h="before">Fueled before training</button>
+          <button class="habit" data-h="after">Refueled within 45 min after</button>
+          <button class="habit" data-h="enough">Ate enough to fuel the day</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="seclabel">Weekly Meal Plan · Editable</div>
+    <p style="color:var(--dim); font-size:13px; margin-bottom:14px;">A starting plan built around your training week — edit any of it to match what you actually like to eat.</p>
+    <div class="pgrid" id="mealGrid"></div>
+
+    <div class="seclabel" style="margin-top:20px;">Meal &amp; Snack Ideas</div>
+    <div class="card cyan">
+      <h3>Idea Bank</h3>
+      <div class="sub">Balanced, easy options to pull into your plan</div>
+      <div id="ideaList" style="margin-top:10px;"></div>
+      <details class="addbox"><summary>+ Add your own</summary><div class="pad">
+        <div class="addrow">
+          <input class="in" id="ideaName" placeholder="e.g. Rice bowl + eggs + avocado">
+          <select class="in" id="ideaCat" style="width:210px;flex:none;">
+            <option>Breakfast</option><option>Lunch / Dinner</option><option>Pre-ride (1&ndash;3 hrs)</option>
+            <option>On the hill / between runs</option><option>Recovery (within ~45 min)</option><option>Snacks</option>
+          </select>
+          <button class="btn sm" id="addIdeaBtn">Add</button>
+        </div>
+      </div></details>
+    </div>
+  </section>
+
   <div class="footnote">054 Gravity · Auto-saves to this browser · Sign in to sync to the cloud</div>
 </div>
 
@@ -583,6 +687,47 @@ const CHEAT = [
   ['Vague / wandering in steep terrain','Check sag — fork ~15-20%, rear ~28-32%. Too much sag makes it wallow.']
 ];
 
+const MEALSLOTS=['breakfast','lunch','dinner','snacks'];
+const MEAL_DAY_HINT={ 0:'Recovery — normal balanced eating', 1:'Gym day — protein for recovery',
+  2:'Ride day — carbs before, refuel after', 3:'BOLTON — fuel up big, snack on the hill, refuel hard',
+  4:'Ride day — carbs before, refuel after', 5:'Power day — fuel the session, protein after',
+  6:'Race sim — eat 2–3 hrs before, snack between runs' };
+const DEFAULT_MEALS={
+  0:{breakfast:'Veggie omelette + toast + fruit', lunch:'Big salad w/ chicken + bread roll', dinner:'Family dinner — balanced plate', snacks:'Fruit, yogurt'},
+  1:{breakfast:'Oats + banana + peanut butter', lunch:'Chicken + rice + roasted veg', dinner:'Pasta + turkey + side salad', snacks:'Greek yogurt + berries · apple + PB'},
+  2:{breakfast:'Bagel + eggs + fruit (fuel for the ride)', lunch:'Turkey sandwich + veg sticks + fruit', dinner:'Burrito bowl: rice, beans, chicken, veg', snacks:'Post-ride smoothie · trail mix'},
+  3:{breakfast:'Oatmeal + eggs + fruit (big — Bolton day)', lunch:'Packed: sandwich + fruit + trail mix', dinner:'Salmon or chicken + potatoes + green veg', snacks:'On-hill: bananas, bars, PB&J · recovery chocolate milk'},
+  4:{breakfast:'Yogurt + granola + berries + toast', lunch:'Rice bowl + chicken + veg', dinner:'Stir-fry: beef/chicken + veg + noodles', snacks:'Post-ride smoothie · cheese + crackers'},
+  5:{breakfast:'Eggs + toast + fruit', lunch:'Pasta salad + protein', dinner:'Burrito bowl or chicken + rice + veg', snacks:'Yogurt · fruit + PB'},
+  6:{breakfast:'Oatmeal + banana + honey (2–3 hrs before)', lunch:'Refuel: rice + chicken', dinner:'Hearty balanced plate to refill', snacks:'Between runs: bananas, bars, PB&J · recovery chocolate milk'}
+};
+const DEFAULT_MEAL_IDEAS=[
+  {cat:'Breakfast', name:'Oats + banana + peanut butter + honey'},
+  {cat:'Breakfast', name:'Eggs + whole-grain toast + fruit'},
+  {cat:'Breakfast', name:'Greek yogurt + granola + berries'},
+  {cat:'Breakfast', name:'Smoothie: milk, banana, berries, oats, PB'},
+  {cat:'Lunch / Dinner', name:'Chicken + rice + roasted veg'},
+  {cat:'Lunch / Dinner', name:'Pasta + turkey meatballs + salad'},
+  {cat:'Lunch / Dinner', name:'Burrito bowl: rice, beans, chicken, veg, salsa'},
+  {cat:'Lunch / Dinner', name:'Salmon + potatoes + green veg'},
+  {cat:'Lunch / Dinner', name:'Stir-fry: chicken or beef + veg + noodles'},
+  {cat:'Lunch / Dinner', name:'Turkey sandwich + fruit + veg sticks'},
+  {cat:'Pre-ride (1–3 hrs)', name:'Toast + honey + banana'},
+  {cat:'Pre-ride (1–3 hrs)', name:'Bowl of cereal + milk'},
+  {cat:'Pre-ride (1–3 hrs)', name:'Oatmeal + fruit'},
+  {cat:'On the hill / between runs', name:'Banana'},
+  {cat:'On the hill / between runs', name:'Granola / energy bar'},
+  {cat:'On the hill / between runs', name:'PB&J half'},
+  {cat:'On the hill / between runs', name:'Trail mix / dried fruit'},
+  {cat:'Recovery (within ~45 min)', name:'Chocolate milk'},
+  {cat:'Recovery (within ~45 min)', name:'Greek yogurt + fruit'},
+  {cat:'Recovery (within ~45 min)', name:'Smoothie with protein + carbs'},
+  {cat:'Snacks', name:'Apple + peanut butter'},
+  {cat:'Snacks', name:'Cheese + crackers'},
+  {cat:'Snacks', name:'Veg + hummus'},
+  {cat:'Snacks', name:'Fruit + string cheese'}
+];
+
 /* =================================================================
    CLOUD SYNC (Firebase) — fill in FIREBASE_CONFIG to enable.
    Leave it blank and the app runs fully in local-only mode.
@@ -654,7 +799,8 @@ function cloudSaveNow(){
 /* ---------- store ---------- */
 let DB, MEM=false, viewDate=todayStr();
 function defaults(){ return { templates:JSON.parse(JSON.stringify(DEFAULT_TEMPLATES)), log:{}, results:[],
-  skills:DEFAULT_SKILLS.map(n=>({name:n,level:0})), bikes:[], setups:[] }; }
+  skills:DEFAULT_SKILLS.map(n=>({name:n,level:0})), bikes:[], setups:[],
+  meals:JSON.parse(JSON.stringify(DEFAULT_MEALS)), mealIdeas:DEFAULT_MEAL_IDEAS.map(m=>({id:uid(),cat:m.cat,name:m.name})) }; }
 function load(){
   try{ const r=localStorage.getItem(KEY); DB = r?JSON.parse(r):defaults();
        // migrate missing keys
@@ -674,6 +820,7 @@ function addDays(s,n){ const d=parseYmd(s); d.setDate(d.getDate()+n); return ymd
 function toMin(t){ if(!t||!t.includes(':')) return null; const [h,m]=t.split(':').map(Number); return h*60+m; }
 function fmt12(t){ const mm=toMin(t); if(mm==null) return t||''; let h=Math.floor(mm/60), m=mm%60, ap=h>=12?'PM':'AM'; h=h%12||12; return h+(m?':'+String(m).padStart(2,'0'):'')+ap; }
 function getLog(date){ if(!DB.log[date]) DB.log[date]={checks:{},custom:[],metrics:{}}; return DB.log[date]; }
+function getFuel(date){ const lg=getLog(date); if(!lg.fuel) lg.fuel={}; return lg.fuel; }
 
 /* combined day items (template + custom) sorted */
 function dayItems(date){
@@ -698,6 +845,7 @@ function setView(v){
   document.getElementById('view-'+v).classList.add('active');
   if(v==='week') renderWeek();
   if(v==='progress') renderProgress();
+  if(v==='meals') renderMeals();
   if(v==='bike') renderBike();
 }
 
@@ -898,6 +1046,41 @@ function renderSkills(){ const el=document.getElementById('skillList'); el.inner
     el.innerHTML+=`<div class="skill"><span class="sn">${esc(s.name)}</span><div class="sdots">${dots}</div><button class="delx" data-dels="${i}">×</button></div>`; });
 }
 
+/* ---------- MEALS ---------- */
+function renderMeals(){
+  const wd=parseYmd(todayStr()).getDay();
+  const plan=DB.meals[wd]||{};
+  document.getElementById('todayFuel').innerHTML = MEALSLOTS.map(s=>
+    `<div class="tfrow"><span class="tfk">${s}</span><span class="tfv">${esc(plan[s]||'—')}</span></div>`).join('');
+  const water=(getLog(todayStr()).metrics||{}).water||0;
+  document.getElementById('waterCount').textContent=water;
+  let drops=''; for(let i=0;i<Math.max(8,water);i++) drops+=`<span class="drop ${i<water?'on':''}">💧</span>`;
+  document.getElementById('waterDrops').innerHTML=drops;
+  const f=getFuel(todayStr());
+  document.querySelectorAll('#fuelHabits .habit').forEach(b=>b.classList.toggle('on',!!f[b.dataset.h]));
+  renderMealPlan(); renderMealIdeas();
+}
+function renderMealPlan(){
+  const g=document.getElementById('mealGrid'); g.innerHTML='';
+  [1,2,3,4,5,6,0].forEach(wd=>{
+    const cls=(wd===3||wd===6)?'pink':(wd===1||wd===5)?'lime':(wd===0)?'dimc':'cyan';
+    const p=DB.meals[wd]||{};
+    const card=document.createElement('div'); card.className='card '+cls;
+    card.innerHTML=`<h3>${DOW_FULL[wd]}</h3><div class="sub">${MEAL_DAY_HINT[wd]}</div>`+
+      MEALSLOTS.map(s=>`<label class="fl" style="margin-top:9px;text-transform:capitalize;">${s}</label>
+        <textarea class="in meal-in" data-wd="${wd}" data-slot="${s}" rows="2">${esc(p[s]||'')}</textarea>`).join('');
+    g.appendChild(card);
+  });
+}
+function renderMealIdeas(){
+  const el=document.getElementById('ideaList'); el.innerHTML='';
+  const cats=[...new Set(DB.mealIdeas.map(m=>m.cat))];
+  cats.forEach(c=>{ const items=DB.mealIdeas.filter(m=>m.cat===c);
+    el.innerHTML+=`<div class="ideacat"><div class="ideacat-h">${esc(c)}</div><div class="ideachips">`+
+      items.map(m=>`<span class="ideachip">${esc(m.name)}<button class="delx" data-deli="${m.id}">×</button></span>`).join('')+
+      `</div></div>`; });
+}
+
 /* ---------- BIKE ---------- */
 function renderBike(){
   // garage
@@ -1015,6 +1198,18 @@ document.getElementById('skillList').addEventListener('click',e=>{
 });
 document.getElementById('addSkillBtn').onclick=()=>{ const v=document.getElementById('addSkill').value.trim(); if(!v) return;
   DB.skills.push({name:v,level:0}); document.getElementById('addSkill').value=''; save(); renderSkills(); };
+
+// meals
+document.getElementById('waterPlus').onclick=()=>{ const m=getLog(todayStr()).metrics; m.water=(m.water||0)+1; save(); renderMeals(); };
+document.getElementById('waterMinus').onclick=()=>{ const m=getLog(todayStr()).metrics; m.water=Math.max(0,(m.water||0)-1); save(); renderMeals(); };
+document.getElementById('fuelHabits').addEventListener('click',e=>{ const b=e.target.closest('.habit'); if(!b) return;
+  const f=getFuel(todayStr()); f[b.dataset.h]=!f[b.dataset.h]; save(); renderMeals(); });
+document.getElementById('mealGrid').addEventListener('change',e=>{ const t=e.target.closest('.meal-in'); if(!t) return;
+  const wd=+t.dataset.wd; if(!DB.meals[wd]) DB.meals[wd]={}; DB.meals[wd][t.dataset.slot]=t.value; save(); });
+document.getElementById('ideaList').addEventListener('click',e=>{ const d=e.target.closest('[data-deli]');
+  if(d){ DB.mealIdeas=DB.mealIdeas.filter(m=>m.id!==d.dataset.deli); save(); renderMealIdeas(); } });
+document.getElementById('addIdeaBtn').onclick=()=>{ const n=document.getElementById('ideaName').value.trim(); if(!n) return;
+  DB.mealIdeas.push({id:uid(),cat:document.getElementById('ideaCat').value,name:n}); document.getElementById('ideaName').value=''; save(); renderMealIdeas(); };
 
 // bikes
 document.getElementById('addBikeBtn').onclick=()=>{
