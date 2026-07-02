@@ -386,6 +386,24 @@
   .insightTips p{ font-size:13px; color:#d6dde2; padding:6px 0; border-top:1px solid #1a2128; margin:0; }
   .insightTips p:first-child{ border-top:0; }
   .run-time{ font-family:'Orbitron'; font-weight:700; font-size:15px; color:var(--lime); margin:8px 0 2px; }
+  /* editable goals */
+  .goalcard{ background:#0e1318; border:1px solid var(--line2); border-radius:7px; padding:14px; margin-bottom:12px; }
+  .goalcard.gdone{ border-color:var(--lime); }
+  .goalcard.editing{ border-color:var(--cyan); }
+  .goalhead{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+  .goaltitle{ font-family:'Oswald'; font-weight:600; font-size:16px; color:#fff; }
+  .gdonebadge{ font-family:'Orbitron'; font-weight:700; font-size:9px; letter-spacing:.08em; background:rgba(144,198,62,.16); color:var(--lime); padding:2px 7px; border-radius:3px; vertical-align:middle; }
+  .goalnote{ font-size:12px; color:var(--dim); margin-top:3px; }
+  .linkbtn{ background:none; border:none; color:var(--cyan); font-family:'Oswald'; font-size:12px; letter-spacing:.03em; padding:2px 4px; flex:none; }
+  .linkbtn:hover{ text-decoration:underline; }
+  .gmedrow{ margin:12px 0 6px; font-size:26px; } .gmed{ filter:grayscale(1) opacity(.3); } .gmed.on{ filter:none; }
+  .gstat{ font-family:'Orbitron'; font-weight:600; font-size:11px; letter-spacing:.03em; color:var(--dim2); }
+  .gbar{ height:8px; background:#1a2028; border-radius:5px; overflow:hidden; margin-top:9px; }
+  .gfill{ height:100%; background:linear-gradient(90deg,var(--cyan),var(--lime)); border-radius:5px; transition:width .3s; }
+  .gcounter{ display:flex; align-items:center; gap:14px; margin:12px 0 4px; }
+  .gnum{ font-family:'Orbitron'; font-weight:800; font-size:22px; }
+  .gcheck{ display:flex; align-items:center; gap:9px; margin-top:12px; font-size:14px; cursor:pointer; }
+  .gcheck input{ width:18px; height:18px; accent-color:var(--lime); }
   .footnote{ text-align:center; margin-top:34px; font-family:'Orbitron'; font-weight:600; font-size:9px;
     letter-spacing:.24em; text-transform:uppercase; color:#3f4954; }
 </style>
@@ -437,12 +455,10 @@
     <div class="navfolder">
       <button class="folder-h" data-folder="race">Race</button>
       <div class="folder-items">
-        <button class="navlink" data-view="racecal">Race Calendar</button>
         <button class="navlink" data-view="raceday">Race Day</button>
         <button class="navlink" data-view="course">Course Notes</button>
         <button class="navlink" data-view="runs">Runs &amp; Timing</button>
         <button class="navlink" data-view="progress">Results</button>
-        <button class="navlink" data-view="rankings">Rankings &amp; Points</button>
         <button class="navlink" data-view="insights">Insights</button>
       </div>
     </div>
@@ -557,15 +573,26 @@
 
   <!-- ================= PROGRESS ================= -->
   <section class="view" id="view-progress">
-    <div class="seclabel">Season Goal</div>
+    <div class="seclabel">Season Goals</div>
     <div class="card pink" style="margin-bottom:16px;">
-      <h3>Podium x3 → Expert 2027</h3>
-      <div class="sub">Top-3 finishes light up. Currently <span id="curStanding">mid-pack</span> — close the gap.</div>
-      <div class="goalmedals" id="goalMedals"></div>
-      <div class="milestone"><span class="star">⭐</span><div>
-        <div style="font-weight:600;">Move up to Expert for 2027</div>
-        <div style="font-size:12px; color:var(--dim);">Unlocked by stringing together podium-pace runs this season.</div>
-      </div></div>
+      <h3>Season Goals</h3>
+      <div class="sub">Set, edit, and track your own goals — add, change, or remove any of them anytime.</div>
+      <div id="goalList" style="margin-top:12px;"></div>
+      <details class="addbox"><summary>+ Add a goal</summary><div class="pad">
+        <div class="grid-form">
+          <div style="grid-column:span 2; min-width:180px;"><label class="fl">Goal</label><input class="in" id="gTitle" placeholder="e.g. Race every ESC round"></div>
+          <div><label class="fl">Type</label><select class="in" id="gType">
+            <option value="podium">Podiums (auto from results)</option>
+            <option value="place">Best finish (auto from results)</option>
+            <option value="counter">Counter (manual + / −)</option>
+            <option value="milestone">Milestone (done / not done)</option>
+          </select></div>
+          <div><label class="fl">Target</label><input class="in" type="number" id="gTarget" placeholder="3"></div>
+        </div>
+        <label class="fl" style="margin-top:10px;">Note (optional)</label>
+        <input class="in" id="gNote" placeholder="Short description">
+        <button class="btn pink sm" id="addGoalBtn" style="margin-top:10px;">Add goal</button>
+      </div></details>
     </div>
 
     <div class="pgrid">
@@ -609,7 +636,6 @@
           <div><label class="fl">Place</label><input class="in" type="number" id="rPlace" placeholder="5"></div>
           <div><label class="fl">Field size</label><input class="in" type="number" id="rField" placeholder="22"></div>
           <div><label class="fl">Run time</label><input class="in" id="rTime" placeholder="3:42.1"></div>
-          <div><label class="fl">Series points earned</label><input class="in" type="number" id="rPoints" placeholder="optional"></div>
         </div>
         <label class="dnfcheck"><input type="checkbox" id="rDnf"><span>Crash / DNF — keep in the log but don’t count toward the pace trend or podium goal</span></label>
         <label class="fl" style="margin-top:10px;">Notes</label>
@@ -626,41 +652,6 @@
       <details class="addbox"><summary>+ Add a skill to track</summary><div class="pad">
         <div class="addrow"><input class="in" id="addSkill" placeholder="e.g. Steep wet roots"><button class="btn lime sm" id="addSkillBtn">Add</button></div>
       </div></details>
-    </div>
-  </section>
-
-  <!-- ================= RANKINGS & POINTS ================= -->
-  <section class="view" id="view-rankings">
-    <div class="seclabel">Qualification Status</div>
-    <div class="card pink" style="margin-bottom:16px;">
-      <h3>Where You Stand</h3>
-      <div class="sub">Pull these from your series' standings page (USA Cycling, regional series, etc.) — Roots &amp; Rain has results but no official rankings</div>
-      <div class="grid-form" style="margin-top:10px;">
-        <div><label class="fl">Category / class</label><input class="in" id="rkCategory" placeholder="18U Amateur"></div>
-        <div style="grid-column:span 2;min-width:220px;"><label class="fl">Current standing</label><input class="in" id="rkStanding" placeholder="14th of 52, Northeast DH Series"></div>
-      </div>
-      <label class="fl" style="margin-top:10px;">What it takes to move up / qualify</label>
-      <textarea class="in" id="rkPointsNote" placeholder="Need to finish top-5 in 3 of remaining 4 rounds to reach Expert for 2027…"></textarea>
-      <div style="margin-top:10px;font-family:'Orbitron';font-size:11px;color:var(--dim);letter-spacing:.06em;">Total points logged: <span id="rkTotal" style="color:#fff;">0</span></div>
-    </div>
-    <div class="seclabel">Points Log</div>
-    <div class="card cyan">
-      <h3>Per-Race Points</h3>
-      <div class="sub">Auto-added when you log points on a race result — or add manually below</div>
-      <div id="rankingEntries" style="margin-top:10px;"></div>
-      <details class="addbox" style="margin-top:12px;"><summary>+ Add points entry</summary><div class="pad">
-        <div class="grid-form">
-          <div><label class="fl">Date</label><input class="in" type="date" id="rkeDate"></div>
-          <div><label class="fl">Series</label><input class="in" id="rkeSeries" placeholder="Northeast DH Series"></div>
-          <div><label class="fl">Race / round</label><input class="in" id="rkeRace" placeholder="Round 3"></div>
-          <div><label class="fl">Points</label><input class="in" type="number" id="rkePoints" placeholder="45"></div>
-        </div>
-        <button class="btn cyan sm" id="addRankBtn" style="margin-top:10px;">Save entry</button>
-      </div></details>
-    </div>
-    <div class="card dimc" style="margin-top:16px;">
-      <h3>About auto-pulling from Roots &amp; Rain</h3>
-      <div class="sub">This dashboard is a static file with no server, so it can't silently sync from another site in the background. Two ways around that: paste your rider profile link here and ask me in chat to pull your latest results any time, or log points straight into the Race Results form above and they'll land here automatically.</div>
     </div>
   </section>
 
@@ -951,36 +942,6 @@
     </div>
   </section>
 
-  <!-- ================= RACE CALENDAR ================= -->
-  <section class="view" id="view-racecal">
-    <div class="seclabel">Season Schedule</div>
-    <p style="color:var(--dim); font-size:13px; margin-bottom:14px;">Every race feeds the countdown on Today &amp; Race Day, and the venue lists in Course Notes and Results. Add coordinates (or hit Find) to get a race-day forecast.</p>
-    <div class="card cyan">
-      <h3>Races</h3>
-      <div class="sub">Registered, tentative, or just on your radar</div>
-      <div id="raceCalList" style="margin-top:10px;"></div>
-      <details class="addbox" style="margin-top:14px;"><summary>+ Add a race</summary><div class="pad">
-        <div class="grid-form">
-          <div><label class="fl">Date</label><input class="in" type="date" id="rcDate"></div>
-          <div><label class="fl">Venue</label><input class="in" id="rcVenue" placeholder="Killington, VT"></div>
-          <div><label class="fl">Series / label</label><input class="in" id="rcLabel" placeholder="e.g. Showdown, Round 3"></div>
-          <div><label class="fl">Class</label><input class="in" id="rcCls" placeholder="18U Amateur"></div>
-          <div><label class="fl">Status</label><select class="in" id="rcStatus"><option>Registered</option><option>Tentative</option><option>Planning</option><option>Withdrawn</option></select></div>
-        </div>
-        <div class="grid-form" style="margin-top:10px;">
-          <div><label class="fl">Latitude</label><input class="in" id="rcLat" placeholder="43.6045"></div>
-          <div><label class="fl">Longitude</label><input class="in" id="rcLon" placeholder="-72.8201"></div>
-          <div style="display:flex;align-items:flex-end;"><button class="btn ghost sm" id="rcFindBtn" style="width:100%;">Find coordinates</button></div>
-        </div>
-        <label class="fl" style="margin-top:10px;">Link (Roots &amp; Rain event page, registration, etc.)</label>
-        <input class="in" id="rcLink" placeholder="https://www.rootsandrain.com/event…">
-        <label class="fl" style="margin-top:10px;">Notes</label>
-        <textarea class="in" id="rcNotes" placeholder="Points race, need top-5 to move up a category…"></textarea>
-        <button class="btn cyan sm" id="addRaceBtn" style="margin-top:10px;">Save race</button>
-      </div></details>
-    </div>
-  </section>
-
   <!-- ================= RACE DAY ================= -->
   <section class="view" id="view-raceday">
     <div class="seclabel">Countdown</div>
@@ -1090,13 +1051,7 @@ const EV_COLORS = { bike:'#20d4e0', gym:'#90c63e', skills:'#9b6dd6', meal:'#caa4
 const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const DOW_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const THEMES = ['Recovery','Reset + Upper / Core','Team Skills Ride','Bolton DH · Key Day','Team Skills Ride','Power + Plyo','Race Sim / Race'];
-function raceVenueOptions(){
-  const rs=[...DB.races].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
-  const opts=rs.map(r=>{ const d=r.date?parseYmd(r.date):null;
-    const dl=d?(d.toLocaleString('en-US',{month:'short'})+' '+d.getDate()):'';
-    return `${venueShort(r.venue)}${dl?', '+dl:''}${r.label&&r.label!==r.venue?' · '+r.label:''}`; });
-  return [...new Set(opts)].concat(['Practice / Other']);
-}
+const VENUES = ['Killington, VT (Jul 12 · Showdown)','Mount Snow, VT (Aug 2)','Thunder Mtn, MA (Aug 9 · Showdown)','Blue Mountain, PA (Aug 30)','Jiminy Peak, MA (Sep 27 · Showdown)','Thunder Mtn, MA (Oct 25 · Finals)','Practice / Other'];
 
 /* default weekly template: weekday -> [{time,end,title,type}] */
 const DEFAULT_TEMPLATES = {
@@ -1243,20 +1198,16 @@ const GYM_TEMPLATES={
 
 const RUN_TYPES=['Race run','Qualifying','Practice','Training'];
 
-const DEFAULT_RACES=[
-  {date:'2026-07-12', venue:'Killington, VT', label:'Killington · Showdown', cls:'', lat:43.6045, lon:-72.8201},
-  {date:'2026-08-02', venue:'Mount Snow, VT', label:'Mount Snow', cls:'', lat:42.9602, lon:-72.9204},
-  {date:'2026-08-09', venue:'Thunder Mtn, MA', label:'Thunder Mtn · Showdown', cls:'', lat:42.6417, lon:-72.9123},
-  {date:'2026-08-30', venue:'Blue Mountain, PA', label:'Blue Mountain', cls:'', lat:40.7996, lon:-75.7324},
-  {date:'2026-09-27', venue:'Jiminy Peak, MA', label:'Jiminy Peak · Showdown', cls:'', lat:42.5540, lon:-73.2887},
-  {date:'2026-10-25', venue:'Thunder Mtn, MA', label:'Thunder Mtn · FINALS', cls:'', lat:42.6417, lon:-72.9123}
+const RACES=[
+  {date:'2026-07-12', venue:'Killington, VT', label:'Killington · Showdown', lat:43.6045, lon:-72.8201},
+  {date:'2026-08-02', venue:'Mount Snow, VT', label:'Mount Snow', lat:42.9602, lon:-72.9204},
+  {date:'2026-08-09', venue:'Thunder Mtn, MA', label:'Thunder Mtn · Showdown', lat:42.6417, lon:-72.9123},
+  {date:'2026-08-30', venue:'Blue Mountain, PA', label:'Blue Mountain', lat:40.7996, lon:-75.7324},
+  {date:'2026-09-27', venue:'Jiminy Peak, MA', label:'Jiminy Peak · Showdown', lat:42.5540, lon:-73.2887},
+  {date:'2026-10-25', venue:'Thunder Mtn, MA', label:'Thunder Mtn · FINALS', lat:42.6417, lon:-72.9123}
 ];
 const WMO={0:['Clear','☀️'],1:['Mainly clear','🌤️'],2:['Partly cloudy','⛅'],3:['Overcast','☁️'],45:['Fog','🌫️'],48:['Rime fog','🌫️'],51:['Light drizzle','🌦️'],53:['Drizzle','🌦️'],55:['Heavy drizzle','🌦️'],56:['Freezing drizzle','🌧️'],57:['Freezing drizzle','🌧️'],61:['Light rain','🌧️'],63:['Rain','🌧️'],65:['Heavy rain','🌧️'],66:['Freezing rain','🌧️'],67:['Freezing rain','🌧️'],71:['Light snow','🌨️'],73:['Snow','🌨️'],75:['Heavy snow','❄️'],77:['Snow grains','🌨️'],80:['Rain showers','🌦️'],81:['Rain showers','🌦️'],82:['Heavy showers','⛈️'],85:['Snow showers','🌨️'],86:['Snow showers','🌨️'],95:['Thunderstorm','⛈️'],96:['Thunderstorm','⛈️'],99:['Thunderstorm','⛈️']};
-const EXTRA_PRACTICE_VENUES=['Bolton Valley','Richmond'];
-function courseVenueList(){
-  const race=DB.races.map(r=>venueShort(r.venue));
-  return [...new Set([...race, ...EXTRA_PRACTICE_VENUES])];
-}
+const COURSE_VENUES=['Killington','Mount Snow','Thunder Mtn','Blue Mountain','Jiminy Peak','Bolton Valley','Richmond'];
 const DEFAULT_DRILLS=[
   {cat:'Cornering', name:'Flat-corner figure-8s', desc:'Weight the outside foot, look through the exit. Tighten the loop as you improve.'},
   {cat:'Cornering', name:'Berm high-line vs low-line', desc:'Session a berm both ways to learn which carries more speed on that trail.'},
@@ -1365,8 +1316,11 @@ function defaults(){ return { templates:JSON.parse(JSON.stringify(DEFAULT_TEMPLA
   maint:{ items:DEFAULT_SERVICE.map(s=>({id:uid(),name:s.name,days:s.days})), done:{}, log:[] },
   raceday:{ packing:DEFAULT_PACKING.map(n=>({id:uid(),name:n,done:false})), steps:DEFAULT_RACEDAY.map(n=>({id:uid(),name:n,done:false})), prerun:DEFAULT_PRERUN.map(n=>({id:uid(),name:n,done:false})) },
   course:{}, settings:{ lat:44.4215, lon:-72.8490, place:'Bolton Valley, VT' },
-  races:DEFAULT_RACES.map(r=>({id:uid(),status:'Registered',notes:'',link:'',...r})),
-  rankings:{ category:'', standing:'', pointsNote:'', entries:[] } }; }
+  goals:[
+    {id:uid(), title:'Podium finishes', type:'podium', target:3, note:'Top-3 finishes this season', progress:0, done:false},
+    {id:uid(), title:'Crack the top 5', type:'place', target:5, note:'A top-5 result at any round', progress:0, done:false},
+    {id:uid(), title:'Move up to Expert for 2027', type:'milestone', target:1, note:'Earn it with podium-pace runs', progress:0, done:false}
+  ] }; }
 function load(){
   try{ const r=localStorage.getItem(KEY); DB = r?JSON.parse(r):defaults();
        // migrate missing keys
@@ -1422,8 +1376,6 @@ function setView(v){
   if(v==='maint') renderMaint();
   if(v==='raceday') renderRaceDay();
   if(v==='course') renderCourse();
-  if(v==='racecal') renderRaceCal();
-  if(v==='rankings') renderRankings();
   if(v==='insights') renderInsights();
   closeSidebar(); window.scrollTo(0,0);
 }
@@ -1535,13 +1487,58 @@ function renderWeek(){
 }
 
 /* ---------- PROGRESS ---------- */
+let editGoal=null;
+function goalProgress(g){
+  const clean=DB.results.filter(r=>!r.dnf && +r.place>0);
+  if(g.type==='podium'){ const c=clean.filter(r=>+r.place<=3).length, t=g.target||3; return {cur:c,target:t,pct:t?Math.min(100,c/t*100):0,done:c>=t}; }
+  if(g.type==='place'){ const best=clean.length?Math.min(...clean.map(r=>+r.place)):null, t=g.target||5, done=best!=null&&best<=t; return {cur:best,best,target:t,pct:done?100:0,done}; }
+  if(g.type==='counter'){ const c=g.progress||0, t=g.target||1; return {cur:c,target:t,pct:t?Math.min(100,c/t*100):0,done:c>=t}; }
+  return {cur:g.done?1:0,target:1,pct:g.done?100:0,done:!!g.done};
+}
+const GTYPE_LABEL={podium:'Podiums (auto)',place:'Best finish (auto)',counter:'Counter (manual)',milestone:'Milestone'};
+function goalEditHtml(g){
+  return `<div class="goalcard editing">
+    <div class="grid-form">
+      <div style="grid-column:span 2; min-width:160px;"><label class="fl">Goal</label><input class="in" id="egTitle_${g.id}" value="${esc(g.title)}"></div>
+      <div><label class="fl">Type</label><select class="in" id="egType_${g.id}">
+        ${['podium','place','counter','milestone'].map(t=>`<option value="${t}" ${g.type===t?'selected':''}>${GTYPE_LABEL[t]}</option>`).join('')}
+      </select></div>
+      <div><label class="fl">Target</label><input class="in" type="number" id="egTarget_${g.id}" value="${g.target||''}"></div>
+    </div>
+    <label class="fl" style="margin-top:10px;">Note</label>
+    <input class="in" id="egNote_${g.id}" value="${esc(g.note||'')}">
+    <div class="addrow" style="margin-top:10px;">
+      <button class="btn pink sm" data-gsave="${g.id}">Save</button>
+      <button class="btn ghost sm" data-gcancel="${g.id}">Cancel</button>
+      <button class="btn ghost sm" data-gdel="${g.id}" style="margin-left:auto; color:var(--pink);">Delete</button>
+    </div></div>`;
+}
+function renderGoals(){
+  const el=document.getElementById('goalList'); if(!el) return;
+  if(!DB.goals || !DB.goals.length){ el.innerHTML='<div class="empty">No goals yet — add one below.</div>'; return; }
+  el.innerHTML=DB.goals.map(g=>{
+    if(editGoal===g.id) return goalEditHtml(g);
+    const p=goalProgress(g); let body='';
+    if(g.type==='podium'){ let m=''; for(let i=0;i<(g.target||3);i++) m+=`<span class="gmed ${i<p.cur?'on':''}">🏆</span>`;
+      body=`<div class="gmedrow">${m}</div><div class="gstat">${p.cur} of ${g.target} podiums</div>`;
+    } else if(g.type==='place'){
+      body=`<div class="gstat">${p.best!=null?('Best so far: P'+p.best):'No clean finishes yet'} · target P${g.target}${p.done?' ✓':''}</div>
+        <div class="gbar"><div class="gfill" style="width:${p.pct}%"></div></div>`;
+    } else if(g.type==='counter'){
+      body=`<div class="gcounter"><button class="btn ghost sm" data-gdec="${g.id}">−</button><span class="gnum">${p.cur} / ${g.target}</span><button class="btn ghost sm" data-ginc="${g.id}">+</button></div>
+        <div class="gbar"><div class="gfill" style="width:${p.pct}%"></div></div>`;
+    } else {
+      body=`<label class="gcheck"><input type="checkbox" data-gtog="${g.id}" ${g.done?'checked':''}><span>${g.done?'Achieved 🎉':'Mark achieved'}</span></label>`;
+    }
+    return `<div class="goalcard ${p.done?'gdone':''}">
+      <div class="goalhead"><div><div class="goaltitle">${esc(g.title)}${p.done?' <span class="gdonebadge">DONE</span>':''}</div>
+        ${g.note?`<div class="goalnote">${esc(g.note)}</div>`:''}</div>
+        <button class="linkbtn" data-gedit="${g.id}">Edit</button></div>
+      ${body}</div>`;
+  }).join('');
+}
 function renderProgress(){
-  // medals (top-3 finishes)
-  const podiums=DB.results.filter(r=>!r.dnf && +r.place>0 && +r.place<=3).sort((a,b)=>a.date.localeCompare(b.date));
-  const gm=document.getElementById('goalMedals'); gm.innerHTML='';
-  for(let i=0;i<3;i++){ const won=podiums[i];
-    gm.innerHTML+=`<div class="medal ${won?'won':''}"><div class="mi">🏆</div>
-      <div class="ml">${won?('P'+won.place+' · '+venueShort(won.venue)):'Podium '+(i+1)}</div></div>`; }
+  renderGoals();
   // consistency
   document.getElementById('stStreak').textContent=streak();
   document.getElementById('stWeek').textContent=weekPct()+'%';
@@ -1611,14 +1608,13 @@ function placeSpark(){
 function renderResults(){ const t=document.getElementById('resultsTable');
   const r=[...DB.results].sort((a,b)=>b.date.localeCompare(a.date));
   if(!r.length){ t.innerHTML=`<tr><td class="empty">No races logged yet. Add your first result below.</td></tr>`; return; }
-  t.innerHTML=`<tr><th>Date</th><th>Venue</th><th>Place</th><th>Time</th><th>Pts</th><th>Notes</th><th></th></tr>`+
+  t.innerHTML=`<tr><th>Date</th><th>Venue</th><th>Place</th><th>Time</th><th>Notes</th><th></th></tr>`+
     r.map(x=>{ const pl=+x.place, cls=x.dnf?'dnf':(pl<=3?'podium':pl<=5?'top5':'');
       const badge=x.dnf?'<span class="dnfbadge">CRASH / DNF</span>':(pl>0&&pl<=3?'<span class="pbadge">PODIUM</span>':'');
       return `<tr><td style="white-space:nowrap;font-family:Orbitron;font-size:11px;color:#9aa6b2">${x.date||''}</td>
         <td>${esc(venueShort(x.venue))}</td>
         <td><span class="place ${cls}">${x.place||'–'}</span>${x.field?`<span class="fld"> / ${x.field}</span>`:''}${badge}</td>
         <td style="font-family:Orbitron;font-size:11px">${esc(x.time||'')}</td>
-        <td style="font-family:Orbitron;font-size:11px">${esc(x.points||'')}</td>
         <td style="color:#9aa6b2;font-size:12px">${esc(x.notes||'')}</td>
         <td><button class="delx" data-delr="${x.id}">×</button></td></tr>`; }).join('');
 }
@@ -1717,7 +1713,7 @@ function embedHtml(url){
 }
 function vbox(src){ return `<div class="videobox"><iframe src="${esc(src)}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>`; }
 function renderRuns(){
-  fillSelect('runCourse', raceVenueOptions().map(v=>({v:v,t:v})));
+  fillSelect('runCourse', VENUES.map(v=>({v:v,t:v})));
   fillSelect('runType', RUN_TYPES.map(t=>({v:t,t:t})));
   const sel=document.getElementById('runFilter');
   const courses=[...new Set(DB.runs.map(r=>venueShort(r.course)).filter(Boolean))];
@@ -1809,7 +1805,7 @@ function lineChart(elId, series, color){
 /* ---------- shared helpers ---------- */
 function sv(id,v){ const el=document.getElementById(id); if(el) el.textContent=v; }
 function daysBetween(a,b){ return Math.round((parseYmd(b)-parseYmd(a))/86400000); }
-function nextRace(){ const t=todayStr(); return [...DB.races].sort((a,b)=>(a.date||'').localeCompare(b.date||'')).find(r=>r.date>=t)||null; }
+function nextRace(){ const t=todayStr(); return RACES.find(r=>r.date>=t)||null; }
 function wmo(c){ return WMO[c]||['—','·']; }
 function timeToSec(s){ if(s==null) return null; s=(''+s).trim(); if(!s) return null;
   if(s.includes(':')){ const p=s.split(':').map(Number); if(p.some(isNaN)) return null; return p.length===2? p[0]*60+p[1] : p[0]*3600+p[1]*60+p[2]; }
@@ -1843,8 +1839,12 @@ function renderTodayDash(){
     : `<div class="sub">Next race</div><div class="cd-race" style="margin-top:10px;">Season complete 🎉</div>`;
   const fc=document.getElementById('focusCard');
   if(fc){ const f=DB.skillsFocus.current; fc.innerHTML=`<div class="sub">This week's focus</div><div class="focus-txt">${f?esc(f):'<span class="empty">Set one in Skills &amp; Drills →</span>'}</div>`; }
-  const pods=DB.results.filter(r=>!r.dnf&&+r.place>0&&+r.place<=3);
-  const sp=document.getElementById('snapPodium'); if(sp) sp.innerHTML=[0,1,2].map(i=>`<span class="smed ${pods[i]?'on':''}">🏆</span>`).join('');
+  const g0=(DB.goals||[])[0];
+  const sp=document.getElementById('snapPodium');
+  if(sp){ if(g0){ const p=goalProgress(g0);
+      if(g0.type==='milestone'||g0.type==='place'){ sp.innerHTML=`<span class="smed ${p.done?'on':''}">🏆</span>`; }
+      else { let m=''; const t=Math.min(g0.target||3,5); for(let i=0;i<t;i++) m+=`<span class="smed ${i<(p.cur||0)?'on':''}">🏆</span>`; sp.innerHTML=m; }
+    } else sp.innerHTML=''; }
   sv('snapStreak',streak()); sv('snapWeek',weekPct()+'%');
   const fe=[...DB.social.entries].sort((a,b)=>a.date.localeCompare(b.date)); const lf=fe[fe.length-1];
   sv('snapFollowers', lf?(+lf.followers).toLocaleString():'–'); sv('snapRuns', DB.runs.length);
@@ -1918,7 +1918,6 @@ function renderRaceDay(){
 }
 async function renderRaceWx(nr){
   const el=document.getElementById('rdWeather'); if(!el) return;
-  if(nr.lat==null || nr.lon==null || nr.lat===''){ el.innerHTML=`<div class="sub">Race-day forecast</div><div class="empty" style="padding:6px 0;">Add coordinates for this race in Race Calendar to see a forecast.</div>`; return; }
   try{ const d=await fetchWx(nr.lat,nr.lon); const idx=d.daily.time.indexOf(nr.date);
     if(idx<0){ el.innerHTML=`<div class="sub">Race-day forecast</div><div class="empty" style="padding:6px 0;">Forecast opens within ~16 days of the race.</div>`; return; }
     const [t,e]=wmo(d.daily.weather_code[idx]);
@@ -1930,11 +1929,9 @@ async function renderRaceWx(nr){
 }
 
 /* ---------- COURSE NOTES ---------- */
-let courseSel=null;
+let courseSel=COURSE_VENUES[0];
 function renderCourse(){
-  const list=courseVenueList();
-  if(courseSel==null || !list.includes(courseSel)) courseSel=list[0];
-  const sel=document.getElementById('courseSel'); sel.innerHTML=list.map(v=>`<option>${esc(v)}</option>`).join(''); sel.value=courseSel;
+  const sel=document.getElementById('courseSel'); sel.innerHTML=COURSE_VENUES.map(v=>`<option>${esc(v)}</option>`).join(''); sel.value=courseSel;
   const c=DB.course[courseSel]||{};
   document.getElementById('cBreakdown').value=c.breakdown||'';
   document.getElementById('cWet').value=c.wet||'';
@@ -1983,8 +1980,8 @@ function renderBike(){
   });
   // setup dropdowns
   fillSelect('sBike', DB.bikes.map(b=>({v:b.id,t:b.name||'Bike'})), true);
-  fillSelect('sCourse', raceVenueOptions().map(v=>({v:v,t:v})));
-  fillSelect('rVenue', raceVenueOptions().map(v=>({v:v,t:v})));
+  fillSelect('sCourse', VENUES.map(v=>({v:v,t:v})));
+  fillSelect('rVenue', VENUES.map(v=>({v:v,t:v})));
   // setups
   const sl=document.getElementById('setupList'); sl.innerHTML='';
   const setups=[...DB.setups].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
@@ -2075,18 +2072,33 @@ document.getElementById('addResultBtn').onclick=()=>{
   const r={ id:uid(), date:document.getElementById('rDate').value||todayStr(),
     venue:document.getElementById('rVenue').value, cls:document.getElementById('rClass').value,
     place:document.getElementById('rPlace').value, field:document.getElementById('rField').value,
-    time:document.getElementById('rTime').value, points:document.getElementById('rPoints').value,
-    notes:document.getElementById('rNotes').value, dnf };
+    time:document.getElementById('rTime').value, notes:document.getElementById('rNotes').value, dnf };
   if(!dnf && !r.place){ alert('Add your finishing place, or tick Crash / DNF.'); return; }
-  DB.results.push(r);
-  if(r.points){ DB.rankings.entries.push({id:uid(), date:r.date, series:venueShort(r.venue), race:r.cls||'', points:+r.points}); }
-  save();
-  ['rPlace','rField','rTime','rPoints','rNotes'].forEach(id=>document.getElementById(id).value='');
+  DB.results.push(r); save();
+  ['rPlace','rField','rTime','rNotes'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('rDnf').checked=false;
   renderProgress();
 };
 document.getElementById('resultsTable').addEventListener('click',e=>{ const d=e.target.closest('[data-delr]');
   if(d){ DB.results=DB.results.filter(x=>x.id!==d.dataset.delr); save(); renderProgress(); } });
+
+// season goals
+document.getElementById('goalList').addEventListener('click',e=>{
+  const inc=e.target.closest('[data-ginc]'); if(inc){ const g=DB.goals.find(x=>x.id===inc.dataset.ginc); if(g){ g.progress=(g.progress||0)+1; save(); renderGoals(); } return; }
+  const dec=e.target.closest('[data-gdec]'); if(dec){ const g=DB.goals.find(x=>x.id===dec.dataset.gdec); if(g){ g.progress=Math.max(0,(g.progress||0)-1); save(); renderGoals(); } return; }
+  const tog=e.target.closest('[data-gtog]'); if(tog){ const g=DB.goals.find(x=>x.id===tog.dataset.gtog); if(g){ g.done=!g.done; save(); renderGoals(); } return; }
+  const ed=e.target.closest('[data-gedit]'); if(ed){ editGoal=ed.dataset.gedit; renderGoals(); return; }
+  const cn=e.target.closest('[data-gcancel]'); if(cn){ editGoal=null; renderGoals(); return; }
+  const sv=e.target.closest('[data-gsave]'); if(sv){ const g=DB.goals.find(x=>x.id===sv.dataset.gsave); if(g){ const gv=id=>document.getElementById(id);
+    g.title=gv('egTitle_'+g.id).value.trim()||g.title; g.type=gv('egType_'+g.id).value; g.target=+gv('egTarget_'+g.id).value||g.target||1; g.note=gv('egNote_'+g.id).value.trim(); }
+    editGoal=null; save(); renderGoals(); return; }
+  const dl=e.target.closest('[data-gdel]'); if(dl){ if(confirm('Delete this goal?')){ DB.goals=DB.goals.filter(x=>x.id!==dl.dataset.gdel); editGoal=null; save(); renderGoals(); } return; }
+});
+document.getElementById('addGoalBtn').onclick=()=>{ const g=id=>document.getElementById(id).value.trim();
+  const title=g('gTitle'); if(!title){ alert('Name the goal.'); return; }
+  const type=document.getElementById('gType').value; const target=+g('gTarget')||(type==='milestone'?1:3);
+  if(!DB.goals) DB.goals=[]; DB.goals.push({id:uid(),title,type,target,note:g('gNote'),progress:0,done:false});
+  ['gTitle','gTarget','gNote'].forEach(id=>document.getElementById(id).value=''); save(); renderGoals(); };
 
 // skills
 document.getElementById('skillList').addEventListener('click',e=>{
@@ -2232,73 +2244,6 @@ function resetRD(kind){ rdArr(kind).forEach(i=>i.done=false); save(); renderRace
 document.getElementById('resetPk').onclick=()=>resetRD('pk');
 document.getElementById('resetSt').onclick=()=>resetRD('st');
 document.getElementById('resetPr').onclick=()=>resetRD('pr');
-
-/* ---------- RACE CALENDAR ---------- */
-function renderRaceCal(){
-  const rs=[...DB.races].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
-  const t=todayStr();
-  const el=document.getElementById('raceCalList');
-  el.innerHTML = rs.length ? rs.map(r=>{
-    const past = r.date && r.date<t;
-    return `<div class="maint-row"><div class="maint-b">
-      <div class="maint-n">${esc(venueShort(r.venue))}${r.label&&r.label!==r.venue?' · '+esc(r.label):''} ${past?'<span style="color:var(--dim);font-size:11px;">(past)</span>':''}</div>
-      <div class="maint-m">${esc(r.date||'')}${r.cls?' · '+esc(r.cls):''}${r.link?' · <a href="'+esc(r.link)+'" target="_blank" style="color:var(--cyan)">link</a>':''}</div>
-      ${r.notes?`<div style="font-size:12px;color:#9aa6b2;margin-top:4px;">${esc(r.notes)}</div>`:''}</div>
-      <span class="mbadge ${r.status==='Registered'?'ok':r.status==='Withdrawn'?'over':'due'}">${esc(r.status||'Planning')}</span>
-      <button class="delx" data-delrc="${r.id}">×</button></div>`;
-  }).join('') : '<div class="empty">No races added yet — add your first one below.</div>';
-}
-document.getElementById('raceCalList').addEventListener('click',e=>{ const d=e.target.closest('[data-delrc]');
-  if(d){ if(confirm('Remove this race?')){ DB.races=DB.races.filter(r=>r.id!==d.dataset.delrc); save(); renderRaceCal(); } } });
-document.getElementById('rcFindBtn').onclick=async()=>{
-  const v=document.getElementById('rcVenue').value.trim(); if(!v){ alert('Enter a venue first.'); return; }
-  const btn=document.getElementById('rcFindBtn'); const orig=btn.textContent; btn.textContent='Finding…'; btn.disabled=true;
-  try{ const r=await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(v)}&count=1`);
-    const d=await r.json();
-    if(d.results && d.results[0]){ document.getElementById('rcLat').value=d.results[0].latitude.toFixed(4); document.getElementById('rcLon').value=d.results[0].longitude.toFixed(4); }
-    else alert('No match found — enter coordinates manually.');
-  }catch(err){ alert("Couldn't look that up right now."); }
-  btn.textContent=orig; btn.disabled=false;
-};
-document.getElementById('addRaceBtn').onclick=()=>{
-  const g=id=>document.getElementById(id).value.trim();
-  const venue=g('rcVenue'); if(!venue){ alert('Enter a venue.'); return; }
-  const r={ id:uid(), date:g('rcDate'), venue, label:g('rcLabel')||venue, cls:g('rcCls'),
-    status:g('rcStatus')||'Registered', lat:g('rcLat')?+g('rcLat'):null, lon:g('rcLon')?+g('rcLon'):null,
-    link:g('rcLink'), notes:g('rcNotes') };
-  DB.races.push(r);
-  ['rcDate','rcVenue','rcLabel','rcCls','rcLat','rcLon','rcLink','rcNotes'].forEach(id=>document.getElementById(id).value='');
-  save(); renderRaceCal();
-};
-
-/* ---------- RANKINGS & POINTS ---------- */
-function renderRankings(){
-  const rk=DB.rankings;
-  document.getElementById('rkCategory').value=rk.category||'';
-  document.getElementById('rkStanding').value=rk.standing||'';
-  document.getElementById('rkPointsNote').value=rk.pointsNote||'';
-  const total=rk.entries.reduce((s,e)=>s+(+e.points||0),0);
-  document.getElementById('rkTotal').textContent=total;
-  const sorted=[...rk.entries].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
-  document.getElementById('rankingEntries').innerHTML = sorted.length ? sorted.map(e=>
-    `<div class="ghrow"><span class="ghd">${esc(e.date||'')}</span><span class="ghw">${esc(e.series||'')}${e.race?' · '+esc(e.race):''} — <b style="color:var(--lime)">${e.points} pts</b></span><button class="delx" data-delrk="${e.id}">×</button></div>`).join('')
-    : '<div class="empty">No points logged yet.</div>';
-}
-['rkCategory','rkStanding','rkPointsNote'].forEach(id=>{
-  document.getElementById(id).addEventListener('change',e=>{
-    const key = id==='rkCategory'?'category':id==='rkStanding'?'standing':'pointsNote';
-    DB.rankings[key]=e.target.value.trim(); save();
-  });
-});
-document.getElementById('addRankBtn').onclick=()=>{
-  const g=id=>document.getElementById(id).value.trim();
-  const points=g('rkePoints'); if(!points){ alert('Enter points earned.'); return; }
-  DB.rankings.entries.push({ id:uid(), date:g('rkeDate')||todayStr(), series:g('rkeSeries'), race:g('rkeRace'), points:+points });
-  ['rkeDate','rkeSeries','rkeRace','rkePoints'].forEach(id=>document.getElementById(id).value='');
-  save(); renderRankings();
-};
-document.getElementById('rankingEntries').addEventListener('click',e=>{ const d=e.target.closest('[data-delrk]');
-  if(d){ DB.rankings.entries=DB.rankings.entries.filter(x=>x.id!==d.dataset.delrk); save(); renderRankings(); } });
 
 // course notes
 document.getElementById('courseSel').addEventListener('change',e=>{ courseSel=e.target.value; renderCourse(); });
