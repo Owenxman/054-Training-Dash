@@ -426,6 +426,15 @@
   .ibar{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; }
   .ibar i{ width:100%; max-width:34px; border-radius:4px 4px 0 0; display:block; min-height:2px; }
   .ibar span{ font-family:'Orbitron'; font-size:9px; color:var(--dim); margin-top:6px; letter-spacing:.04em; }
+  /* weekly goals */
+  .weeknav{ display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
+  .wklabel{ flex:1; min-width:150px; text-align:center; }
+  .wklabel #wkLabel{ font-family:'Oswald'; font-weight:600; font-size:15px; color:#fff; display:block; }
+  .wkrace{ font-family:'Orbitron'; font-size:10px; letter-spacing:.06em; color:var(--pink); display:block; margin-top:2px; }
+  .tagpill{ font-family:'Orbitron'; font-weight:700; font-size:8px; letter-spacing:.1em; text-transform:uppercase; background:rgba(144,198,62,.16); color:var(--lime); padding:3px 7px; border-radius:3px; vertical-align:middle; margin-left:6px; }
+  .goalitems{ margin-top:6px; }
+  .chkrow.sm{ padding:6px 0; } .chkrow.sm > span{ font-size:13px; }
+  .focusgoals{ margin-top:8px; }
   .footnote{ text-align:center; margin-top:34px; font-family:'Orbitron'; font-weight:600; font-size:9px;
     letter-spacing:.24em; text-transform:uppercase; color:#3f4954; }
 </style>
@@ -461,6 +470,7 @@
       <button class="folder-h" data-folder="training">Training</button>
       <div class="folder-items">
         <button class="navlink" data-view="week">Weekly Schedule</button>
+        <button class="navlink" data-view="weekly">Weekly Goals</button>
         <button class="navlink" data-view="gym">Gym</button>
         <button class="navlink" data-view="skills">Skills &amp; Drills</button>
         <button class="navlink" data-view="mobility">Mobility &amp; Recovery</button>
@@ -899,16 +909,54 @@
     <div class="empty" id="noAcct" style="display:none;">Add an account above to start tracking.</div>
   </section>
 
+  <!-- ================= WEEKLY GOALS ================= -->
+  <section class="view" id="view-weekly">
+    <div class="seclabel">Weekly Goals</div>
+    <div class="weeknav">
+      <button class="btn ghost sm" id="wkPrev">‹</button>
+      <div class="wklabel"><span id="wkLabel">This week</span><span class="wkrace" id="wkRace"></span></div>
+      <button class="btn ghost sm" id="wkNext">›</button>
+      <button class="btn ghost sm" id="wkThis">This week</button>
+    </div>
+    <details class="addbox" style="margin-bottom:16px;"><summary>How this works — process vs. outcome goals</summary><div class="pad">
+      <p style="font-size:13px; color:#d6dde2; line-height:1.6; margin:0;">
+        <b style="color:var(--pink)">Outcome goals</b> are the result you want — a podium, a top-10. Motivating, but not fully in your control, so hold them loosely, especially on race day.<br><br>
+        <b style="color:var(--cyan)">Performance goals</b> are measurable standards against yourself — a clean run, beating your own time. More in your control than an outcome.<br><br>
+        <b style="color:var(--lime)">Process goals</b> are the actions and cues you control on every ride — look through the exit, heavy feet, run your pre-run routine. These are your <b>daily focus</b>; nail the process and the outcomes tend to follow.<br><br>
+        Set a few in each, then review at the end of the week and carry what's unfinished forward. Framework courtesy of your team's mental-skills coaching.
+      </p>
+    </div></details>
+
+    <div class="card pink" style="margin-bottom:16px;">
+      <h3>Outcome Goals</h3><div class="sub">The result you're chasing — hold it loosely when it counts</div>
+      <div class="goalitems" id="wkOutcome"></div>
+      <div class="addrow"><input class="in" id="wkOutcomeIn" placeholder="e.g. Qualify top 10 at Killington"><button class="btn sm pink" data-wkadd="outcome">Add</button></div>
+    </div>
+    <div class="card cyan" style="margin-bottom:16px;">
+      <h3>Performance Goals</h3><div class="sub">Measurable standards vs. yourself</div>
+      <div class="goalitems" id="wkPerformance"></div>
+      <div class="addrow"><input class="in" id="wkPerformanceIn" placeholder="e.g. Clean race run, no dabs"><button class="btn sm" data-wkadd="performance">Add</button></div>
+    </div>
+    <div class="card lime" style="margin-bottom:16px;">
+      <h3>Process Goals <span class="tagpill">daily focus</span></h3><div class="sub">The controllables — what you do on every run</div>
+      <div class="goalitems" id="wkProcess"></div>
+      <div class="addrow"><input class="in" id="wkProcessIn" placeholder="e.g. Look through every corner exit"><button class="btn sm lime" data-wkadd="process">Add</button></div>
+    </div>
+
+    <div class="seclabel">Weekly Review</div>
+    <div class="card dimc">
+      <h3>How did the week go?</h3>
+      <div class="sub">Rate it and note what to carry forward — this closes the loop</div>
+      <div class="feelrow" id="wkRateRow" style="margin-top:10px;">
+        <button class="feel" data-wkrate="1">1</button><button class="feel" data-wkrate="2">2</button><button class="feel" data-wkrate="3">3</button><button class="feel" data-wkrate="4">4</button><button class="feel" data-wkrate="5">5</button>
+      </div>
+      <textarea class="in" id="wkReview" style="margin-top:12px;" placeholder="What worked, what to adjust, what to carry into next week…"></textarea>
+      <div class="addrow" style="margin-top:10px;"><button class="btn ghost sm" id="wkCarry">Carry unfinished goals → next week</button></div>
+    </div>
+  </section>
+
   <!-- ================= SKILLS & DRILLS ================= -->
   <section class="view" id="view-skills">
-    <div class="seclabel">Focus of the Week</div>
-    <div class="card lime" style="margin-bottom:16px;">
-      <h3>Pick One Thing</h3>
-      <div class="sub">Deliberate practice beats aimless laps — choose a focus and rate how it's going</div>
-      <textarea class="in" id="focusText" style="margin-top:10px;" placeholder="e.g. Late braking into flat corners — carry more entry speed"></textarea>
-      <div class="addrow"><input class="in" id="focusNote" placeholder="Quick note on how it went…"><button class="btn lime sm" id="saveFocusBtn">Log it</button></div>
-      <div id="focusLog" style="margin-top:12px;"></div>
-    </div>
     <div class="seclabel">Drill Bank</div>
     <div class="card cyan">
       <h3>Drills &amp; Progressions</h3>
@@ -1354,6 +1402,7 @@ function defaults(){ return { templates:JSON.parse(JSON.stringify(DEFAULT_TEMPLA
   maint:{ items:DEFAULT_SERVICE.map(s=>({id:uid(),name:s.name,days:s.days})), done:{}, log:[] },
   raceday:{ packing:DEFAULT_PACKING.map(n=>({id:uid(),name:n,done:false})), steps:DEFAULT_RACEDAY.map(n=>({id:uid(),name:n,done:false})), prerun:DEFAULT_PRERUN.map(n=>({id:uid(),name:n,done:false})) },
   course:{}, settings:{ lat:44.4215, lon:-72.8490, place:'Bolton Valley, VT' },
+  weeklyGoals:{},
   goals:[
     {id:uid(), title:'Podium finishes', type:'podium', target:3, note:'Top-3 finishes this season', progress:0, done:false},
     {id:uid(), title:'Crack the top 5', type:'place', target:5, note:'A top-5 result at any round', progress:0, done:false},
@@ -1410,6 +1459,7 @@ function setView(v){
   if(v==='social') renderSocial();
   if(v==='bike') renderBike();
   if(v==='skills') renderSkillsDrills();
+  if(v==='weekly') renderWeekly();
   if(v==='mobility') renderMobility();
   if(v==='maint') renderMaint();
   if(v==='raceday') renderRaceDay();
@@ -1883,7 +1933,10 @@ function renderTodayDash(){
     ? `<div class="sub">Next race</div><div class="cd-days">${daysBetween(todayStr(),nr.date)}</div><div class="cd-lbl">days out</div><div class="cd-race">${esc(nr.label)}</div><div class="cd-date">${nr.date}</div>`
     : `<div class="sub">Next race</div><div class="cd-race" style="margin-top:10px;">Season complete 🎉</div>`;
   const fc=document.getElementById('focusCard');
-  if(fc){ const f=DB.skillsFocus.current; fc.innerHTML=`<div class="sub">This week's focus</div><div class="focus-txt">${f?esc(f):'<span class="empty">Set one in Skills &amp; Drills →</span>'}</div>`; }
+  if(fc){ const wk=getWeek(mondayOf(viewDate)); const pr=wk.process||[];
+    fc.innerHTML=`<div class="sub">This week's focus <span class="tagpill">process goals</span></div>`+
+      (pr.length ? `<div class="focusgoals">${pr.map(g=>`<div class="chkrow sm" data-fptog="${g.id}"><div class="chk ${g.done?'on':''}"></div><span class="${g.done?'strike':''}">${esc(g.text)}</span></div>`).join('')}</div>`
+        : `<div class="focus-txt"><span class="empty">Set process goals in Weekly Goals →</span></div>`); }
   const g0=(DB.goals||[])[0];
   const sp=document.getElementById('snapPodium');
   if(sp){ if(g0){ const p=goalProgress(g0);
@@ -1898,11 +1951,6 @@ function renderTodayDash(){
 
 /* ---------- SKILLS & DRILLS ---------- */
 function renderSkillsDrills(){
-  document.getElementById('focusText').value=DB.skillsFocus.current||'';
-  const fl=[...DB.skillsFocus.log].reverse();
-  document.getElementById('focusLog').innerHTML= fl.length ? fl.map(e=>
-    `<div class="ghrow"><span class="ghd">${e.date}</span><span class="ghw">${esc(e.focus)}${e.note?' — '+esc(e.note):''}</span><button class="delx" data-delf="${e.id}">×</button></div>`).join('')
-    : '<div class="empty">No focus history yet.</div>';
   const el=document.getElementById('drillList'); el.innerHTML='';
   [...new Set(DB.drills.map(d=>d.cat))].forEach(c=>{
     el.innerHTML+=`<div class="ideacat"><div class="ideacat-h">${esc(c)}</div>`+
@@ -1910,6 +1958,33 @@ function renderSkillsDrills(){
         <div class="drill-b"><div class="drill-n">${esc(d.name)}</div><div class="drill-d">${esc(d.desc||'')}</div></div>
         <button class="delx" data-deld="${d.id}">×</button></div>`).join('')+`</div>`;
   });
+}
+
+/* ---------- WEEKLY GOALS ---------- */
+const WK_MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+let weekSel=null;
+function mondayOf(dateStr){ const d=parseYmd(dateStr); const off=(d.getDay()+6)%7; return addDays(dateStr,-off); }
+function getWeek(k){ if(!DB.weeklyGoals) DB.weeklyGoals={}; if(!DB.weeklyGoals[k]) DB.weeklyGoals[k]={process:[],performance:[],outcome:[],review:'',rating:0}; const w=DB.weeklyGoals[k];
+  ['process','performance','outcome'].forEach(c=>{ if(!Array.isArray(w[c])) w[c]=[]; }); return w; }
+function weekRangeLabel(mon){ const a=parseYmd(mon), b=parseYmd(addDays(mon,6));
+  return WK_MONTHS[a.getMonth()]+' '+a.getDate()+' – '+WK_MONTHS[b.getMonth()]+' '+b.getDate(); }
+function raceInWeek(mon){ const sun=addDays(mon,6); return RACES.find(r=>r.date>=mon && r.date<=sun)||null; }
+function goalItemsHtml(cat, arr){
+  if(!arr.length) return '<div class="empty" style="padding:8px 0;">Nothing set yet.</div>';
+  return arr.map(g=>`<div class="chkrow" data-wktog="${cat}:${g.id}"><div class="chk ${g.done?'on':''}"></div><span class="${g.done?'strike':''}">${esc(g.text)}</span><button class="delx" data-wkdel="${cat}:${g.id}">×</button></div>`).join('');
+}
+function renderWeekly(){
+  if(!weekSel) weekSel=mondayOf(todayStr());
+  const w=getWeek(weekSel);
+  const thisWk=mondayOf(todayStr());
+  sv('wkLabel', weekSel===thisWk?('This week · '+weekRangeLabel(weekSel)):weekRangeLabel(weekSel));
+  const nr=raceInWeek(weekSel);
+  document.getElementById('wkRace').innerHTML = nr ? `🏁 ${esc(venueShort(nr.venue))} this week` : '';
+  document.getElementById('wkOutcome').innerHTML=goalItemsHtml('outcome',w.outcome);
+  document.getElementById('wkPerformance').innerHTML=goalItemsHtml('performance',w.performance);
+  document.getElementById('wkProcess').innerHTML=goalItemsHtml('process',w.process);
+  document.getElementById('wkReview').value=w.review||'';
+  document.querySelectorAll('#wkRateRow .feel').forEach(b=>b.classList.toggle('on',+b.dataset.wkrate===w.rating));
 }
 
 /* ---------- MOBILITY & RECOVERY ---------- */
@@ -2316,13 +2391,30 @@ document.getElementById('addSetupBtn').onclick=()=>{
 document.getElementById('setupList').addEventListener('click',e=>{ const d=e.target.closest('[data-delset]');
   if(d){ DB.setups=DB.setups.filter(x=>x.id!==d.dataset.delset); save(); renderBike(); } });
 
+// weekly goals
+function wkAdd(cat){ const i=document.getElementById('wk'+cat.charAt(0).toUpperCase()+cat.slice(1)+'In'); const v=i.value.trim(); if(!v) return;
+  getWeek(weekSel)[cat].push({id:uid(),text:v,done:false}); i.value=''; save(); renderWeekly(); }
+document.querySelectorAll('[data-wkadd]').forEach(b=>b.addEventListener('click',()=>wkAdd(b.dataset.wkadd)));
+document.getElementById('view-weekly').addEventListener('click',e=>{
+  const tog=e.target.closest('[data-wktog]'); if(tog && !e.target.closest('[data-wkdel]')){ const [c,id]=tog.dataset.wktog.split(':');
+    const g=getWeek(weekSel)[c].find(x=>x.id===id); if(g){ g.done=!g.done; save(); renderWeekly(); } return; }
+  const del=e.target.closest('[data-wkdel]'); if(del){ const [c,id]=del.dataset.wkdel.split(':');
+    const w=getWeek(weekSel); w[c]=w[c].filter(x=>x.id!==id); save(); renderWeekly(); return; }
+  const rt=e.target.closest('[data-wkrate]'); if(rt){ const w=getWeek(weekSel); const v=+rt.dataset.wkrate; w.rating=w.rating===v?0:v; save(); renderWeekly(); }
+});
+document.getElementById('wkReview').addEventListener('change',e=>{ getWeek(weekSel).review=e.target.value; save(); });
+document.getElementById('wkPrev').onclick=()=>{ weekSel=addDays(weekSel||mondayOf(todayStr()),-7); renderWeekly(); };
+document.getElementById('wkNext').onclick=()=>{ weekSel=addDays(weekSel||mondayOf(todayStr()),7); renderWeekly(); };
+document.getElementById('wkThis').onclick=()=>{ weekSel=mondayOf(todayStr()); renderWeekly(); };
+document.getElementById('wkCarry').onclick=()=>{ const from=getWeek(weekSel); const nextK=addDays(weekSel,7); const to=getWeek(nextK); let n=0;
+  ['process','performance','outcome'].forEach(c=>{ from[c].filter(g=>!g.done).forEach(g=>{ to[c].push({id:uid(),text:g.text,done:false}); n++; }); });
+  save(); if(n){ weekSel=nextK; renderWeekly(); alert(n+' unfinished goal'+(n>1?'s':'')+' carried into next week.'); } else alert('No unfinished goals to carry.'); };
+
+// today focus-card process goals
+document.getElementById('focusCard').addEventListener('click',e=>{ const t=e.target.closest('[data-fptog]'); if(!t) return;
+  const wk=getWeek(mondayOf(viewDate)); const g=(wk.process||[]).find(x=>x.id===t.dataset.fptog); if(g){ g.done=!g.done; save(); renderTodayDash(); } });
+
 // skills & drills
-document.getElementById('focusText').addEventListener('change',e=>{ DB.skillsFocus.current=e.target.value.trim(); save(); });
-document.getElementById('saveFocusBtn').onclick=()=>{ const cur=document.getElementById('focusText').value.trim(); if(!cur){ alert('Set a focus first.'); return; }
-  const note=document.getElementById('focusNote').value.trim(); DB.skillsFocus.current=cur;
-  DB.skillsFocus.log.push({id:uid(),date:todayStr(),focus:cur,note}); document.getElementById('focusNote').value=''; save(); renderSkillsDrills(); };
-document.getElementById('focusLog').addEventListener('click',e=>{ const d=e.target.closest('[data-delf]');
-  if(d){ DB.skillsFocus.log=DB.skillsFocus.log.filter(x=>x.id!==d.dataset.delf); save(); renderSkillsDrills(); } });
 document.getElementById('addDrillBtn').onclick=()=>{ const g=id=>document.getElementById(id).value.trim();
   const name=g('drillName'); if(!name){ alert('Give the drill a name.'); return; }
   DB.drills.push({id:uid(),cat:g('drillCat')||'General',name,desc:g('drillDesc'),star:false});
