@@ -404,6 +404,28 @@
   .gnum{ font-family:'Orbitron'; font-weight:800; font-size:22px; }
   .gcheck{ display:flex; align-items:center; gap:9px; margin-top:12px; font-size:14px; cursor:pointer; }
   .gcheck input{ width:18px; height:18px; accent-color:var(--lime); }
+  /* daily log ratings + readiness */
+  .ratingrow{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:7px 0; border-top:1px solid #1a2128; flex-wrap:wrap; }
+  .ratingrow:first-child{ border-top:0; }
+  .rlbl{ font-family:'Oswald'; font-weight:500; font-size:13px; color:var(--text); }
+  .rlbl em{ display:block; font-style:normal; font-size:10px; color:var(--dim); letter-spacing:.02em; margin-top:1px; }
+  .rdbadge{ display:flex; align-items:center; gap:12px; margin-top:14px; padding:12px 14px; background:#0e1318; border:1px solid var(--line2); border-left-width:4px; border-radius:6px; }
+  .rdbadge.lime{ border-left-color:var(--lime); } .rdbadge.cyan{ border-left-color:var(--cyan); } .rdbadge.pink{ border-left-color:var(--pink); }
+  .rdnum{ font-family:'Orbitron'; font-weight:800; font-size:30px; line-height:1; }
+  .rdbadge.lime .rdnum{ color:var(--lime); } .rdbadge.cyan .rdnum{ color:var(--cyan); } .rdbadge.pink .rdnum{ color:var(--pink); }
+  .rdtxt{ font-family:'Orbitron'; font-weight:600; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--dim2); }
+  /* insights */
+  .readhead{ display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
+  .bignum{ font-family:'Orbitron'; font-weight:800; font-size:52px; line-height:.9; color:#fff; }
+  .bignum.lime{ color:var(--lime); } .bignum.cyan{ color:var(--cyan); } .bignum.pink{ color:var(--pink); }
+  .readside{ text-align:right; } .readside .v{ font-family:'Orbitron'; font-weight:800; font-size:26px; }
+  .flag{ font-size:13px; line-height:1.5; padding:10px 12px; border-radius:6px; border-left:3px solid; }
+  .flag.ok{ background:rgba(144,198,62,.1); border-left-color:var(--lime); color:#cfe0b0; }
+  .flag.warn{ background:rgba(232,24,118,.12); border-left-color:var(--pink); color:#f0c0d4; }
+  .ibarwrap{ display:flex; align-items:flex-end; gap:8px; height:120px; margin-top:10px; }
+  .ibar{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; }
+  .ibar i{ width:100%; max-width:34px; border-radius:4px 4px 0 0; display:block; min-height:2px; }
+  .ibar span{ font-family:'Orbitron'; font-size:9px; color:var(--dim); margin-top:6px; letter-spacing:.04em; }
   .footnote{ text-align:center; margin-top:34px; font-family:'Orbitron'; font-weight:600; font-size:9px;
     letter-spacing:.24em; text-transform:uppercase; color:#3f4954; }
 </style>
@@ -518,20 +540,28 @@
 
         <div class="card cyan">
           <h3>Daily Log</h3>
-          <div class="sub">Feeds your progress trends — log it every day</div>
+          <div class="sub">The more you log, the sharper your Insights get</div>
           <div class="metrics" style="margin-top:12px;">
             <div><label class="fl">Sleep (hrs)</label><input class="in" type="number" step="0.5" id="mSleep" placeholder="9"></div>
+            <div><label class="fl">Resting HR (bpm)</label><input class="in" type="number" id="mRHR" placeholder="52"></div>
+            <div><label class="fl">Ride time (min)</label><input class="in" type="number" id="mRide" placeholder="60"></div>
             <div><label class="fl">Race-pace runs</label><input class="in" type="number" id="mRuns" placeholder="0"></div>
+            <div><label class="fl">Session effort (RPE 1–10)</label><input class="in" type="number" min="1" max="10" id="mRPE" placeholder="6"></div>
             <div><label class="fl">Body weight (lb)</label><input class="in" type="number" step="0.1" id="mWeight" placeholder=""></div>
           </div>
-          <div style="margin-top:12px;">
-            <label class="fl">How the legs / body feel</label>
-            <div class="feelrow" id="feelRow">
-              <button class="feel" data-v="1">1</button><button class="feel" data-v="2">2</button>
-              <button class="feel" data-v="3">3</button><button class="feel" data-v="4">4</button>
-              <button class="feel" data-v="5">5</button>
-            </div>
+          <div class="ratings" id="ratings" style="margin-top:14px;">
+            <div class="ratingrow" data-metric="sleepQ"><span class="rlbl">Sleep quality<em>1 poor · 5 great</em></span>
+              <div class="feelrow"><button class="feel" data-v="1">1</button><button class="feel" data-v="2">2</button><button class="feel" data-v="3">3</button><button class="feel" data-v="4">4</button><button class="feel" data-v="5">5</button></div></div>
+            <div class="ratingrow" data-metric="feel"><span class="rlbl">Legs / body<em>1 flat · 5 firing</em></span>
+              <div class="feelrow"><button class="feel" data-v="1">1</button><button class="feel" data-v="2">2</button><button class="feel" data-v="3">3</button><button class="feel" data-v="4">4</button><button class="feel" data-v="5">5</button></div></div>
+            <div class="ratingrow" data-metric="soreness"><span class="rlbl">Soreness<em>1 none · 5 very sore</em></span>
+              <div class="feelrow"><button class="feel" data-v="1">1</button><button class="feel" data-v="2">2</button><button class="feel" data-v="3">3</button><button class="feel" data-v="4">4</button><button class="feel" data-v="5">5</button></div></div>
+            <div class="ratingrow" data-metric="stress"><span class="rlbl">Stress<em>1 calm · 5 maxed</em></span>
+              <div class="feelrow"><button class="feel" data-v="1">1</button><button class="feel" data-v="2">2</button><button class="feel" data-v="3">3</button><button class="feel" data-v="4">4</button><button class="feel" data-v="5">5</button></div></div>
+            <div class="ratingrow" data-metric="mood"><span class="rlbl">Mood / stoke<em>1 low · 5 buzzing</em></span>
+              <div class="feelrow"><button class="feel" data-v="1">1</button><button class="feel" data-v="2">2</button><button class="feel" data-v="3">3</button><button class="feel" data-v="4">4</button><button class="feel" data-v="5">5</button></div></div>
           </div>
+          <div class="rdbadge" id="dlReadiness"></div>
           <div style="margin-top:12px;">
             <label class="fl">Notes (what worked, what to fix)</label>
             <textarea class="in" id="mNotes" placeholder="Felt fast through the rock garden, need to brake later into the bottom corner…"></textarea>
@@ -1005,31 +1035,39 @@
 
   <!-- ================= INSIGHTS ================= -->
   <section class="view" id="view-insights">
-    <div class="seclabel">What Your Data Says</div>
+    <div class="seclabel">Readiness</div>
     <div class="card lime" style="margin-bottom:16px;">
-      <h3>Patterns</h3>
+      <div class="readhead">
+        <div><div class="bignum" id="inReadNow">–</div><div class="k" id="inReadLbl">Log today's recovery to see readiness</div></div>
+        <div class="readside"><div class="v cyan" id="inRead7">–</div><div class="k">7-day avg</div></div>
+      </div>
+      <svg class="spark" id="readSpark" width="100%" height="56" style="margin-top:12px;"></svg>
+      <div class="sub">A composite of sleep, sleep quality, legs, soreness, stress and mood — 30 days</div>
+    </div>
+
+    <div class="seclabel">Recovery</div>
+    <div class="card cyan" style="margin-bottom:16px;">
+      <div class="statline" id="recoveryStats"></div>
+      <div id="rhrFlag" style="margin-top:12px;"></div>
+    </div>
+
+    <div class="seclabel">Training Load</div>
+    <div class="card pink" style="margin-bottom:16px;">
+      <div class="statline" id="loadStats"></div>
+      <div class="sub" style="margin-top:14px;">Weekly training load — RPE × minutes, last 8 weeks</div>
+      <div class="ibarwrap" id="loadBars"></div>
+      <div id="acwrBox" style="margin-top:10px;"></div>
+    </div>
+
+    <div class="seclabel">Racing</div>
+    <div class="card lime" style="margin-bottom:16px;">
+      <div class="statline" id="raceStats"></div>
+    </div>
+
+    <div class="seclabel">What Your Data Says</div>
+    <div class="card dimc">
       <div class="sub">Built from what you've logged — the more you track, the sharper this gets</div>
       <div class="insightTips" id="insightTips" style="margin-top:10px;"></div>
-    </div>
-    <div class="pgrid">
-      <div class="card cyan">
-        <h3>Training &amp; Recovery</h3>
-        <div class="statline">
-          <div class="stat"><div class="v cyan" id="inSleep">–</div><div class="k">Avg sleep 30d</div></div>
-          <div class="stat"><div class="v lime" id="inConsist">–</div><div class="k">Completion 30d</div></div>
-          <div class="stat"><div class="v pink" id="inFeel">–</div><div class="k">Avg feel 30d</div></div>
-          <div class="stat"><div class="v" id="inGym">0</div><div class="k">Gym increases</div></div>
-        </div>
-      </div>
-      <div class="card pink">
-        <h3>Racing</h3>
-        <div class="statline">
-          <div class="stat"><div class="v lime" id="inBest">–</div><div class="k">Best finish</div></div>
-          <div class="stat"><div class="v cyan" id="inAvg">–</div><div class="k">Avg (clean)</div></div>
-          <div class="stat"><div class="v" id="inClean">0 / 0</div><div class="k">Clean / crash</div></div>
-          <div class="stat"><div class="v pink" id="inTrend">–</div><div class="k">Trend</div></div>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -1411,10 +1449,17 @@ function renderToday(){
   // metrics
   const m=getLog(viewDate).metrics||{};
   document.getElementById('mSleep').value=m.sleep??'';
+  document.getElementById('mRHR').value=m.rhr??'';
+  document.getElementById('mRide').value=m.ride??'';
   document.getElementById('mRuns').value=m.runs??'';
+  document.getElementById('mRPE').value=m.rpe??'';
   document.getElementById('mWeight').value=m.weight??'';
   document.getElementById('mNotes').value=m.notes??'';
-  document.querySelectorAll('#feelRow .feel').forEach(b=>b.classList.toggle('on',+b.dataset.v===m.feel));
+  ['sleepQ','feel','soreness','stress','mood'].forEach(key=>{
+    document.querySelectorAll(`.ratingrow[data-metric="${key}"] .feel`).forEach(b=>b.classList.toggle('on',+b.dataset.v===m[key])); });
+  const rd=readinessFor(m), rb=document.getElementById('dlReadiness');
+  if(rb){ if(rd!=null){ const lb=readinessLabel(rd); rb.className='rdbadge '+lb.c; rb.innerHTML=`<span class="rdnum">${rd}</span><span class="rdtxt">Readiness · ${lb.t}</span>`; }
+    else { rb.className='rdbadge'; rb.innerHTML='<span class="rdtxt" style="color:var(--dim)">Rate today\'s recovery to see your readiness score</span>'; } }
   // timeline
   renderTimeline();
   renderTodayDash();
@@ -1940,27 +1985,108 @@ function renderCourse(){
 }
 
 /* ---------- INSIGHTS ---------- */
-function weekPct30(){ let tot=0,don=0; for(let i=0;i<30;i++){ const c=completion(addDays(todayStr(),-i)); tot+=c.t; don+=c.d; } return tot?Math.round(don/tot*100):0; }
+function weekPctN(n){ let tot=0,don=0; for(let i=0;i<n;i++){ const c=completion(addDays(todayStr(),-i)); tot+=c.t; don+=c.d; } return tot?Math.round(don/tot*100):0; }
+function readinessFor(m){ if(!m) return null; const p=[];
+  if(m.sleep!=null) p.push(Math.max(0,Math.min(1,m.sleep/9)));
+  if(m.sleepQ!=null) p.push(m.sleepQ/5);
+  if(m.feel!=null) p.push(m.feel/5);
+  if(m.mood!=null) p.push(m.mood/5);
+  if(m.soreness!=null) p.push((6-m.soreness)/5);
+  if(m.stress!=null) p.push((6-m.stress)/5);
+  return p.length? Math.round(p.reduce((a,b)=>a+b,0)/p.length*100) : null; }
+function readinessLabel(s){ if(s>=80) return {t:'Fresh',c:'lime'}; if(s>=65) return {t:'Ready',c:'lime'}; if(s>=50) return {t:'Moderate',c:'cyan'}; if(s>=35) return {t:'Fatigued',c:'pink'}; return {t:'Cooked — rest',c:'pink'}; }
+function readinessSeries(days){ const out=[]; for(let i=days-1;i>=0;i--){ const ds=addDays(todayStr(),-i); out.push(readinessFor((DB.log[ds]&&DB.log[ds].metrics)||null)); } return out; }
+function loadFor(m){ if(!m) return 0; let rpe=m.rpe, dur=m.ride; if(rpe==null && dur==null) return 0; if(rpe==null) rpe=5; if(dur==null) dur=45; return rpe*dur; }
+function weeklyLoads(weeks){ const out=[]; for(let w=weeks-1;w>=0;w--){ let s=0; for(let d=0;d<7;d++){ const ds=addDays(todayStr(),-(w*7+d)); s+=loadFor((DB.log[ds]&&DB.log[ds].metrics)||null); } out.push(Math.round(s)); } return out; }
+function weekLabels(weeks){ const out=[]; for(let w=weeks-1;w>=0;w--) out.push(w===0?'now':w+'w'); return out; }
+function fmtDur(min){ min=Math.round(min||0); if(!min) return '0m'; const h=Math.floor(min/60),mm=min%60; return h?(h+'h'+(mm?' '+mm+'m':'')):(mm+'m'); }
+function statCell(v,k,cls){ return `<div class="stat"><div class="v ${cls||''}">${v}</div><div class="k">${k}</div></div>`; }
+function barChart(elId,values,labels,color){ const el=document.getElementById(elId); if(!el) return;
+  const max=Math.max(1,...values);
+  el.innerHTML=values.map((v,i)=>`<div class="ibar" title="${labels[i]}: ${v}"><i style="height:${Math.max(2,Math.round(v/max*100))}%; background:${color}"></i><span>${labels[i]}</span></div>`).join(''); }
+
 function renderInsights(){
-  const sleep=avgMetric('sleep',30), feel=avgMetric('feel',30);
+  // ---- readiness ----
+  const rNow=readinessFor(getLog(todayStr()).metrics);
+  const r7a=readinessSeries(7).filter(v=>v!=null); const r7=r7a.length?Math.round(r7a.reduce((a,b)=>a+b,0)/r7a.length):null;
+  const rNowEl=document.getElementById('inReadNow');
+  if(rNow!=null){ const lb=readinessLabel(rNow); rNowEl.textContent=rNow; rNowEl.className='bignum '+lb.c; sv('inReadLbl',lb.t); }
+  else { rNowEl.textContent='–'; rNowEl.className='bignum'; sv('inReadLbl',"Log today's recovery to see readiness"); }
+  sv('inRead7', r7!=null?r7:'–');
+  drawSpark('readSpark', readinessSeries(30), 0, 100, '#90c63e', null);
+
+  // ---- recovery ----
+  const sleep7=avgMetric('sleep',7), sleep30=avgMetric('sleep',30), sq=avgMetric('sleepQ',30);
+  const rhr7=avgMetric('rhr',7), rhr30=avgMetric('rhr',30);
+  const sore=avgMetric('soreness',30), stress=avgMetric('stress',30), mood=avgMetric('mood',30), feel=avgMetric('feel',30);
+  document.getElementById('recoveryStats').innerHTML=
+    statCell(sleep7!=null?sleep7.toFixed(1)+'h':'–','Sleep 7d','cyan')+
+    statCell(sleep30!=null?sleep30.toFixed(1)+'h':'–','Sleep 30d','cyan')+
+    statCell(sq!=null?sq.toFixed(1):'–','Sleep quality','lime')+
+    statCell(rhr7!=null?Math.round(rhr7):'–','Resting HR 7d','pink')+
+    statCell(sore!=null?sore.toFixed(1):'–','Soreness 30d','')+
+    statCell(stress!=null?stress.toFixed(1):'–','Stress 30d','')+
+    statCell(mood!=null?mood.toFixed(1):'–','Mood 30d','lime')+
+    statCell(feel!=null?feel.toFixed(1):'–','Legs 30d','cyan');
+  let rhrHtml='';
+  if(rhr7!=null && rhr30!=null){ const diff=rhr7-rhr30;
+    rhrHtml = diff>=3
+      ? `<div class="flag warn">Resting HR is ~${Math.round(diff)} bpm above your 30-day baseline — a classic sign of fatigue or something coming on. Bank sleep and take it easy.</div>`
+      : `<div class="flag ok">Resting HR is in line with your baseline — recovery looks on track.</div>`; }
+  document.getElementById('rhrFlag').innerHTML=rhrHtml;
+
+  // ---- training load ----
+  const ride7=sumMetric('ride',7), ride30=sumMetric('ride',30), rpe=avgMetric('rpe',30), runs30=sumMetric('runs',30);
+  const gymInc=Object.values(DB.gym).reduce((n,arr)=>{ const s=[...arr].sort((a,b)=>a.d.localeCompare(b.d)); return n+s.reduce((mm,e,i)=>i>0&&e.w>s[i-1].w?mm+1:mm,0); },0);
+  document.getElementById('loadStats').innerHTML=
+    statCell(fmtDur(ride7),'Ride 7d','pink')+
+    statCell(fmtDur(ride30),'Ride 30d','pink')+
+    statCell(rpe!=null?rpe.toFixed(1):'–','Avg RPE','')+
+    statCell(runs30,'Race runs 30d','cyan')+
+    statCell(weekPctN(7)+'%','Consistency 7d','lime')+
+    statCell(weekPctN(30)+'%','Consistency 30d','lime')+
+    statCell(streak(),'Day streak','cyan')+
+    statCell(gymInc,'Gym increases','lime');
+  const loads=weeklyLoads(8); barChart('loadBars', loads, weekLabels(8), '#e81876');
+  const acute=loads[loads.length-1]; const past=loads.slice(3,7).filter(x=>x>0);
+  const chronic=past.length?past.reduce((a,b)=>a+b,0)/past.length:null;
+  let acwr='';
+  if(chronic && acute!=null){ const ratio=acute/chronic;
+    if(ratio>1.5) acwr=`<div class="flag warn">You're ramping load fast (${ratio.toFixed(1)}× your recent weekly average). Coming back from time off, this is exactly where injuries happen — work in easy days and don't add more than ~10% a week.</div>`;
+    else if(ratio<0.8) acwr=`<div class="flag ok">Load is easing (${ratio.toFixed(1)}× average) — good for a taper or rest week; build back gradually after.</div>`;
+    else acwr=`<div class="flag ok">Load is in the sweet spot (${ratio.toFixed(1)}× your recent average) — you're building safely.</div>`; }
+  document.getElementById('acwrBox').innerHTML=acwr;
+
+  // ---- racing ----
   const clean=DB.results.filter(r=>!r.dnf&&+r.place>0);
   const crashes=DB.results.filter(r=>r.dnf).length;
   const best=clean.length?Math.min(...clean.map(r=>+r.place)):null;
   const avgP=clean.length?(clean.reduce((s,r)=>s+ +r.place,0)/clean.length):null;
   const sorted=[...clean].sort((a,b)=>a.date.localeCompare(b.date)); let trend='';
-  if(sorted.length>=2){ const mid=Math.floor(sorted.length/2); const e=sorted.slice(0,mid), l=sorted.slice(mid);
+  if(sorted.length>=2){ const mid=Math.floor(sorted.length/2), e=sorted.slice(0,mid), l=sorted.slice(mid);
     const ea=e.reduce((s,r)=>s+ +r.place,0)/e.length, la=l.reduce((s,r)=>s+ +r.place,0)/l.length;
     trend= la<ea?'improving ▲':la>ea?'slipping ▼':'steady'; }
-  const gymInc=Object.values(DB.gym).reduce((n,arr)=>{ const s=[...arr].sort((a,b)=>a.d.localeCompare(b.d)); return n+s.reduce((m,e,i)=>i>0&&e.w>s[i-1].w?m+1:m,0); },0);
-  sv('inSleep', sleep!=null?sleep.toFixed(1)+'h':'–'); sv('inConsist', weekPct30()+'%'); sv('inFeel', feel!=null?feel.toFixed(1):'–'); sv('inGym', gymInc);
-  sv('inBest', best!=null?('P'+best):'–'); sv('inAvg', avgP!=null?avgP.toFixed(1):'–'); sv('inClean', clean.length+' / '+crashes); sv('inTrend', trend||'–');
+  document.getElementById('raceStats').innerHTML=
+    statCell(best!=null?('P'+best):'–','Best finish','lime')+
+    statCell(avgP!=null?avgP.toFixed(1):'–','Avg (clean)','cyan')+
+    statCell(clean.length,'Clean finishes','lime')+
+    statCell(crashes,'Crash / DNF','pink')+
+    statCell(DB.results.length,'Races logged','')+
+    statCell(trend||'–','Trend','pink');
+
+  // ---- tips ----
   const tips=[];
-  if(sleep!=null && sleep<8) tips.push("Your 30-day sleep average is under 8 hours — that's the biggest free speed and recovery you can add. Protect the 9.");
-  else if(sleep!=null) tips.push("Sleep is holding strong — keep protecting it, it's doing the quiet work.");
-  if(crashes>=2) tips.push("A couple of crashes on file. Build a wet-weather line plan per course, and remember crash results are noise, not your pace.");
-  if(trend==='improving ▲') tips.push("Your clean-finish trend is bending toward the front — whatever you're doing, keep stacking it.");
-  if(gymInc>0) tips.push(`You've logged ${gymInc} strength increase${gymInc>1?'s':''} — progressive overload is working. Keep form clean as you climb.`);
-  if(!tips.length) tips.push("Log a bit more — sleep, results, gym weights — and this panel will start spotting your patterns.");
+  if(rNow!=null && rNow<50) tips.push("Readiness is low today — treat that as a green light to rest or spin easy, not to push. You get faster by recovering from hard days, not stacking them.");
+  if(r7!=null && r7>=75) tips.push("You've been riding fresh all week — a good window to session something hard or hit race pace while the body's primed.");
+  if(sleep7!=null && sleep7<8) tips.push("Your 7-day sleep average is under 8 hours — that's the biggest free gain in speed and recovery you have. Protect the 9.");
+  else if(sleep30!=null && sleep30>=8.5) tips.push("Sleep is holding strong — it's doing the quiet work behind every session.");
+  if(rhr7!=null && rhr30!=null && (rhr7-rhr30)>=3) tips.push("Elevated resting HR usually shows up a day or two before you feel run-down. Ease off now and it rarely turns into anything.");
+  if(sore!=null && sore>=3.5) tips.push("Soreness has been running high — lean on mobility, sleep, and easy spins. Strength and skill lock in during recovery, not during the grind.");
+  if(stress!=null && stress>=3.5) tips.push("Off-bike stress has been high. It draws from the same recovery budget as training, so guard your downtime and keep hard sessions honest.");
+  if(mood!=null && mood<=2.5) tips.push("Your stoke's been low lately — that happens to every rider. Try a no-agenda fun ride, and lean on the people around you. If it stays low for a while, it's worth talking to someone you trust.");
+  if(trend==='improving ▲') tips.push("Your clean-finish trend is bending toward the front — whatever you're stacking, keep at it.");
+  if(gymInc>0) tips.push(`You've logged ${gymInc} strength increase${gymInc>1?'s':''} — progressive overload is working. Keep form clean as the weight climbs.`);
+  if(!tips.length) tips.push("Start logging sleep, ride time, RPE and how you feel each day — within a week or two this panel will start spotting your patterns.");
   document.getElementById('insightTips').innerHTML=tips.map(t=>`<p>${esc(t)}</p>`).join('');
 }
 
@@ -2048,10 +2174,12 @@ document.getElementById('addTaskBtn').onclick=()=>{
 // metrics
 function bindMetric(id,key,num){ document.getElementById(id).addEventListener('change',e=>{
   const m=getLog(viewDate).metrics; const v=e.target.value; m[key]= v===''?undefined:(num?parseFloat(v):v); save();
-  if(document.getElementById('view-progress').classList.contains('active')) renderProgress(); }); }
-bindMetric('mSleep','sleep',true); bindMetric('mRuns','runs',true); bindMetric('mWeight','weight',true); bindMetric('mNotes','notes',false);
-document.getElementById('feelRow').addEventListener('click',e=>{ const b=e.target.closest('.feel'); if(!b) return;
-  const m=getLog(viewDate).metrics; m.feel = m.feel===+b.dataset.v ? undefined : +b.dataset.v; save(); renderToday(); });
+  renderToday(); if(document.getElementById('view-progress').classList.contains('active')) renderProgress(); }); }
+bindMetric('mSleep','sleep',true); bindMetric('mRHR','rhr',true); bindMetric('mRide','ride',true);
+bindMetric('mRuns','runs',true); bindMetric('mRPE','rpe',true); bindMetric('mWeight','weight',true); bindMetric('mNotes','notes',false);
+document.getElementById('ratings').addEventListener('click',e=>{ const b=e.target.closest('.feel'); if(!b) return;
+  const key=b.closest('.ratingrow').dataset.metric; const m=getLog(viewDate).metrics;
+  m[key] = m[key]===+b.dataset.v ? undefined : +b.dataset.v; save(); renderToday(); });
 
 // week edits (delegated)
 document.getElementById('weekGrid').addEventListener('click',e=>{
