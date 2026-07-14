@@ -487,10 +487,12 @@
     <div class="navfolder">
       <button class="folder-h" data-folder="race">Race</button>
       <div class="folder-items">
+        <button class="navlink" data-view="racecal">Race Calendar</button>
         <button class="navlink" data-view="raceday">Race Day</button>
         <button class="navlink" data-view="course">Course Notes</button>
         <button class="navlink" data-view="runs">Runs &amp; Timing</button>
         <button class="navlink" data-view="progress">Results</button>
+        <button class="navlink" data-view="rankings">Rankings &amp; Points</button>
         <button class="navlink" data-view="insights">Insights</button>
       </div>
     </div>
@@ -676,6 +678,7 @@
           <div><label class="fl">Place</label><input class="in" type="number" id="rPlace" placeholder="5"></div>
           <div><label class="fl">Field size</label><input class="in" type="number" id="rField" placeholder="22"></div>
           <div><label class="fl">Run time</label><input class="in" id="rTime" placeholder="3:42.1"></div>
+          <div><label class="fl">Series points earned</label><input class="in" type="number" id="rPoints" placeholder="optional"></div>
         </div>
         <label class="dnfcheck"><input type="checkbox" id="rDnf"><span>Crash / DNF — keep in the log but don’t count toward the pace trend or podium goal</span></label>
         <label class="fl" style="margin-top:10px;">Notes</label>
@@ -692,6 +695,41 @@
       <details class="addbox"><summary>+ Add a skill to track</summary><div class="pad">
         <div class="addrow"><input class="in" id="addSkill" placeholder="e.g. Steep wet roots"><button class="btn lime sm" id="addSkillBtn">Add</button></div>
       </div></details>
+    </div>
+  </section>
+
+  <!-- ================= RANKINGS & POINTS ================= -->
+  <section class="view" id="view-rankings">
+    <div class="seclabel">Qualification Status</div>
+    <div class="card pink" style="margin-bottom:16px;">
+      <h3>Where You Stand</h3>
+      <div class="sub">Pull these from your series' standings page (USA Cycling, regional series, etc.) — Roots &amp; Rain has results but no official rankings</div>
+      <div class="grid-form" style="margin-top:10px;">
+        <div><label class="fl">Category / class</label><input class="in" id="rkCategory" placeholder="18U Amateur"></div>
+        <div style="grid-column:span 2;min-width:220px;"><label class="fl">Current standing</label><input class="in" id="rkStanding" placeholder="14th of 52, Northeast DH Series"></div>
+      </div>
+      <label class="fl" style="margin-top:10px;">What it takes to move up / qualify</label>
+      <textarea class="in" id="rkPointsNote" placeholder="Need to finish top-5 in 3 of remaining 4 rounds to reach Expert for 2027…"></textarea>
+      <div style="margin-top:10px;font-family:'Orbitron';font-size:11px;color:var(--dim);letter-spacing:.06em;">Total points logged: <span id="rkTotal" style="color:#fff;">0</span></div>
+    </div>
+    <div class="seclabel">Points Log</div>
+    <div class="card cyan">
+      <h3>Per-Race Points</h3>
+      <div class="sub">Auto-added when you log points on a race result — or add manually below</div>
+      <div id="rankingEntries" style="margin-top:10px;"></div>
+      <details class="addbox" style="margin-top:12px;"><summary>+ Add points entry</summary><div class="pad">
+        <div class="grid-form">
+          <div><label class="fl">Date</label><input class="in" type="date" id="rkeDate"></div>
+          <div><label class="fl">Series</label><input class="in" id="rkeSeries" placeholder="Northeast DH Series"></div>
+          <div><label class="fl">Race / round</label><input class="in" id="rkeRace" placeholder="Round 3"></div>
+          <div><label class="fl">Points</label><input class="in" type="number" id="rkePoints" placeholder="45"></div>
+        </div>
+        <button class="btn cyan sm" id="addRankBtn" style="margin-top:10px;">Save entry</button>
+      </div></details>
+    </div>
+    <div class="card dimc" style="margin-top:16px;">
+      <h3>About auto-pulling from Roots &amp; Rain</h3>
+      <div class="sub">This dashboard is a static file with no server, so it can't silently sync from another site in the background. Two ways around that: paste your rider profile link here and ask me in chat to pull your latest results any time, or log points straight into the Race Results form above and they'll land here automatically.</div>
     </div>
   </section>
 
@@ -1020,6 +1058,36 @@
     </div>
   </section>
 
+  <!-- ================= RACE CALENDAR ================= -->
+  <section class="view" id="view-racecal">
+    <div class="seclabel">Season Schedule</div>
+    <p style="color:var(--dim); font-size:13px; margin-bottom:14px;">Every race feeds the countdown on Today &amp; Race Day, the auto race-weekend schedule, and the venue lists in Course Notes and Results. Add coordinates (or hit Find) to get a race-day forecast and an accurate Friday leave time.</p>
+    <div class="card cyan">
+      <h3>Races</h3>
+      <div class="sub">Registered, tentative, or just on your radar</div>
+      <div id="raceCalList" style="margin-top:10px;"></div>
+      <details class="addbox" style="margin-top:14px;"><summary>+ Add a race</summary><div class="pad">
+        <div class="grid-form">
+          <div><label class="fl">Date</label><input class="in" type="date" id="rcDate"></div>
+          <div><label class="fl">Venue</label><input class="in" id="rcVenue" placeholder="Killington, VT"></div>
+          <div><label class="fl">Series / label</label><input class="in" id="rcLabel" placeholder="e.g. Showdown, Round 3"></div>
+          <div><label class="fl">Class</label><input class="in" id="rcCls" placeholder="18U Amateur"></div>
+          <div><label class="fl">Status</label><select class="in" id="rcStatus"><option>Registered</option><option>Tentative</option><option>Planning</option><option>Withdrawn</option></select></div>
+        </div>
+        <div class="grid-form" style="margin-top:10px;">
+          <div><label class="fl">Latitude</label><input class="in" id="rcLat" placeholder="43.6045"></div>
+          <div><label class="fl">Longitude</label><input class="in" id="rcLon" placeholder="-72.8201"></div>
+          <div style="display:flex;align-items:flex-end;"><button class="btn ghost sm" id="rcFindBtn" style="width:100%;">Find coordinates</button></div>
+        </div>
+        <label class="fl" style="margin-top:10px;">Link (Roots &amp; Rain event page, registration, etc.)</label>
+        <input class="in" id="rcLink" placeholder="https://www.rootsandrain.com/event…">
+        <label class="fl" style="margin-top:10px;">Notes</label>
+        <textarea class="in" id="rcNotes" placeholder="Points race, need top-5 to move up a category…"></textarea>
+        <button class="btn cyan sm" id="addRaceBtn" style="margin-top:10px;">Save race</button>
+      </div></details>
+    </div>
+  </section>
+
   <!-- ================= RACE DAY ================= -->
   <section class="view" id="view-raceday">
     <div class="seclabel">Countdown</div>
@@ -1137,7 +1205,13 @@ const EV_COLORS = { bike:'#20d4e0', gym:'#90c63e', skills:'#9b6dd6', meal:'#caa4
 const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const DOW_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const THEMES = ['Recovery','Reset + Upper / Core','Team Skills Ride','Bolton DH · Key Day','Team Skills Ride','Power + Plyo','Race Sim / Race'];
-const VENUES = ['Killington, VT (Jul 12 · Showdown)','Mount Snow, VT (Aug 2)','Thunder Mtn, MA (Aug 9 · Showdown)','Blue Mountain, PA (Aug 30)','Jiminy Peak, MA (Sep 27 · Showdown)','Thunder Mtn, MA (Oct 25 · Finals)','Practice / Other'];
+function raceVenueOptions(){
+  const rs=[...DB.races].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  const opts=rs.map(r=>{ const d=r.date?parseYmd(r.date):null;
+    const dl=d?(d.toLocaleString('en-US',{month:'short'})+' '+d.getDate()):'';
+    return `${venueShort(r.venue)}${dl?', '+dl:''}${r.label&&r.label!==r.venue?' · '+r.label:''}`; });
+  return [...new Set(opts)].concat(['Practice / Other']);
+}
 
 /* default weekly template: weekday -> [{time,end,title,type}] */
 const DEFAULT_TEMPLATES = {
@@ -1284,16 +1358,20 @@ const GYM_TEMPLATES={
 
 const RUN_TYPES=['Race run','Qualifying','Practice','Training'];
 
-const RACES=[
-  {date:'2026-07-12', venue:'Killington, VT', label:'Killington · Showdown', lat:43.6045, lon:-72.8201},
-  {date:'2026-08-02', venue:'Mount Snow, VT', label:'Mount Snow', lat:42.9602, lon:-72.9204},
-  {date:'2026-08-09', venue:'Thunder Mtn, MA', label:'Thunder Mtn · Showdown', lat:42.6417, lon:-72.9123},
-  {date:'2026-08-30', venue:'Blue Mountain, PA', label:'Blue Mountain', lat:40.7996, lon:-75.7324},
-  {date:'2026-09-27', venue:'Jiminy Peak, MA', label:'Jiminy Peak · Showdown', lat:42.5540, lon:-73.2887},
-  {date:'2026-10-25', venue:'Thunder Mtn, MA', label:'Thunder Mtn · FINALS', lat:42.6417, lon:-72.9123}
+const DEFAULT_RACES=[
+  {date:'2026-07-12', venue:'Killington, VT', label:'Killington · Showdown', cls:'', lat:43.6045, lon:-72.8201},
+  {date:'2026-08-02', venue:'Mount Snow, VT', label:'Mount Snow', cls:'', lat:42.9602, lon:-72.9204},
+  {date:'2026-08-09', venue:'Thunder Mtn, MA', label:'Thunder Mtn · Showdown', cls:'', lat:42.6417, lon:-72.9123},
+  {date:'2026-08-30', venue:'Blue Mountain, PA', label:'Blue Mountain', cls:'', lat:40.7996, lon:-75.7324},
+  {date:'2026-09-27', venue:'Jiminy Peak, MA', label:'Jiminy Peak · Showdown', cls:'', lat:42.5540, lon:-73.2887},
+  {date:'2026-10-25', venue:'Thunder Mtn, MA', label:'Thunder Mtn · FINALS', cls:'', lat:42.6417, lon:-72.9123}
 ];
 const WMO={0:['Clear','☀️'],1:['Mainly clear','🌤️'],2:['Partly cloudy','⛅'],3:['Overcast','☁️'],45:['Fog','🌫️'],48:['Rime fog','🌫️'],51:['Light drizzle','🌦️'],53:['Drizzle','🌦️'],55:['Heavy drizzle','🌦️'],56:['Freezing drizzle','🌧️'],57:['Freezing drizzle','🌧️'],61:['Light rain','🌧️'],63:['Rain','🌧️'],65:['Heavy rain','🌧️'],66:['Freezing rain','🌧️'],67:['Freezing rain','🌧️'],71:['Light snow','🌨️'],73:['Snow','🌨️'],75:['Heavy snow','❄️'],77:['Snow grains','🌨️'],80:['Rain showers','🌦️'],81:['Rain showers','🌦️'],82:['Heavy showers','⛈️'],85:['Snow showers','🌨️'],86:['Snow showers','🌨️'],95:['Thunderstorm','⛈️'],96:['Thunderstorm','⛈️'],99:['Thunderstorm','⛈️']};
-const COURSE_VENUES=['Killington','Mount Snow','Thunder Mtn','Blue Mountain','Jiminy Peak','Bolton Valley','Richmond'];
+const EXTRA_PRACTICE_VENUES=['Bolton Valley','Richmond'];
+function courseVenueList(){
+  const race=DB.races.map(r=>venueShort(r.venue));
+  return [...new Set([...race, ...EXTRA_PRACTICE_VENUES])];
+}
 const DEFAULT_DRILLS=[
   {cat:'Cornering', name:'Flat-corner figure-8s', desc:'Weight the outside foot, look through the exit. Tighten the loop as you improve.'},
   {cat:'Cornering', name:'Berm high-line vs low-line', desc:'Session a berm both ways to learn which carries more speed on that trail.'},
@@ -1402,6 +1480,8 @@ function defaults(){ return { templates:JSON.parse(JSON.stringify(DEFAULT_TEMPLA
   maint:{ items:DEFAULT_SERVICE.map(s=>({id:uid(),name:s.name,days:s.days})), done:{}, log:[] },
   raceday:{ packing:DEFAULT_PACKING.map(n=>({id:uid(),name:n,done:false})), steps:DEFAULT_RACEDAY.map(n=>({id:uid(),name:n,done:false})), prerun:DEFAULT_PRERUN.map(n=>({id:uid(),name:n,done:false})) },
   course:{}, settings:{ lat:44.4215, lon:-72.8490, place:'Bolton Valley, VT' },
+  races:DEFAULT_RACES.map(r=>({id:uid(),status:'Registered',notes:'',link:'',...r})),
+  rankings:{ category:'', standing:'', pointsNote:'', entries:[] },
   weeklyGoals:{},
   goals:[
     {id:uid(), title:'Podium finishes', type:'podium', target:3, note:'Top-3 finishes this season', progress:0, done:false},
@@ -1429,10 +1509,105 @@ function fmt12(t){ const mm=toMin(t); if(mm==null) return t||''; let h=Math.floo
 function getLog(date){ if(!DB.log[date]) DB.log[date]={checks:{},custom:[],metrics:{}}; return DB.log[date]; }
 function getFuel(date){ const lg=getLog(date); if(!lg.fuel) lg.fuel={}; return lg.fuel; }
 
+const HOME = { name:'Hinesburg, VT', lat:44.3315, lon:-73.1023 };
+const driveFetching = new Set();
+function haversineMiles(lat1,lon1,lat2,lon2){
+  const R=3958.8, toRad=d=>d*Math.PI/180;
+  const dLat=toRad(lat2-lat1), dLon=toRad(lon2-lon1);
+  const a=Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+function estimateDriveMinutes(lat,lon){
+  if(lat==null||lon==null) return null;
+  const miles=haversineMiles(HOME.lat,HOME.lon,lat,lon);
+  return Math.round(miles*1.25/45*60); // +25% for road vs straight-line, ~45mph avg incl. highway+local
+}
+async function updateDriveTime(race){
+  if(race.lat==null||race.lon==null) return;
+  if(driveFetching.has(race.id)) return;
+  driveFetching.add(race.id);
+  try{
+    const url=`https://router.project-osrm.org/route/v1/driving/${HOME.lon},${HOME.lat};${race.lon},${race.lat}?overview=false`;
+    const r=await fetch(url); const d=await r.json();
+    if(d.routes && d.routes[0]){
+      race.driveMin=Math.round(d.routes[0].duration/60); race.driveExact=true; save();
+      if(document.getElementById('view-today').classList.contains('active')) renderToday();
+      if(document.getElementById('view-racecal').classList.contains('active')) renderRaceCal();
+      if(document.getElementById('view-week').classList.contains('active')) renderWeek();
+    }
+  }catch(err){ /* keep estimate, fail quietly */ }
+  driveFetching.delete(race.id);
+}
+function mmClock(m){ let x=((m%1440)+1440)%1440; return String(Math.floor(x/60)).padStart(2,'0')+':'+String(x%60).padStart(2,'0'); }
+function raceWeekendTasks(date){
+  const wd=parseYmd(date).getDay();
+  if(wd!==5 && wd!==6 && wd!==0) return null; // Fri (5) travel / Sat (6) practice / Sun (0) race day
+  const raceDate = wd===5 ? addDays(date,2) : wd===6 ? addDays(date,1) : date;
+  const race=DB.races.find(r=>r.date===raceDate);
+  if(!race) return null;
+  const venue=venueShort(race.venue);
+  if(wd===5){
+    let driveMin = race.driveMin!=null ? race.driveMin : estimateDriveMinutes(race.lat,race.lon);
+    if(race.driveMin==null && race.lat!=null) updateDriveTime(race); // kick off real lookup, non-blocking
+    let leaveMin, leaveNote;
+    if(driveMin!=null){
+      leaveMin=20*60-driveMin; if(leaveMin<0) leaveMin+=24*60;
+      const hrs=(driveMin/60).toFixed(1);
+      leaveNote=`~${hrs}h drive from ${HOME.name}${race.driveExact?'':' (estimated)'} · arrive ~8:00pm`;
+    } else {
+      leaveMin=17*60; // placeholder until coordinates are added
+      leaveNote='placeholder — add coordinates in Race Calendar for an exact time';
+    }
+    return [
+      {time:mmClock(leaveMin-150),end:'',title:'Wash gear and pack clothes',type:'other'},
+      {time:mmClock(leaveMin-120),end:'',title:'Prep bike tools',type:'bike'},
+      {time:mmClock(leaveMin-90),end:'',title:'Prep camping supplies',type:'other'},
+      {time:mmClock(leaveMin-60),end:'',title:'Prep bike',type:'bike'},
+      {time:mmClock(leaveMin-30),end:'',title:'Pack everything into truck',type:'other'},
+      {time:mmClock(leaveMin),end:'',title:`Leave for ${venue} — ${leaveNote}`,type:'race'},
+      {time:'20:15',end:'',title:'Set up campsite',type:'other'}
+    ];
+  }
+  if(wd===6){
+    return [
+      {time:'07:30',end:'',title:'Wake up',type:'other'},
+      {time:'07:40',end:'',title:'Breakfast',type:'meal'},
+      {time:'08:05',end:'',title:'Prep gear',type:'other'},
+      {time:'08:30',end:'',title:`Arrive at ${venue}`,type:'race'},
+      {time:'08:35',end:'',title:'Prep bike for the day (chain lube, bolt check, tire pressure)',type:'bike'},
+      {time:'08:45',end:'',title:'Register',type:'race'},
+      {time:'09:00',end:'',title:'Track walk',type:'race'},
+      {time:'09:45',end:'',title:'Practice start',type:'race'},
+      {time:'12:30',end:'13:15',title:'Lunch break',type:'meal'},
+      {time:'13:30',end:'15:00',title:'Practice',type:'race'},
+      {time:'15:00',end:'16:00',title:'Seeding',type:'race'},
+      {time:'16:00',end:'18:00',title:'Practice',type:'race'}
+    ];
+  }
+  // Sunday — race day
+  return [
+    {time:'07:30',end:'',title:'Wake up',type:'other'},
+    {time:'07:40',end:'',title:'Breakfast',type:'meal'},
+    {time:'08:30',end:'',title:`Arrive at ${venue}`,type:'race'},
+    {time:'08:35',end:'',title:'Prep bike for the day (chain lube, bolt check, tire pressure)',type:'bike'},
+    {time:'09:00',end:'',title:'Practice start',type:'race'},
+    {time:'11:00',end:'',title:'Racing starts',type:'race'},
+    {time:'12:45',end:'13:30',title:'U18 racing (times may vary)',type:'race'},
+    {time:'13:30',end:'15:30',title:'Watch the rest of racing',type:'race'},
+    {time:'15:30',end:'',title:'Pack pit',type:'other'},
+    {time:'16:00',end:'',title:'Pack campsite',type:'other'},
+    {time:'16:30',end:'',title:'Head home',type:'other'},
+    {time:'19:00',end:'',title:'Recover',type:'rest'}
+  ];
+}
+
 /* combined day items (template + custom) sorted */
 function dayItems(date){
   const wd=parseYmd(date).getDay();
-  const base=(DB.templates[wd]||[]).map((t,i)=>({...t, id:'t'+wd+'_'+i, src:'tpl'}));
+  const rwt=raceWeekendTasks(date);
+  const base = rwt
+    ? rwt.map((t,i)=>({...t, id:'rw_'+date+'_'+i, src:'tpl', raceWeekend:true}))
+    : (DB.templates[wd]||[]).map((t,i)=>({...t, id:'t'+wd+'_'+i, src:'tpl'}));
   const lg=getLog(date);
   const cust=(lg.custom||[]).map(c=>({...c, src:'cst'}));
   const all=[...base,...cust];
@@ -1464,6 +1639,8 @@ function setView(v){
   if(v==='maint') renderMaint();
   if(v==='raceday') renderRaceDay();
   if(v==='course') renderCourse();
+  if(v==='racecal') renderRaceCal();
+  if(v==='rankings') renderRankings();
   if(v==='insights') renderInsights();
   closeSidebar(); window.scrollTo(0,0);
 }
@@ -1475,10 +1652,8 @@ function renderToday(){
   document.getElementById('dayLabel').textContent = isToday?'Today':DOW_FULL[wd];
   const d=parseYmd(viewDate);
   document.getElementById('dayDate').textContent = d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
-  document.getElementById('dayTheme').textContent = THEMES[wd];
-
-  // tasks
   const items=dayItems(viewDate);
+  document.getElementById('dayTheme').textContent = items.some(i=>i.raceWeekend) ? (wd===5?'🏁 Race Weekend · Travel Day':wd===6?'🏁 Race Weekend · Practice Day':'🏁 Race Weekend · Race Day') : THEMES[wd];
   const ul=document.getElementById('taskList'); ul.innerHTML='';
   items.forEach(it=>{
     const on=isChecked(viewDate,it);
@@ -1570,6 +1745,7 @@ function renderWeek(){
         </div>
         <button class="delx" data-wd="${wd}" data-i="${i}">×</button></li>`).join('');
     card.innerHTML=`<h3>${DOW_FULL[wd]}</h3><div class="sub">${THEMES[wd]}</div>
+      ${(wd===5||wd===6||wd===0)?`<div class="sub" style="color:var(--pink);margin-top:2px;">🏁 Auto-replaced by the race-weekend schedule on the Fri/Sat/Sun around any race in your Race Calendar</div>`:''}
       <ul class="tasks" style="margin-top:8px;">${rows}</ul>
       <div class="addrow">
         <input class="in wk-t" placeholder="Add task…" data-wd="${wd}">
@@ -1703,13 +1879,14 @@ function placeSpark(){
 function renderResults(){ const t=document.getElementById('resultsTable');
   const r=[...DB.results].sort((a,b)=>b.date.localeCompare(a.date));
   if(!r.length){ t.innerHTML=`<tr><td class="empty">No races logged yet. Add your first result below.</td></tr>`; return; }
-  t.innerHTML=`<tr><th>Date</th><th>Venue</th><th>Place</th><th>Time</th><th>Notes</th><th></th></tr>`+
+  t.innerHTML=`<tr><th>Date</th><th>Venue</th><th>Place</th><th>Time</th><th>Pts</th><th>Notes</th><th></th></tr>`+
     r.map(x=>{ const pl=+x.place, cls=x.dnf?'dnf':(pl<=3?'podium':pl<=5?'top5':'');
       const badge=x.dnf?'<span class="dnfbadge">CRASH / DNF</span>':(pl>0&&pl<=3?'<span class="pbadge">PODIUM</span>':'');
       return `<tr><td style="white-space:nowrap;font-family:Orbitron;font-size:11px;color:#9aa6b2">${x.date||''}</td>
         <td>${esc(venueShort(x.venue))}</td>
         <td><span class="place ${cls}">${x.place||'–'}</span>${x.field?`<span class="fld"> / ${x.field}</span>`:''}${badge}</td>
         <td style="font-family:Orbitron;font-size:11px">${esc(x.time||'')}</td>
+        <td style="font-family:Orbitron;font-size:11px">${esc(x.points||'')}</td>
         <td style="color:#9aa6b2;font-size:12px">${esc(x.notes||'')}</td>
         <td><button class="delx" data-delr="${x.id}">×</button></td></tr>`; }).join('');
 }
@@ -1808,7 +1985,7 @@ function embedHtml(url){
 }
 function vbox(src){ return `<div class="videobox"><iframe src="${esc(src)}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>`; }
 function renderRuns(){
-  fillSelect('runCourse', VENUES.map(v=>({v:v,t:v})));
+  fillSelect('runCourse', raceVenueOptions().map(v=>({v:v,t:v})));
   fillSelect('runType', RUN_TYPES.map(t=>({v:t,t:t})));
   const sel=document.getElementById('runFilter');
   const courses=[...new Set(DB.runs.map(r=>venueShort(r.course)).filter(Boolean))];
@@ -1900,7 +2077,7 @@ function lineChart(elId, series, color){
 /* ---------- shared helpers ---------- */
 function sv(id,v){ const el=document.getElementById(id); if(el) el.textContent=v; }
 function daysBetween(a,b){ return Math.round((parseYmd(b)-parseYmd(a))/86400000); }
-function nextRace(){ const t=todayStr(); return RACES.find(r=>r.date>=t)||null; }
+function nextRace(){ const t=todayStr(); return [...DB.races].sort((a,b)=>(a.date||'').localeCompare(b.date||'')).find(r=>r.date>=t)||null; }
 function wmo(c){ return WMO[c]||['—','·']; }
 function timeToSec(s){ if(s==null) return null; s=(''+s).trim(); if(!s) return null;
   if(s.includes(':')){ const p=s.split(':').map(Number); if(p.some(isNaN)) return null; return p.length===2? p[0]*60+p[1] : p[0]*3600+p[1]*60+p[2]; }
@@ -1968,7 +2145,7 @@ function getWeek(k){ if(!DB.weeklyGoals) DB.weeklyGoals={}; if(!DB.weeklyGoals[k
   ['process','performance','outcome'].forEach(c=>{ if(!Array.isArray(w[c])) w[c]=[]; }); return w; }
 function weekRangeLabel(mon){ const a=parseYmd(mon), b=parseYmd(addDays(mon,6));
   return WK_MONTHS[a.getMonth()]+' '+a.getDate()+' – '+WK_MONTHS[b.getMonth()]+' '+b.getDate(); }
-function raceInWeek(mon){ const sun=addDays(mon,6); return RACES.find(r=>r.date>=mon && r.date<=sun)||null; }
+function raceInWeek(mon){ const sun=addDays(mon,6); return DB.races.find(r=>r.date>=mon && r.date<=sun)||null; }
 function goalItemsHtml(cat, arr){
   if(!arr.length) return '<div class="empty" style="padding:8px 0;">Nothing set yet.</div>';
   return arr.map(g=>`<div class="chkrow" data-wktog="${cat}:${g.id}"><div class="chk ${g.done?'on':''}"></div><span class="${g.done?'strike':''}">${esc(g.text)}</span><button class="delx" data-wkdel="${cat}:${g.id}">×</button></div>`).join('');
@@ -2038,6 +2215,7 @@ function renderRaceDay(){
 }
 async function renderRaceWx(nr){
   const el=document.getElementById('rdWeather'); if(!el) return;
+  if(nr.lat==null || nr.lon==null || nr.lat===''){ el.innerHTML=`<div class="sub">Race-day forecast</div><div class="empty" style="padding:6px 0;">Add coordinates for this race in Race Calendar to see a forecast.</div>`; return; }
   try{ const d=await fetchWx(nr.lat,nr.lon); const idx=d.daily.time.indexOf(nr.date);
     if(idx<0){ el.innerHTML=`<div class="sub">Race-day forecast</div><div class="empty" style="padding:6px 0;">Forecast opens within ~16 days of the race.</div>`; return; }
     const [t,e]=wmo(d.daily.weather_code[idx]);
@@ -2049,9 +2227,11 @@ async function renderRaceWx(nr){
 }
 
 /* ---------- COURSE NOTES ---------- */
-let courseSel=COURSE_VENUES[0];
+let courseSel=null;
 function renderCourse(){
-  const sel=document.getElementById('courseSel'); sel.innerHTML=COURSE_VENUES.map(v=>`<option>${esc(v)}</option>`).join(''); sel.value=courseSel;
+  const list=courseVenueList();
+  if(courseSel==null || !list.includes(courseSel)) courseSel=list[0];
+  const sel=document.getElementById('courseSel'); sel.innerHTML=list.map(v=>`<option>${esc(v)}</option>`).join(''); sel.value=courseSel;
   const c=DB.course[courseSel]||{};
   document.getElementById('cBreakdown').value=c.breakdown||'';
   document.getElementById('cWet').value=c.wet||'';
@@ -2181,8 +2361,8 @@ function renderBike(){
   });
   // setup dropdowns
   fillSelect('sBike', DB.bikes.map(b=>({v:b.id,t:b.name||'Bike'})), true);
-  fillSelect('sCourse', VENUES.map(v=>({v:v,t:v})));
-  fillSelect('rVenue', VENUES.map(v=>({v:v,t:v})));
+  fillSelect('sCourse', raceVenueOptions().map(v=>({v:v,t:v})));
+  fillSelect('rVenue', raceVenueOptions().map(v=>({v:v,t:v})));
   // setups
   const sl=document.getElementById('setupList'); sl.innerHTML='';
   const setups=[...DB.setups].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
@@ -2275,10 +2455,13 @@ document.getElementById('addResultBtn').onclick=()=>{
   const r={ id:uid(), date:document.getElementById('rDate').value||todayStr(),
     venue:document.getElementById('rVenue').value, cls:document.getElementById('rClass').value,
     place:document.getElementById('rPlace').value, field:document.getElementById('rField').value,
-    time:document.getElementById('rTime').value, notes:document.getElementById('rNotes').value, dnf };
+    time:document.getElementById('rTime').value, points:document.getElementById('rPoints').value,
+    notes:document.getElementById('rNotes').value, dnf };
   if(!dnf && !r.place){ alert('Add your finishing place, or tick Crash / DNF.'); return; }
-  DB.results.push(r); save();
-  ['rPlace','rField','rTime','rNotes'].forEach(id=>document.getElementById(id).value='');
+  DB.results.push(r);
+  if(r.points){ DB.rankings.entries.push({id:uid(), date:r.date, series:venueShort(r.venue), race:r.cls||'', points:+r.points}); }
+  save();
+  ['rPlace','rField','rTime','rPoints','rNotes'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('rDnf').checked=false;
   renderProgress();
 };
@@ -2464,6 +2647,73 @@ function resetRD(kind){ rdArr(kind).forEach(i=>i.done=false); save(); renderRace
 document.getElementById('resetPk').onclick=()=>resetRD('pk');
 document.getElementById('resetSt').onclick=()=>resetRD('st');
 document.getElementById('resetPr').onclick=()=>resetRD('pr');
+
+/* ---------- RACE CALENDAR ---------- */
+function renderRaceCal(){
+  const rs=[...DB.races].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  const t=todayStr();
+  const el=document.getElementById('raceCalList');
+  el.innerHTML = rs.length ? rs.map(r=>{
+    const past = r.date && r.date<t;
+    return `<div class="maint-row"><div class="maint-b">
+      <div class="maint-n">${esc(venueShort(r.venue))}${r.label&&r.label!==r.venue?' · '+esc(r.label):''} ${past?'<span style="color:var(--dim);font-size:11px;">(past)</span>':''}</div>
+      <div class="maint-m">${esc(r.date||'')}${r.cls?' · '+esc(r.cls):''}${r.link?' · <a href="'+esc(r.link)+'" target="_blank" style="color:var(--cyan)">link</a>':''}</div>
+      ${r.notes?`<div style="font-size:12px;color:#9aa6b2;margin-top:4px;">${esc(r.notes)}</div>`:''}</div>
+      <span class="mbadge ${r.status==='Registered'?'ok':r.status==='Withdrawn'?'over':'due'}">${esc(r.status||'Planning')}</span>
+      <button class="delx" data-delrc="${r.id}">×</button></div>`;
+  }).join('') : '<div class="empty">No races added yet — add your first one below.</div>';
+}
+document.getElementById('raceCalList').addEventListener('click',e=>{ const d=e.target.closest('[data-delrc]');
+  if(d){ if(confirm('Remove this race?')){ DB.races=DB.races.filter(r=>r.id!==d.dataset.delrc); save(); renderRaceCal(); } } });
+document.getElementById('rcFindBtn').onclick=async()=>{
+  const v=document.getElementById('rcVenue').value.trim(); if(!v){ alert('Enter a venue first.'); return; }
+  const btn=document.getElementById('rcFindBtn'); const orig=btn.textContent; btn.textContent='Finding…'; btn.disabled=true;
+  try{ const r=await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(v)}&count=1`);
+    const d=await r.json();
+    if(d.results && d.results[0]){ document.getElementById('rcLat').value=d.results[0].latitude.toFixed(4); document.getElementById('rcLon').value=d.results[0].longitude.toFixed(4); }
+    else alert('No match found — enter coordinates manually.');
+  }catch(err){ alert("Couldn't look that up right now."); }
+  btn.textContent=orig; btn.disabled=false;
+};
+document.getElementById('addRaceBtn').onclick=()=>{
+  const g=id=>document.getElementById(id).value.trim();
+  const venue=g('rcVenue'); if(!venue){ alert('Enter a venue.'); return; }
+  const r={ id:uid(), date:g('rcDate'), venue, label:g('rcLabel')||venue, cls:g('rcCls'),
+    status:g('rcStatus')||'Registered', lat:g('rcLat')?+g('rcLat'):null, lon:g('rcLon')?+g('rcLon'):null,
+    link:g('rcLink'), notes:g('rcNotes') };
+  DB.races.push(r);
+  ['rcDate','rcVenue','rcLabel','rcCls','rcLat','rcLon','rcLink','rcNotes'].forEach(id=>document.getElementById(id).value='');
+  save(); renderRaceCal();
+};
+
+/* ---------- RANKINGS & POINTS ---------- */
+function renderRankings(){
+  const rk=DB.rankings;
+  document.getElementById('rkCategory').value=rk.category||'';
+  document.getElementById('rkStanding').value=rk.standing||'';
+  document.getElementById('rkPointsNote').value=rk.pointsNote||'';
+  const total=rk.entries.reduce((s,e)=>s+(+e.points||0),0);
+  document.getElementById('rkTotal').textContent=total;
+  const sorted=[...rk.entries].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  document.getElementById('rankingEntries').innerHTML = sorted.length ? sorted.map(e=>
+    `<div class="ghrow"><span class="ghd">${esc(e.date||'')}</span><span class="ghw">${esc(e.series||'')}${e.race?' · '+esc(e.race):''} — <b style="color:var(--lime)">${e.points} pts</b></span><button class="delx" data-delrk="${e.id}">×</button></div>`).join('')
+    : '<div class="empty">No points logged yet.</div>';
+}
+['rkCategory','rkStanding','rkPointsNote'].forEach(id=>{
+  document.getElementById(id).addEventListener('change',e=>{
+    const key = id==='rkCategory'?'category':id==='rkStanding'?'standing':'pointsNote';
+    DB.rankings[key]=e.target.value.trim(); save();
+  });
+});
+document.getElementById('addRankBtn').onclick=()=>{
+  const g=id=>document.getElementById(id).value.trim();
+  const points=g('rkePoints'); if(!points){ alert('Enter points earned.'); return; }
+  DB.rankings.entries.push({ id:uid(), date:g('rkeDate')||todayStr(), series:g('rkeSeries'), race:g('rkeRace'), points:+points });
+  ['rkeDate','rkeSeries','rkeRace','rkePoints'].forEach(id=>document.getElementById(id).value='');
+  save(); renderRankings();
+};
+document.getElementById('rankingEntries').addEventListener('click',e=>{ const d=e.target.closest('[data-delrk]');
+  if(d){ DB.rankings.entries=DB.rankings.entries.filter(x=>x.id!==d.dataset.delrk); save(); renderRankings(); } });
 
 // course notes
 document.getElementById('courseSel').addEventListener('change',e=>{ courseSel=e.target.value; renderCourse(); });
