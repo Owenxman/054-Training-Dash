@@ -373,6 +373,17 @@
   .chkrow > span{ flex:1; font-size:14px; }
   .chkrow .strike, span.strike{ text-decoration:line-through; color:var(--dim); }
 
+  /* work shift toggle */
+  .workdaybar{ display:flex; gap:8px; flex-wrap:wrap; }
+  .workday-btn{ background:#0e1318; border:1px solid var(--line2); color:var(--dim2); border-radius:6px;
+    padding:10px 4px; min-width:52px; text-align:center; font-family:'Oswald'; }
+  .workday-btn:hover{ border-color:var(--pink); }
+  .workday-btn .wd-day{ font-family:'Orbitron'; font-weight:700; font-size:9px; letter-spacing:.08em; text-transform:uppercase; }
+  .workday-btn .wd-date{ font-size:16px; font-weight:600; margin-top:3px; color:#fff; }
+  .workday-btn.on{ background:var(--pink); border-color:var(--pink); color:#fff; }
+  .workday-btn.on .wd-date{ color:#fff; }
+  .workday-btn.past{ opacity:.4; }
+
   /* maintenance */
   .maint-row{ display:flex; align-items:center; gap:10px; padding:11px 0; border-top:1px solid #1a2128; flex-wrap:wrap; }
   .maint-row:first-child{ border-top:0; }
@@ -606,10 +617,24 @@
 
   <!-- ================= WEEK ================= -->
   <section class="view" id="view-week">
+    <div class="seclabel">Work Shifts</div>
+    <div class="card pink" style="margin-bottom:20px;">
+      <h3>Tap the Days You're Working</h3>
+      <div class="sub">Earl's shift runs ~2:45pm – close (8:30pm) — toggling a day swaps in a work-day schedule for that date automatically. You get next week's days on Thursdays.</div>
+      <div style="margin-top:14px;">
+        <div class="sub" style="margin-bottom:6px;">This week</div>
+        <div class="workdaybar" id="workBarThis"></div>
+      </div>
+      <div style="margin-top:14px;">
+        <div class="sub" style="margin-bottom:6px;">Next week</div>
+        <div class="workdaybar" id="workBarNext"></div>
+      </div>
+    </div>
     <div class="seclabel">The Week · Editable Template <span class="spacer"></span></div>
     <p style="color:var(--dim); font-size:13px; margin-bottom:14px;">
       This is your recurring weekly plan. Edit it here and every matching weekday in the Today view updates.
-      Daily check-offs are tracked per date over on Today.</p>
+      Daily check-offs are tracked per date over on Today. A day you've marked as a work shift above, or that falls
+      on a race weekend, is auto-replaced by that schedule instead of the template below.</p>
     <div class="pgrid" id="weekGrid"></div>
   </section>
 
@@ -1204,7 +1229,7 @@ const TYPES = ['bike','gym','skills','meal','rest','race','other'];
 const EV_COLORS = { bike:'#20d4e0', gym:'#90c63e', skills:'#9b6dd6', meal:'#caa45a', rest:'#3a4651', race:'#e81876', other:'#5a6570' };
 const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const DOW_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-const THEMES = ['Recovery','Reset + Upper / Core','Team Skills Ride','Bolton DH · Key Day','Team Skills Ride','Power + Plyo','Race Sim / Race'];
+const THEMES = ['Recovery','BTC + Gym — Upper / Core','BTC + Skills / Mobility','BTC + Key Session','BTC + Fire Dept Training','BTC + Gym — Lower / Plyo','Snowboard / Long Session'];
 function raceVenueOptions(){
   const rs=[...DB.races].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
   const opts=rs.map(r=>{ const d=r.date?parseYmd(r.date):null;
@@ -1213,62 +1238,63 @@ function raceVenueOptions(){
   return [...new Set(opts)].concat(['Practice / Other']);
 }
 
-/* default weekly template: weekday -> [{time,end,title,type}] */
+/* default weekly template: weekday -> [{time,end,title,type}]
+   Off-season / school-year schedule — BTC (Aviation Maintenance) runs 11:20am–2:30pm on school days.
+   A day marked as a work shift (Work Shifts panel on the Week page) or a race-weekend day
+   auto-replaces whatever's below for that specific date — see workDayTasks() / raceWeekendTasks(). */
 const DEFAULT_TEMPLATES = {
   0:[ {time:'07:30',end:'08:00',title:'Wake · breakfast',type:'meal'},
-      {time:'10:30',end:'11:15',title:'Easy spin only (conversational pace)',type:'bike'},
+      {time:'10:30',end:'11:15',title:'Easy movement — walk, easy spin, or optional snowboard run',type:'rest'},
       {time:'14:00',end:'14:45',title:'Full mobility · plan & pack the week',type:'rest'},
       {time:'18:00',end:'18:45',title:'Dinner',type:'meal'},
       {time:'22:00',end:'',title:'Sleep',type:'rest'} ],
-  1:[ {time:'07:00',end:'07:20',title:'Wake · water · 5 min mobility',type:'other'},
-      {time:'07:30',end:'08:00',title:'Breakfast (carbs + protein)',type:'meal'},
-      {time:'09:30',end:'10:45',title:'PF: Upper Body + Core (Template A)',type:'gym'},
-      {time:'11:00',end:'11:15',title:'Post-gym snack',type:'meal'},
-      {time:'12:30',end:'13:00',title:'Lunch',type:'meal'},
-      {time:'14:00',end:'15:00',title:'Bike maintenance · watch race POV lines',type:'skills'},
+  1:[ {time:'06:30',end:'06:50',title:'Wake · breakfast (carbs + protein)',type:'meal'},
+      {time:'07:30',end:'11:10',title:'School',type:'other'},
+      {time:'11:20',end:'14:30',title:'BTC — Aviation Maintenance',type:'other'},
+      {time:'14:45',end:'15:00',title:'Snack · travel home',type:'meal'},
+      {time:'15:15',end:'16:30',title:'PF: Upper Body + Core (Template A)',type:'gym'},
+      {time:'16:30',end:'16:45',title:'Post-gym snack',type:'meal'},
       {time:'18:00',end:'18:45',title:'Dinner',type:'meal'},
       {time:'20:30',end:'21:00',title:'Foam roll + mobility',type:'rest'},
       {time:'22:00',end:'',title:'Sleep',type:'rest'} ],
-  2:[ {time:'07:00',end:'07:20',title:'Wake · mobility',type:'other'},
-      {time:'07:30',end:'08:00',title:'Breakfast (carbs-forward)',type:'meal'},
-      {time:'09:15',end:'09:45',title:'Snack · pack · dynamic warm-up',type:'other'},
-      {time:'10:00',end:'11:30',title:'Team ride — Richmond enduro (session 2 features)',type:'bike'},
-      {time:'11:45',end:'12:00',title:'Refuel within 30 min · rehydrate',type:'meal'},
-      {time:'12:30',end:'13:00',title:'Lunch',type:'meal'},
-      {time:'14:00',end:'14:45',title:'Parking-lot skills drills (light)',type:'skills'},
+  2:[ {time:'06:30',end:'06:50',title:'Wake · breakfast',type:'meal'},
+      {time:'07:30',end:'11:10',title:'School',type:'other'},
+      {time:'11:20',end:'14:30',title:'BTC — Aviation Maintenance',type:'other'},
+      {time:'14:45',end:'15:00',title:'Snack',type:'meal'},
+      {time:'15:15',end:'16:15',title:'Skills drills / visualize lines, or easy indoor spin',type:'skills'},
       {time:'18:00',end:'18:45',title:'Dinner',type:'meal'},
+      {time:'20:30',end:'21:00',title:'Mobility',type:'rest'},
       {time:'22:00',end:'',title:'Sleep',type:'rest'} ],
-  3:[ {time:'06:30',end:'06:50',title:'Wake · full breakfast',type:'meal'},
-      {time:'08:30',end:'09:00',title:'Pack · bike safety check',type:'other'},
-      {time:'09:30',end:'10:00',title:'Dynamic warm-up · easy first spin',type:'other'},
-      {time:'10:00',end:'17:00',title:'BOLTON lift laps → 2–3 race-pace top-to-bottoms midday',type:'bike'},
-      {time:'17:15',end:'17:30',title:'Refuel big · rehydrate',type:'meal'},
+  3:[ {time:'06:30',end:'06:50',title:'Wake · breakfast',type:'meal'},
+      {time:'07:30',end:'11:10',title:'School',type:'other'},
+      {time:'11:20',end:'14:30',title:'BTC — Aviation Maintenance',type:'other'},
+      {time:'14:45',end:'15:00',title:'Snack',type:'meal'},
+      {time:'15:15',end:'16:45',title:'Key session — snowboard laps (if open) or extra plyo/skills block',type:'skills'},
       {time:'18:30',end:'19:15',title:'Dinner',type:'meal'},
-      {time:'20:00',end:'20:30',title:'Recovery · legs up · mobility',type:'rest'},
+      {time:'20:00',end:'20:30',title:'Recovery · mobility',type:'rest'},
       {time:'22:00',end:'',title:'Sleep (earlier if cooked)',type:'rest'} ],
-  4:[ {time:'07:00',end:'07:20',title:'Wake · check legs after Bolton',type:'other'},
-      {time:'07:30',end:'08:00',title:'Breakfast',type:'meal'},
-      {time:'09:15',end:'09:45',title:'Snack · dynamic warm-up',type:'other'},
-      {time:'10:00',end:'11:30',title:'Team ride — cornering + pump for speed',type:'bike'},
-      {time:'11:45',end:'12:00',title:'Refuel · rehydrate',type:'meal'},
-      {time:'12:30',end:'13:00',title:'Lunch',type:'meal'},
-      {time:'14:00',end:'14:30',title:'Optional: grip work + mobility only',type:'gym'},
-      {time:'18:00',end:'18:45',title:'Dinner',type:'meal'},
-      {time:'22:00',end:'',title:'Sleep',type:'rest'} ],
-  5:[ {time:'07:00',end:'07:20',title:'Wake · mobility',type:'other'},
-      {time:'07:30',end:'08:00',title:'Breakfast (carbs + protein)',type:'meal'},
-      {time:'09:30',end:'10:45',title:'PF: Lower Power + Plyo (Template B)',type:'gym'},
-      {time:'11:00',end:'11:15',title:'Post-gym snack',type:'meal'},
-      {time:'12:30',end:'13:00',title:'Lunch',type:'meal'},
-      {time:'14:00',end:'15:00',title:'Skills drills OR visualize race run',type:'skills'},
+  4:[ {time:'06:30',end:'06:50',title:'Wake · breakfast',type:'meal'},
+      {time:'07:30',end:'11:10',title:'School',type:'other'},
+      {time:'11:20',end:'14:30',title:'BTC — Aviation Maintenance',type:'other'},
+      {time:'14:45',end:'15:15',title:'Snack · homework / light mobility',type:'other'},
+      {time:'15:15',end:'18:00',title:'Homework / downtime before fire training',type:'other'},
+      {time:'18:30',end:'20:30',title:'Fire Department training',type:'other'},
+      {time:'20:45',end:'21:15',title:'Light dinner / recovery',type:'meal'},
+      {time:'22:15',end:'',title:'Sleep',type:'rest'} ],
+  5:[ {time:'06:30',end:'06:50',title:'Wake · breakfast (carbs + protein)',type:'meal'},
+      {time:'07:30',end:'11:10',title:'School',type:'other'},
+      {time:'11:20',end:'14:30',title:'BTC — Aviation Maintenance',type:'other'},
+      {time:'14:45',end:'15:00',title:'Snack',type:'meal'},
+      {time:'15:15',end:'16:30',title:'PF: Lower Power + Plyo (Template B)',type:'gym'},
+      {time:'16:30',end:'16:45',title:'Post-gym snack',type:'meal'},
       {time:'18:00',end:'18:45',title:'Dinner',type:'meal'},
       {time:'20:30',end:'21:00',title:'Foam roll + mobility',type:'rest'},
       {time:'22:00',end:'',title:'Sleep',type:'rest'} ],
-  6:[ {time:'08:00',end:'08:40',title:'Wake · full breakfast (2–3 hrs before riding)',type:'meal'},
-      {time:'10:00',end:'10:30',title:'Full warm-up · plan lines',type:'other'},
-      {time:'10:30',end:'12:30',title:'2–4 race-pace timed runs + rest between',type:'bike'},
-      {time:'13:00',end:'13:30',title:'Lunch / refuel',type:'meal'},
-      {time:'15:00',end:'16:00',title:'Recover · team content',type:'rest'},
+  6:[ {time:'08:00',end:'08:40',title:'Wake · full breakfast',type:'meal'},
+      {time:'10:00',end:'10:30',title:'Travel to Bolton · gear up',type:'other'},
+      {time:'10:30',end:'14:00',title:'Snowboard session (or gym-based bike-specific training if no snow)',type:'skills'},
+      {time:'14:30',end:'15:00',title:'Lunch / refuel',type:'meal'},
+      {time:'16:00',end:'16:45',title:'Optional: accessory gym work + mobility',type:'gym'},
       {time:'18:00',end:'18:45',title:'Dinner',type:'meal'},
       {time:'22:00',end:'',title:'Sleep',type:'rest'} ]
 };
@@ -1482,6 +1508,7 @@ function defaults(){ return { templates:JSON.parse(JSON.stringify(DEFAULT_TEMPLA
   course:{}, settings:{ lat:44.4215, lon:-72.8490, place:'Bolton Valley, VT' },
   races:DEFAULT_RACES.map(r=>({id:uid(),status:'Registered',notes:'',link:'',...r})),
   rankings:{ category:'', standing:'', pointsNote:'', entries:[] },
+  workDays:{},
   weeklyGoals:{},
   goals:[
     {id:uid(), title:'Podium finishes', type:'podium', target:3, note:'Top-3 finishes this season', progress:0, done:false},
@@ -1601,12 +1628,42 @@ function raceWeekendTasks(date){
   ];
 }
 
+/* work-shift override — set per specific date from the Work Shifts panel on the Week page */
+function workDayTasks(date){
+  if(!DB.workDays || !DB.workDays[date]) return null;
+  const wd=parseYmd(date).getDay();
+  if(wd===0 || wd===6){
+    return [
+      {time:'09:00',end:'',title:'Wake · breakfast',type:'meal'},
+      {time:'10:00',end:'10:30',title:'Light mobility / easy movement',type:'rest'},
+      {time:'14:40',end:'',title:'Leave for work',type:'other'},
+      {time:'14:45',end:'20:30',title:"Work — Earl's Cyclery",type:'other'},
+      {time:'21:00',end:'21:30',title:'Dinner (late)',type:'meal'},
+      {time:'21:45',end:'',title:'Wind down · light stretch',type:'rest'},
+      {time:'22:30',end:'',title:'Sleep',type:'rest'}
+    ];
+  }
+  return [
+    {time:'06:30',end:'06:50',title:'Wake · breakfast',type:'meal'},
+    {time:'07:30',end:'11:10',title:'School',type:'other'},
+    {time:'11:20',end:'14:30',title:'BTC — Aviation Maintenance',type:'other'},
+    {time:'14:40',end:'',title:'Leave for work',type:'other'},
+    {time:'14:45',end:'20:30',title:"Work — Earl's Cyclery",type:'other'},
+    {time:'21:00',end:'21:30',title:'Dinner (late)',type:'meal'},
+    {time:'21:45',end:'',title:'Wind down · light stretch',type:'rest'},
+    {time:'22:30',end:'',title:'Sleep',type:'rest'}
+  ];
+}
+
 /* combined day items (template + custom) sorted */
 function dayItems(date){
   const wd=parseYmd(date).getDay();
   const rwt=raceWeekendTasks(date);
+  const wdt = rwt ? null : workDayTasks(date);
   const base = rwt
     ? rwt.map((t,i)=>({...t, id:'rw_'+date+'_'+i, src:'tpl', raceWeekend:true}))
+    : wdt
+    ? wdt.map((t,i)=>({...t, id:'wk_'+date+'_'+i, src:'tpl', workDay:true}))
     : (DB.templates[wd]||[]).map((t,i)=>({...t, id:'t'+wd+'_'+i, src:'tpl'}));
   const lg=getLog(date);
   const cust=(lg.custom||[]).map(c=>({...c, src:'cst'}));
@@ -1653,7 +1710,7 @@ function renderToday(){
   const d=parseYmd(viewDate);
   document.getElementById('dayDate').textContent = d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
   const items=dayItems(viewDate);
-  document.getElementById('dayTheme').textContent = items.some(i=>i.raceWeekend) ? (wd===5?'🏁 Race Weekend · Travel Day':wd===6?'🏁 Race Weekend · Practice Day':'🏁 Race Weekend · Race Day') : THEMES[wd];
+  document.getElementById('dayTheme').textContent = items.some(i=>i.raceWeekend) ? (wd===5?'🏁 Race Weekend · Travel Day':wd===6?'🏁 Race Weekend · Practice Day':'🏁 Race Weekend · Race Day') : items.some(i=>i.workDay) ? "💼 Work Day · Earl's Cyclery" : THEMES[wd];
   const ul=document.getElementById('taskList'); ul.innerHTML='';
   items.forEach(it=>{
     const on=isChecked(viewDate,it);
@@ -1731,7 +1788,42 @@ function renderTimeline(){
 }
 
 /* ---------- WEEK ---------- */
+/* ---------- WORK SHIFTS ---------- */
+function renderWorkBar(elId, startDate){
+  const el=document.getElementById(elId); if(!el) return;
+  const t=todayStr();
+  let html='';
+  for(let i=0;i<7;i++){
+    const ds=addDays(startDate,i);
+    const d=parseYmd(ds);
+    const on = !!(DB.workDays && DB.workDays[ds]);
+    const past = ds<t;
+    html+=`<button class="workday-btn ${on?'on':''} ${past?'past':''}" data-wdate="${ds}" title="${ds}">
+      <div class="wd-day">${DOW_FULL[d.getDay()].slice(0,3)}</div>
+      <div class="wd-date">${d.getDate()}</div>
+    </button>`;
+  }
+  el.innerHTML=html;
+}
+function renderWorkBars(){
+  const mon=mondayOf(todayStr());
+  renderWorkBar('workBarThis', mon);
+  renderWorkBar('workBarNext', addDays(mon,7));
+}
+function workBarClick(e){
+  const b=e.target.closest('[data-wdate]'); if(!b) return;
+  const ds=b.dataset.wdate;
+  if(!DB.workDays) DB.workDays={};
+  if(DB.workDays[ds]) delete DB.workDays[ds]; else DB.workDays[ds]=true;
+  save();
+  renderWorkBars();
+  if(document.getElementById('view-today').classList.contains('active') && viewDate===ds) renderToday();
+}
+document.getElementById('workBarThis').addEventListener('click', workBarClick);
+document.getElementById('workBarNext').addEventListener('click', workBarClick);
+
 function renderWeek(){
+  renderWorkBars();
   const g=document.getElementById('weekGrid'); g.innerHTML='';
   const order=[1,2,3,4,5,6,0];
   order.forEach(wd=>{
